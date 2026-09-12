@@ -501,6 +501,15 @@ data class GameSystem(
                                     // The panel ghosts by itself; it does not need the
                                     // emulator blending frames on top of that.
                                     CoreVariable("gambatte_mix_frames", "disabled"),
+                                    // Force Game Boy hardware. A .gb file can still be
+                                    // Game Boy Color *enhanced*, and on Auto the core
+                                    // then runs in colour -- where the grayscale palette
+                                    // above does not apply, because that only governs
+                                    // DMG output. Libbet is one such game and came out
+                                    // in full colour on a screen that has none. In DMG
+                                    // mode those games render in four shades and the
+                                    // palette reaches them.
+                                    CoreVariable("gambatte_gb_hwmode", "GB"),
                                 ),
                             controllerConfigs =
                                 hashMapOf(
