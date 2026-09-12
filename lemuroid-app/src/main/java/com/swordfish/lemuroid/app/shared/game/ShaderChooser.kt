@@ -40,9 +40,14 @@ object ShaderChooser {
 
     private fun getDefaultShaderForSystem(system: GameSystem): ShaderConfig {
         return when (system.id) {
-            SystemID.GBA -> ShaderConfig.LCD
-            SystemID.GBC -> ShaderConfig.LCD
-            SystemID.GB -> ShaderConfig.LCD
+            // Upstream simulates a Game Boy's green LCD here, faithfully and at some
+            // cost. This panel is greyscale, so the tint cannot be shown -- it only
+            // arrives as mud, spending contrast the picture needs. Sharp keeps the
+            // pixels square and the palette untouched, which is what a 3x integer scale
+            // onto E Ink wants.
+            SystemID.GBA -> ShaderConfig.Sharp
+            SystemID.GBC -> ShaderConfig.Sharp
+            SystemID.GB -> ShaderConfig.Sharp
             SystemID.N64 -> ShaderConfig.CRT
             SystemID.GENESIS -> ShaderConfig.CRT
             SystemID.SEGACD -> ShaderConfig.CRT

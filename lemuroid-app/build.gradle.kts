@@ -224,6 +224,8 @@ dependencies {
 
     implementation(platform(deps.libs.androidx.compose.composeBom))
     implementation(deps.libs.androidx.compose.material3)
+    // Mudita's own design system: what makes this look like the rest of the phone.
+    implementation("com.mudita:MMD:1.0.2")
     implementation(deps.libs.androidx.compose.constraintLayout)
     debugImplementation(deps.libs.androidx.compose.tooling)
     implementation(deps.libs.androidx.compose.toolingPreview)
