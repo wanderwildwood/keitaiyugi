@@ -64,7 +64,6 @@ import com.swordfish.lemuroid.lib.bios.BiosManager
 import com.swordfish.lemuroid.lib.core.CoresSelection
 import com.swordfish.lemuroid.lib.injection.PerActivity
 import com.swordfish.lemuroid.lib.library.MetaSystemID
-import com.swordfish.lemuroid.lib.library.SystemID
 import com.swordfish.lemuroid.lib.library.db.RetrogradeDatabase
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
@@ -358,15 +357,9 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
             )
 
             if (infoDialogDisplayed.value) {
-                val message =
-                    remember {
-                        val systemFolders =
-                            SystemID.values()
-                                .joinToString(", ") { "<i>${it.dbname}</i>" }
-
-                        getString(R.string.lemuroid_help_content)
-                            .replace("\$SYSTEMS", systemFolders)
-                    }
+                // The help text no longer enumerates systems: there is one, and it is
+                // named in the sentence. Upstream substituted all twenty-five here.
+                val message = remember { getString(R.string.lemuroid_help_content) }
 
                 AlertDialog(
                     text = { HtmlText(text = message) },

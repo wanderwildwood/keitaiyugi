@@ -38,5 +38,6 @@ fun LemuroidGameImage(
         fallback = fallbackPainter,
         error = fallbackPainter,
         contentScale = ContentScale.Crop,
+        colorFilter = GreyscaleCover,
     )
 }

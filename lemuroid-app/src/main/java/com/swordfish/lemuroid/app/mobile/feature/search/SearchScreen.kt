@@ -7,7 +7,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import com.mudita.mmd.components.lazy.LazyColumnMMD
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,7 +83,7 @@ private fun SearchResultsView(
     onGameLongClick: (Game) -> Unit,
     onGameFavoriteToggle: (Game, Boolean) -> Unit,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumnMMD(modifier = modifier) {
         items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
             val game = games[index] ?: return@items
 

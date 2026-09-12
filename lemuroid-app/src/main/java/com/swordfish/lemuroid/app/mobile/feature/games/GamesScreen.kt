@@ -2,7 +2,7 @@ package com.swordfish.lemuroid.app.mobile.feature.games
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import com.mudita.mmd.components.lazy.LazyColumnMMD
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -26,7 +26,12 @@ fun GamesScreen(
         return
     }
 
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    // MMD's list rather than a plain LazyColumn. It brings the fling behaviour and
+    // scroll step Mudita tuned for this panel, plus the page-navigation scrollbar the
+    // phone's own apps use. A smooth fling is the worst thing to ask of this screen:
+    // scrolling here is display-bound, not CPU-bound, so the only lever that helps is
+    // producing fewer frames -- which is why e-ink readers page instead of scrolling.
+    LazyColumnMMD(modifier = modifier.fillMaxSize()) {
         items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
             val game = games[index] ?: return@items
 
