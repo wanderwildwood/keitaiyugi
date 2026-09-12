@@ -6,6 +6,14 @@ E Ink screen rather than in spite of it.
 *Keitai yūgi* is 携帯遊戯 — portable play. Which is what a Game Boy was, and what this phone
 can be on a quiet afternoon.
 
+| | |
+|---|---|
+| ![The library](screenshots/1-home.png) | ![All the games](screenshots/2-games.png) |
+| ![2048gb, playing](screenshots/3-playing.png) | ![Why everything is grey](screenshots/4-help.png) |
+
+Every game shown is freely licensed homebrew from the [Homebrew Hub](https://hh.gbdev.io).
+No commercial game appears in this repository, and none is bundled in the app.
+
 A fork of **[Lemuroid](https://github.com/Swordfish90/Lemuroid)** by Filippo Scognamiglio,
 cut down to one console and reskinned for a screen with two colours. Emulation is
 [Gambatte](https://docs.libretro.com/library/gambatte/) through
