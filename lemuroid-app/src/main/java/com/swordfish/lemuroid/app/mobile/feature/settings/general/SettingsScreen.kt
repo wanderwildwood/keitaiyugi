@@ -18,11 +18,9 @@ import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGro
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsPage
-import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSlider
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
 import com.swordfish.lemuroid.app.utils.android.settings.booleanPreferenceState
 import com.swordfish.lemuroid.app.utils.android.settings.indexPreferenceState
-import com.swordfish.lemuroid.app.utils.android.settings.intPreferenceState
 import com.swordfish.lemuroid.app.utils.android.stringListResource
 
 @Composable
@@ -81,21 +79,10 @@ private fun MiscSettings(
                 onClick = { navController.navigateToRoute(MainRoute.SETTINGS_SAVE_SYNC) },
             )
         }
-        LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(id = R.string.settings_title_open_cores_selection)) },
-            subtitle = {
-                Text(text = stringResource(id = R.string.settings_description_open_cores_selection))
-            },
-            onClick = { navController.navigateToRoute(MainRoute.SETTINGS_CORES_SELECTION) },
-        )
-        LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(id = R.string.settings_title_display_bios_info)) },
-            subtitle = {
-                Text(text = stringResource(id = R.string.settings_description_display_bios_info))
-            },
-            enabled = !indexingInProgress,
-            onClick = { navController.navigateToRoute(MainRoute.SETTINGS_BIOS) },
-        )
+        // No core chooser: there is one core for one system, so the screen could only
+        // ever show a single row with nothing to choose between. No BIOS screen either
+        // -- a Game Boy needs no BIOS file and gambatte asks for none, so it could only
+        // ever report that nothing is missing.
         LemuroidSettingsMenuLink(
             title = { Text(text = stringResource(id = R.string.settings_title_advanced_settings)) },
             subtitle = {
@@ -135,9 +122,6 @@ private fun InputSettings(navController: NavController) {
 
 @Composable
 private fun GeneralSettings() {
-    val hdMode = booleanPreferenceState(R.string.pref_key_hd_mode, false)
-    val immersiveMode = booleanPreferenceState(R.string.pref_key_enable_immersive_mode, false)
-
     LemuroidCardSettingsGroup(
         title = { Text(text = stringResource(id = R.string.settings_category_general)) },
     ) {
@@ -146,30 +130,13 @@ private fun GeneralSettings() {
             title = { Text(text = stringResource(id = R.string.settings_title_enable_autosave)) },
             subtitle = { Text(text = stringResource(id = R.string.settings_description_enable_autosave)) },
         )
-        LemuroidSettingsSwitch(
-            state = immersiveMode,
-            title = { Text(text = stringResource(id = R.string.settings_title_immersive_mode)) },
-            subtitle = { Text(text = stringResource(id = R.string.settings_description_immersive_mode)) },
-        )
-        LemuroidSettingsSwitch(
-            state = hdMode,
-            title = { Text(text = stringResource(id = R.string.settings_title_hd_mode)) },
-            subtitle = { Text(text = stringResource(id = R.string.settings_description_hd_mode)) },
-        )
-        LemuroidSettingsSlider(
-            enabled = hdMode.value,
-            state =
-                intPreferenceState(
-                    key = stringResource(id = R.string.pref_key_hd_mode_quality),
-                    default = 2,
-                ),
-            steps = 1,
-            valueRange = 0f..2f,
-            title = { Text(text = stringResource(R.string.settings_title_hd_quality)) },
-            subtitle = { Text(text = stringResource(id = R.string.settings_description_hd_quality)) },
-        )
+        // Immersive mode is gone. It colours the letterbox from the game's own visuals,
+        // which on four greys is a grey wash -- more ink held on the panel, more
+        // ghosting, and nothing gained. HD mode and its quality slider are gone for the
+        // same kind of reason: they are post-processing upscalers, and this app draws a
+        // 160x144 picture at exactly 3x onto a screen with no colour. There is nothing
+        // for them to improve and a cost to running them.
         LemuroidSettingsList(
-            enabled = !hdMode.value,
             state =
                 indexPreferenceState(
                     R.string.pref_key_shader_filter,
