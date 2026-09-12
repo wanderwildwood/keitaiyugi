@@ -62,7 +62,7 @@ jobs:
           } > signing/signing.properties
 
       - name: Build release APK
-        run: ./gradlew :lemuroid-app:assembleFreeBundleRelease
+        run: ./gradlew :lemuroid-app:assembleRelease
 
       # Signed with the wrong key is not something that can be taken back once people have
       # installed it, so this asserts positively that the APK carries the one expected
@@ -72,7 +72,7 @@ jobs:
         env:
           EXPECTED: 813e7847802726274c4ba901b665994149efa53f253667f6281c7c1f63009b78
         run: |
-          apk=$(find lemuroid-app/build/outputs/apk/freeBundle/release -maxdepth 1 -name '*.apk')
+          apk=$(find lemuroid-app/build/outputs/apk/release -maxdepth 1 -name '*.apk')
           apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
           certs=$("$apksigner" verify --print-certs "$apk")
           echo "$certs"
@@ -90,7 +90,7 @@ jobs:
       # get wrong: a stray core is tens of megabytes nobody asked to download.
       - name: Verify only the Game Boy core is packaged
         run: |
-          apk=$(find lemuroid-app/build/outputs/apk/freeBundle/release -maxdepth 1 -name '*.apk')
+          apk=$(find lemuroid-app/build/outputs/apk/release -maxdepth 1 -name '*.apk')
           cores=$(unzip -l "$apk" | grep -oE '[a-z0-9_]+_libretro_android\.so' | sort -u)
           echo "$cores"
           if [ "$cores" != "libgambatte_libretro_android.so" ]; then
@@ -115,7 +115,7 @@ jobs:
       # not. Both are byte-identical - only the file name differs.
       - name: Rename APK and generate checksum
         run: |
-          apk_path=$(find lemuroid-app/build/outputs/apk/freeBundle/release -maxdepth 1 -name '*.apk')
+          apk_path=$(find lemuroid-app/build/outputs/apk/release -maxdepth 1 -name '*.apk')
           apk_name="keitaiyugi-${GITHUB_REF_NAME}.apk"
           cp "$apk_path" "$apk_name"
           sha256sum "$apk_name" > "${apk_name}.sha256"

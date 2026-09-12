@@ -27,58 +27,14 @@ android {
             abiFilters += "arm64-v8a"
         }
     }
-    flavorDimensions += listOf("opensource", "cores")
-
-    if (usePlayDynamicFeatures()) {
-        println("Building Google Play version. Bundling dynamic features.")
-        dynamicFeatures.addAll(
-            setOf(
-                ":lemuroid_core_desmume",
-                ":lemuroid_core_dosbox_pure",
-                ":lemuroid_core_fbneo",
-                ":lemuroid_core_fceumm",
-                ":lemuroid_core_gambatte",
-                ":lemuroid_core_genesis_plus_gx",
-                ":lemuroid_core_handy",
-                ":lemuroid_core_mame2003_plus",
-                ":lemuroid_core_mednafen_ngp",
-                ":lemuroid_core_mednafen_pce_fast",
-                ":lemuroid_core_mednafen_wswan",
-                ":lemuroid_core_melonds",
-                ":lemuroid_core_mgba",
-                ":lemuroid_core_mupen64plus_next_gles3",
-                ":lemuroid_core_pcsx_rearmed",
-                ":lemuroid_core_ppsspp",
-                ":lemuroid_core_prosystem",
-                ":lemuroid_core_snes9x",
-                ":lemuroid_core_stella",
-                ":lemuroid_core_citra",
-            ),
-        )
-    }
-
-    // Since some dependencies are closed source we make a completely free as in free speech variant.
-
-    productFlavors {
-
-        create("free") {
-            dimension = "opensource"
-        }
-
-        create("play") {
-            dimension = "opensource"
-        }
-
-        // Include cores in the final apk
-        create("bundle") {
-            dimension = "cores"
-        }
-
-        // Download cores on demand (from GooglePlay or GitHub)
-        create("dynamic") {
-            dimension = "cores"
-        }
-    }
+    // No product flavours. Upstream has two dimensions: free/play, because some of its
+    // dependencies are closed source, and bundle/dynamic, because Google Play delivers
+    // cores as dynamic features. This app has one core, is sideloaded onto a degoogled
+    // phone, and will never be on Play -- so both dimensions had exactly one live value
+    // and the play half existed only to be not built. Removing it means Google Play
+    // Services and Google Drive cannot be built here, rather than merely are not.
+    //
+    // Build tasks are assembleDebug / assembleRelease now, not assembleFreeBundle*.
 
     packagingOptions {
         jniLibs {
@@ -150,6 +106,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
+            // Upstream minifies code but not resources, so everything unreferenced still
+            // shipped: drawables for twenty consoles, the leanback and TV resources this
+            // fork orphaned, and font weights nothing asks for.
+            isShrinkResources = true
             realSigningConfig?.let { signingConfig = it }
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             resValue("string", "lemuroid_name", "Handheld Games")
@@ -190,10 +150,9 @@ dependencies {
     "baselineProfile"(project(":baselineprofile"))
     implementation(deps.libs.androidx.profileInstaller)
 
-    "bundleImplementation"(project(":bundled-cores"))
+    implementation(project(":bundled-cores"))
 
-    "freeImplementation"(project(":lemuroid-app-ext-free"))
-    "playImplementation"(project(":lemuroid-app-ext-play"))
+    implementation(project(":lemuroid-app-ext-free"))
 
     implementation(deps.libs.androidx.navigation.navigationFragment)
     implementation(deps.libs.androidx.navigation.navigationUi)

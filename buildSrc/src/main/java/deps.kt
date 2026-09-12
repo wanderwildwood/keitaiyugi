@@ -9,7 +9,6 @@ object deps {
 
     object versions {
         const val dagger          = "2.19"
-        const val gms             = "17.0.0"
         const val kotlin          = "2.0.21"
         const val okHttp          = "4.9.1"
         const val retrofit        = "2.9.0"
@@ -17,7 +16,6 @@ object deps {
         const val navigation      = "2.5.2"
         const val lifecycle       = "2.6.1"
         const val leanback        = "1.1.0-rc01"
-        const val googleApiClient = "1.32.1"
         const val paging          = "3.2.1"
         const val room            = "2.6.1"
         const val serialization   = "1.2.2"
@@ -127,19 +125,6 @@ object deps {
             const val stdlib = "stdlib"
             const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-core:${versions.serialization}"
             const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${versions.serialization}"
-        }
-        object play {
-            const val review = "com.google.android.play:review:2.0.0"
-            const val reviewKtx = "com.google.android.play:review-ktx:2.0.0"
-            const val featureDelivery = "com.google.android.play:feature-delivery:2.1.0"
-            const val featureDeliveryKtx = "com.google.android.play:feature-delivery-ktx:2.1.0"
-            const val playServices = "com.google.android.gms:play-services-auth:17.0.0"
-            const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
-        }
-        object gdrive {
-            const val apiClient            = "com.google.api-client:google-api-client:${versions.googleApiClient}"
-            const val apiClientAndroid     = "com.google.api-client:google-api-client-android:${versions.googleApiClient}"
-            const val apiServicesDrive     = "com.google.apis:google-api-services-drive:v3-rev20210725-${versions.googleApiClient}"
         }
         object coil {
             const val coil = "io.coil-kt:coil:2.6.0"
