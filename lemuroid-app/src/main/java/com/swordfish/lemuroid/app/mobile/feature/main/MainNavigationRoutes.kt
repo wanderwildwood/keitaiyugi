@@ -42,8 +42,12 @@ enum class MainRoute(
     val showBottomNavigation: Boolean = true,
 ) {
     HOME(
+        // The bar above the first screen says the app's name, not "Home". The bottom tab
+        // still says Home -- it is one of four and needs to say which of the four it is,
+        // where the header is the only place the app gets to introduce itself. They used
+        // to share a single string, which is why the header said Home.
         route = "home",
-        titleId = R.string.title_home,
+        titleId = R.string.lemuroid_name,
     ),
     FAVORITES(
         route = "favorites",

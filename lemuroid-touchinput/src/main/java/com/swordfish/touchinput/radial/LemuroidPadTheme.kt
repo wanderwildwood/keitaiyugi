@@ -22,7 +22,14 @@ class LemuroidPadTheme {
     // here: an E Ink panel has no mid greys to render them in, so it dithers each of them
     // into a field of noise, and the blur spreads that noise past the edge of the shape.
     //
-    // Solid white faces, solid black icons, inverted while held, and nothing blurred.
+    // Solid white faces, solid black glyphs, inverted while held, and nothing blurred.
+    //
+    // ⚠ White-on-black, not the black-on-white this panel would prefer, and not by
+    // choice. The area these sit on is not ours: LibretroDroid clears its GL surface to
+    // opaque black in native code (video.cpp, glClearColor(0,0,0,1)) and that fills the
+    // whole view, letterbox included. Black faces simply disappeared into it. Inverting
+    // for real needs a LibretroDroid fork -- the same fork a halftone shader would need,
+    // so the two wants travel together.
     // GlassSurface only draws its shadow when the colour has alpha, so a transparent one
     // turns the blur off rather than merely hiding it.
     private val icons = gray(0.0f, 1.0f)
