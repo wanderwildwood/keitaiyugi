@@ -22,9 +22,8 @@ sprite crosses it, so only a small rectangle of the screen changes and the panel
 repaint that. Mario scrolls, and although that changes fewer pixels than you would think —
 about a tenth, since flat ground shifted sideways is still flat ground — those changes land
 everywhere, so the rectangle that must be repainted is nearly the whole screen. Measured on a synthetic
-Game Boy frame it is 0.9% against 93%, from the same sprite moving at the same speed —
-that measurement lives in [keitaiyugi-probe](https://github.com/wanderwildwood/keitaiyugi-probe),
-not here.
+Game Boy frame it is 0.9% against 93%, from the same sprite moving at the same speed. That
+measurement was made by a separate test harness, not by this app.
 
 So: puzzle, turn-based and fixed-camera games play well. Zelda plays well, which is the
 surprising one. Mario does not.
