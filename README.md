@@ -21,8 +21,10 @@ What it asks for in return is patience with motion. A room in Zelda holds still 
 sprite crosses it, so only a small rectangle of the screen changes and the panel only has to
 repaint that. Mario scrolls, and although that changes fewer pixels than you would think —
 about a tenth, since flat ground shifted sideways is still flat ground — those changes land
-everywhere, so the rectangle that must be repainted is nearly the whole screen. Measured here
-it is 0.9% against 93%, from the same sprite moving at the same speed.
+everywhere, so the rectangle that must be repainted is nearly the whole screen. Measured on a synthetic
+Game Boy frame it is 0.9% against 93%, from the same sprite moving at the same speed —
+that measurement lives in [keitaiyugi-probe](https://github.com/wanderwildwood/keitaiyugi-probe),
+not here.
 
 So: puzzle, turn-based and fixed-camera games play well. Zelda plays well, which is the
 surprising one. Mario does not.
@@ -30,11 +32,14 @@ surprising one. Mario does not.
 ## What is different from Lemuroid
 
 - **One console.** Twenty bundled cores become one, and four ABIs become one — the Kompakt is
-  arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is 12 MB.
+  arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is 6.8 MB.
 - **Grey, not green.** Upstream renders the Game Boy's own green LCD. This panel has no colour
   to show it in, so the tint arrives only as contrast lost between the four shades that are
-  the whole picture. The palette is a true grey ramp; frame mixing is off, because the screen
-  smears without help.
+  the whole picture. The palette is a true grey ramp.
+- **Frames are blended.** Which sounds backwards on a screen that already smears, and is the
+  opposite of what reasoning suggested — but blending gives the panel a smaller change to
+  render between frames, so it has less to smear, and the ghosting is markedly better. Tried
+  on the hardware, not argued from first principles.
 - **Mudita's design system.** Every screen goes through [MMD](https://github.com/mudita/MMD),
   so it looks like the apps the phone shipped with: light, flat, high contrast. Upstream
   defaults to a dark theme with colours taken from the wallpaper, both of which cost more than
@@ -62,3 +67,7 @@ Forked from Lemuroid at `53752bf2`.
 ## Licence
 
 GPL-3.0-only, © wander wildwood, inheriting Lemuroid's GPL-3.0. See [COPYING](COPYING).
+
+Most of this app is other people's work. **[THIRD-PARTY.md](THIRD-PARTY.md)** names all
+of it, with licences and sources — including the one licence question worth knowing about
+before you redistribute: the Game Boy core is GPL-2.0 without an "or later" clause.
