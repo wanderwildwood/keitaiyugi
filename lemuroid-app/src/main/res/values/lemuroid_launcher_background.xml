@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lemuroid_launcher_background">@color/main_color</color>
+    <!-- White, not the app's accent: this icon is drawn for a greyscale panel. -->
+    <color name="lemuroid_launcher_background">#FFFFFFFF</color>
 </resources>

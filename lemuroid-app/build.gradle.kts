@@ -12,7 +12,16 @@ android {
     defaultConfig {
         versionCode = 252
         versionName = "1.17.0" // Always remember to update Cores Tag!
-        applicationId = "com.swordfish.lemuroid"
+        // Its own id, so it installs alongside anything upstream rather than colliding
+        // with it. The code package stays com.swordfish.lemuroid: that is shared
+        // code and its attribution, and renaming it would be a rename for its own sake.
+        applicationId = "com.wanderwildwood.keitaiyugi"
+
+        // The Kompakt reports arm64-v8a and nothing else can run on it, so the other
+        // three ABIs are download and nothing more.
+        ndk {
+            abiFilters += "arm64-v8a"
+        }
     }
     flavorDimensions += listOf("opensource", "cores")
 
@@ -72,6 +81,36 @@ android {
             // Stripping created some issues with some libretro cores such as ppsspp
             keepDebugSymbols += setOf("*/*/*_libretro_android.so")
             useLegacyPackaging = true
+
+            // This app plays Game Boy games, so it carries the Game Boy core and no
+            // others. Upstream bundles twenty, and they are most of the download --
+            // fbneo alone is 208MB on disk, mame2003_plus another 126MB.
+            //
+            // Done here rather than by deleting anything, because the cores are a git
+            // submodule shared with upstream and the files under bundled-cores are
+            // symlinks into it. Excluding by name in our own build file leaves that tree
+            // untouched and says plainly, in one readable list, what is left out.
+            excludes += setOf(
+                    "**/libcitra_libretro_android.so",
+                    "**/libdesmume_libretro_android.so",
+                    "**/libdosbox_pure_libretro_android.so",
+                    "**/libfbneo_libretro_android.so",
+                    "**/libfceumm_libretro_android.so",
+                    "**/libgenesis_plus_gx_libretro_android.so",
+                    "**/libhandy_libretro_android.so",
+                    "**/libmame2003_plus_libretro_android.so",
+                    "**/libmednafen_ngp_libretro_android.so",
+                    "**/libmednafen_pce_fast_libretro_android.so",
+                    "**/libmednafen_wswan_libretro_android.so",
+                    "**/libmelonds_libretro_android.so",
+                    "**/libmgba_libretro_android.so",
+                    "**/libmupen64plus_next_gles3_libretro_android.so",
+                    "**/libpcsx_rearmed_libretro_android.so",
+                    "**/libppsspp_libretro_android.so",
+                    "**/libprosystem_libretro_android.so",
+                    "**/libsnes9x_libretro_android.so",
+                    "**/libstella_libretro_android.so",
+            )
         }
         resources {
             excludes += setOf("META-INF/DEPENDENCIES", "META-INF/library_release.kotlin_module")
@@ -96,12 +135,12 @@ android {
             isMinifyEnabled = true
             signingConfig = signingConfigs["release"]
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            resValue("string", "lemuroid_name", "Lemuroid")
+            resValue("string", "lemuroid_name", "Handheld Games")
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
-            resValue("string", "lemuroid_name", "LemuroiDebug")
+            resValue("string", "lemuroid_name", "Handheld Games (debug)")
         }
     }
 
