@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- No cleartext anywhere. Upstream permitted it for thumbnails.libretro.com because the
+     cover URLs were built with http://; they are https:// now and the host has always
+     served both, so the exception had nothing left to excuse. -->
 <network-security-config>
-    <!-- Apparently a lot of covers in ovgdb are using cleartext http. This is something that we should fix -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">thumbnails.libretro.com</domain>
-    </domain-config>
+    <base-config cleartextTrafficPermitted="false" />
 </network-security-config>

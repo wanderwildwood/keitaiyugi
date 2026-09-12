@@ -26,4 +26,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Run ktlint tests
-      run: ./gradlew assembleDebug ktlintCheck
+      # Only the flavour this fork ships. Upstream's `assembleDebug` builds every
+      # flavour including playDynamic, which drags in the Google dependencies this
+      # app deliberately does not use and took fifteen minutes to tell us so.
+      run: ./gradlew :lemuroid-app:assembleFreeBundleDebug ktlintCheck

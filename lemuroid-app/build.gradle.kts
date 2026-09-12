@@ -94,7 +94,8 @@ android {
             // submodule shared with upstream and the files under bundled-cores are
             // symlinks into it. Excluding by name in our own build file leaves that tree
             // untouched and says plainly, in one readable list, what is left out.
-            excludes += setOf(
+            excludes +=
+                setOf(
                     "**/libcitra_libretro_android.so",
                     "**/libdesmume_libretro_android.so",
                     "**/libdosbox_pure_libretro_android.so",
@@ -114,7 +115,7 @@ android {
                     "**/libprosystem_libretro_android.so",
                     "**/libsnes9x_libretro_android.so",
                     "**/libstella_libretro_android.so",
-            )
+                )
         }
         resources {
             excludes += setOf("META-INF/DEPENDENCIES", "META-INF/library_release.kotlin_module")

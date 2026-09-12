@@ -30,7 +30,7 @@ surprising one. Mario does not.
 ## What is different from Lemuroid
 
 - **One console.** Twenty bundled cores become one, and four ABIs become one — the Kompakt is
-  arm64-v8a. The download goes from 212 MB to about 31 MB.
+  arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is 12 MB.
 - **Grey, not green.** Upstream renders the Game Boy's own green LCD. This panel has no colour
   to show it in, so the tint arrives only as contrast lost between the four shades that are
   the whole picture. The palette is a true grey ramp; frame mixing is off, because the screen

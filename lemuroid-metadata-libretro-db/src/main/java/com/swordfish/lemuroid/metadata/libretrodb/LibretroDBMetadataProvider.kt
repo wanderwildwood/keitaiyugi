@@ -178,6 +178,9 @@ class LibretroDBMetadataProvider(private val ovgdbManager: LibretroDBManager) :
 
         val thumbGameName = name.replace(THUMB_REPLACE, "_")
 
-        return "http://thumbnails.libretro.com/$systemName/$imageType/$thumbGameName.png"
+        // HTTPS. The host serves both and always has; upstream's own comment next to the
+        // cleartext exception said this should be fixed. Over plain HTTP every cover
+        // fetch announces, to anyone on the path, which games are in your library.
+        return "https://thumbnails.libretro.com/$systemName/$imageType/$thumbGameName.png"
     }
 }

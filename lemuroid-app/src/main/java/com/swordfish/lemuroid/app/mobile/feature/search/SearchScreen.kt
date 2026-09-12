@@ -7,7 +7,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidEmptyView
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameListRow

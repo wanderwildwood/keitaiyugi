@@ -2,10 +2,10 @@ package com.swordfish.lemuroid.app.mobile.feature.games
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidEmptyView
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameListRow
 import com.swordfish.lemuroid.lib.library.db.entity.Game

@@ -18,10 +18,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import com.swordfish.lemuroid.lib.library.MetaSystemID
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.lib.library.MetaSystemID
 
 fun NavGraphBuilder.composable(
     route: MainRoute,

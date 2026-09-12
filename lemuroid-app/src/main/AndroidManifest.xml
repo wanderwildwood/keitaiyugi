@@ -20,11 +20,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+    <!-- No Android TV guide access. Deleting our own declaration was not enough: both
+         of these are merged in from a dependency's manifest, so they survived into the
+         built APK and showed up in the permission list a user actually reads. They have
+         to be removed at the merge. A phone has no TV home-screen channels. -->
+    <uses-permission
+        android:name="com.android.providers.tv.permission.WRITE_EPG_DATA"
+        tools:node="remove" />
+    <uses-permission
+        android:name="com.android.providers.tv.permission.READ_EPG_DATA"
+        tools:node="remove" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- No RECORD_AUDIO. Upstream needs it for the Nintendo DS core's microphone;
+         this fork ships one core and a Game Boy has no microphone. -->
 
     <application
         android:name="com.swordfish.lemuroid.app.LemuroidApplication"

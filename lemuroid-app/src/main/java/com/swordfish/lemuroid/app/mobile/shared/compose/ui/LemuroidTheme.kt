@@ -74,21 +74,6 @@ private val DarkColorScheme =
     )
 
 /**
- * Every screen in the app goes through here, so this is the whole reskin.
- *
- * Three things upstream does are right for a phone and wrong for this one. It defaults to
- * **dark**, which on a reflective E Ink panel is a screenful of ink that ghosts and costs
- * contrast rather than saving power. It takes **dynamic colour** from the wallpaper, which
- * is meaningless where there is no colour. And it is Material's palette rather than the
- * one every other app on this phone uses.
- *
- * ThemeMMD is Mudita's own Material3 theme, so all of that is answered by delegating to
- * it: light, flat, high contrast, and consistent with the apps the phone shipped with.
- *
- * The [darkTheme] parameter is kept, unused, so the signature still matches upstream's and
- * merges stay quiet. There is no dark mode here and there should not be one.
- */
-/**
  * Two colours, and every Material role given one of them.
  *
  * Built up from [lightColorScheme] rather than assembled from scratch, which matters: a
@@ -141,6 +126,21 @@ private val EInkColorScheme =
         scrim = Color(0x99000000),
     )
 
+/**
+ * Every screen in the app goes through here, so this is the whole reskin.
+ *
+ * Three things upstream does are right for a phone and wrong for this one. It defaults to
+ * **dark**, which on a reflective E Ink panel is a screenful of ink that ghosts and costs
+ * contrast rather than saving power. It takes **dynamic colour** from the wallpaper, which
+ * is meaningless where there is no colour. And it is Material's palette rather than the
+ * one every other app on this phone uses.
+ *
+ * ThemeMMD is Mudita's own Material3 theme, so all of that is answered by delegating to
+ * it: light, flat, high contrast, and consistent with the apps the phone shipped with.
+ *
+ * The [darkTheme] parameter is kept, unused, so the signature still matches upstream's and
+ * merges stay quiet. There is no dark mode here and there should not be one.
+ */
 @Composable
 fun AppTheme(
     @Suppress("UNUSED_PARAMETER") darkTheme: Boolean = false,
