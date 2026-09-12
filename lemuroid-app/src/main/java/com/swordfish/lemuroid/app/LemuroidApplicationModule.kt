@@ -37,9 +37,6 @@ import com.swordfish.lemuroid.app.shared.main.GameLaunchTaskHandler
 import com.swordfish.lemuroid.app.shared.rumble.RumbleManager
 import com.swordfish.lemuroid.app.shared.settings.ControllerConfigsManager
 import com.swordfish.lemuroid.app.shared.settings.StorageFrameworkPickerLauncher
-import com.swordfish.lemuroid.app.tv.channel.ChannelHandler
-import com.swordfish.lemuroid.app.tv.settings.BiosPreferences
-import com.swordfish.lemuroid.app.tv.settings.CoresSelectionPreferences
 import com.swordfish.lemuroid.ext.feature.core.CoreUpdaterImpl
 import com.swordfish.lemuroid.ext.feature.review.ReviewManager
 import com.swordfish.lemuroid.ext.feature.savesync.SaveSyncManagerImpl
@@ -291,20 +288,10 @@ abstract class LemuroidApplicationModule {
         @Provides
         @PerApp
         @JvmStatic
-        fun biosPreferences(biosManager: BiosManager) = BiosPreferences(biosManager)
-
-        @Provides
-        @PerApp
-        @JvmStatic
         fun coresSelection(
             sharedPreferences: Lazy<SharedPreferences>,
             desmumeMigrationHandler: DesmumeMigrationHandler,
         ) = CoresSelection(sharedPreferences, desmumeMigrationHandler)
-
-        @Provides
-        @PerApp
-        @JvmStatic
-        fun coreSelectionPreferences() = CoresSelectionPreferences()
 
         @Provides
         @PerApp
@@ -341,15 +328,6 @@ abstract class LemuroidApplicationModule {
             context: Context,
             retrofit: Retrofit,
         ) = ShortcutsGenerator(context, retrofit)
-
-        @Provides
-        @PerApp
-        @JvmStatic
-        fun channelHandler(
-            context: Context,
-            retrogradeDatabase: RetrogradeDatabase,
-            retrofit: Retrofit,
-        ) = ChannelHandler(context, retrogradeDatabase, retrofit)
 
         @Provides
         @PerApp

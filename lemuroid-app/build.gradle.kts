@@ -214,10 +214,6 @@ dependencies {
 
     kapt(deps.libs.androidx.lifecycle.processor)
 
-    implementation(deps.libs.androidx.leanback.leanback)
-    implementation(deps.libs.androidx.leanback.leanbackPreference)
-    implementation(deps.libs.androidx.leanback.leanbackPaging)
-
     implementation(deps.libs.androidx.appcompat.recyclerView)
     implementation(deps.libs.androidx.paging.common)
     implementation(deps.libs.androidx.paging.runtime)
@@ -234,7 +230,6 @@ dependencies {
     implementation(deps.libs.flowPreferences)
     implementation(deps.libs.guava)
     implementation(deps.libs.androidx.documentfile)
-    implementation(deps.libs.androidx.leanback.tvProvider)
     implementation(deps.libs.harmony)
     implementation(deps.libs.startup)
     implementation(deps.libs.kotlin.serialization)

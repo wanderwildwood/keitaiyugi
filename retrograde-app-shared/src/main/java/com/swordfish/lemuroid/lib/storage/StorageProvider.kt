@@ -20,7 +20,6 @@
 package com.swordfish.lemuroid.lib.storage
 
 import android.net.Uri
-import androidx.leanback.preference.LeanbackPreferenceFragment
 import com.swordfish.lemuroid.lib.library.db.entity.DataFile
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import kotlinx.coroutines.flow.Flow
@@ -32,8 +31,6 @@ interface StorageProvider {
     val name: String
 
     val uriSchemes: List<String>
-
-    val prefsFragmentClass: Class<out LeanbackPreferenceFragment>?
 
     val enabledByDefault: Boolean
 

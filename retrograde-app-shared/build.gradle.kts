@@ -20,9 +20,12 @@ dependencies {
     api(deps.libs.androidx.lifecycle.commonJava8)
 
     implementation(deps.libs.arch.work.runtime)
+    // androidx.preference was arriving transitively through leanback-preference,
+    // which is gone. SharedPreferencesHelper uses it directly, so it is declared
+    // directly -- depending on it by accident was never right.
+    implementation(deps.libs.androidx.preferences.preferencesKtx)
     implementation(deps.libs.arch.work.runtimeKtx)
     implementation(deps.libs.androidx.appcompat.appcompat)
-    implementation(deps.libs.androidx.leanback.leanbackPreference)
     implementation(deps.libs.androidx.ktx.collection)
     implementation(deps.libs.androidx.ktx.core)
     implementation(deps.libs.androidx.ktx.coreKtx)
