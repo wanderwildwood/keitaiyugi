@@ -491,7 +491,16 @@ data class GameSystem(
                             defaultSettings =
                                 listOf(
                                     CoreVariable("gambatte_gb_colorization", "internal"),
-                                    CoreVariable("gambatte_gb_internal_palette", "GB - Pocket"),
+                                    // Upstream picks "GB - Pocket", which is a kinder green
+                                    // than the DMG's but still a green. This screen has no
+                                    // colour to spend, so every bit of the tint arrives as
+                                    // lost contrast between the four shades. A true grey
+                                    // ramp keeps all four distinguishable, which is the
+                                    // whole of what this panel can show.
+                                    CoreVariable("gambatte_gb_internal_palette", "GBC - Grayscale"),
+                                    // The panel ghosts by itself; it does not need the
+                                    // emulator blending frames on top of that.
+                                    CoreVariable("gambatte_mix_frames", "disabled"),
                                 ),
                             controllerConfigs =
                                 hashMapOf(
