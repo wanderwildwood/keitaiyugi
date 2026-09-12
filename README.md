@@ -1,61 +1,64 @@
-# Lemuroid
+# 携帯遊戯 keitaiyugi — Handheld Games
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/com.swordfish.lemuroid/)
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=com.swordfish.lemuroid)
+Game Boy games on the [Mudita Kompakt](https://mudita.com/products/kompakt/), drawn for its
+E Ink screen rather than in spite of it.
 
-## Description
+*Keitai yūgi* is 携帯遊戯 — portable play. Which is what a Game Boy was, and what this phone
+can be on a quiet afternoon.
 
-Lemuroid is an open-source emulation project for Android based on Libretro. Its main goal is ease of use, good Android integration and a great user experience.
+A fork of **[Lemuroid](https://github.com/Swordfish90/Lemuroid)** by Filippo Scognamiglio,
+cut down to one console and reskinned for a screen with two colours. Emulation is
+[Gambatte](https://docs.libretro.com/library/gambatte/) through
+[LibretroDroid](https://github.com/Swordfish90/LibretroDroid). None of the hard part is mine.
 
-It originated from a rib of [Retrograde](https://github.com/retrograde/retrograde-android), but graduated to a standalone project integrating [LibretroDroid](https://github.com/Swordfish90/LibretroDroid).
+## Why this screen at all
 
-|Screen 1|Screen 2|Screen 3|
-|---|---|---|
-|![Screen1](https://github.com/Swordfish90/Lemuroid/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg)|![Screen2](https://github.com/Swordfish90/Lemuroid/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg)|![Screen3](https://github.com/Swordfish90/Lemuroid/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg)|
+The Kompakt's panel is 480 pixels wide. A Game Boy is 160. That is exactly **3x** — the
+picture fills the width with no resampling and no stretching, and leaves room underneath for
+the controls. The fit is a coincidence, but it is a good one.
 
-### Supported Systems:
-- Atari 2600 (A26) ([stella](https://docs.libretro.com/library/stella/))
-- Atari 7800 (A78) ([prosystem](https://docs.libretro.com/library/prosystem/))
-- Atari Lynx (Lynx) ([handy](https://docs.libretro.com/library/handy/))
-- Nintendo (NES) ([fceumm](https://docs.libretro.com/library/fceumm/))
-- Super Nintendo (SNES) ([snes9x](https://docs.libretro.com/library/snes9x/))
-- Game Boy (GB) ([gambatte](https://docs.libretro.com/library/gambatte/))
-- Game Boy Color (GBC) ([gambatte](https://docs.libretro.com/library/gambatte/))
-- Game Boy Advance (GBA) ([mgba](https://docs.libretro.com/library/mgba/))
-- Sega Genesis (aka Megadrive) ([genesis_plus_gx](https://docs.libretro.com/library/genesis_plus_gx/))
-- Sega CD (aka Mega CD) ([genesis_plus_gx](https://docs.libretro.com/library/genesis_plus_gx/))
-- Sega Master System (SMS) ([genesis_plus_gx](https://docs.libretro.com/library/genesis_plus_gx/))
-- Sega Game Gear (GG) ([genesis_plus_gx](https://docs.libretro.com/library/genesis_plus_gx/))
-- Nintendo 64 (N64) ([mupen64plus](https://docs.libretro.com/library/mupen64plus/))
-- PlayStation (PSX) ([PCSX-ReARMed](https://docs.libretro.com/library/pcsx_rearmed/))
-- PlayStation Portable (PSP) ([ppsspp](https://docs.libretro.com/library/ppsspp/))
-- FinalBurn Neo (Arcade) ([fbneo](https://github.com/libretro/FBNeo/))
-- Nintendo DS (NDS) ([desmume](https://docs.libretro.com/library/desmume/)/[MelonDS](https://docs.libretro.com/library/melonds/))
-- NEC PC Engine (PCE) ([beetle_pce_fast](https://docs.libretro.com/library/beetle_pce_fast/))
-- Neo Geo Pocket (NGP) ([mednafen_ngp](https://docs.libretro.com/library/beetle_neopop/))
-- Neo Geo Pocket Color (NGC) ([mednafen_ngp](https://docs.libretro.com/library/beetle_neopop/))
-- WonderSwan (WS) ([beetle_cygne](https://docs.libretro.com/library/beetle_cygne/))
-- WonderSwan Color (WSC) ([beetle_cygne](https://docs.libretro.com/library/beetle_cygne/))
-- Nintendo 3DS (3DS) ([citra](https://docs.libretro.com/library/citra/))
+What it asks for in return is patience with motion. A room in Zelda holds still while a
+sprite crosses it, so only a small rectangle of the screen changes and the panel only has to
+repaint that. Mario scrolls, and although that changes fewer pixels than you would think —
+about a tenth, since flat ground shifted sideways is still flat ground — those changes land
+everywhere, so the rectangle that must be repainted is nearly the whole screen. Measured here
+it is 0.9% against 93%, from the same sprite moving at the same speed.
 
-### Features:
-- Android TV support
-- Automatically save and restore game states.
-- ROMs scanning and indexing
-- Optimized touch controls
-- Quick save/load
-- Support for Zipped ROMs
-- Display simulation (LCD/CRT)
-- Gamepad support
-- Local multiplayer
-- Tilt input
-- Customizable touch controls (size and position)
-- Cloud save sync
-- HD mode
+So: puzzle, turn-based and fixed-camera games play well. Zelda plays well, which is the
+surprising one. Mario does not.
 
-### Languages:
-You can help translate Lemuroid in your native language by going here: https://crowdin.com/project/lemuroid
+## What is different from Lemuroid
+
+- **One console.** Twenty bundled cores become one, and four ABIs become one — the Kompakt is
+  arm64-v8a. The download goes from 212 MB to about 31 MB.
+- **Grey, not green.** Upstream renders the Game Boy's own green LCD. This panel has no colour
+  to show it in, so the tint arrives only as contrast lost between the four shades that are
+  the whole picture. The palette is a true grey ramp; frame mixing is off, because the screen
+  smears without help.
+- **Mudita's design system.** Every screen goes through [MMD](https://github.com/mudita/MMD),
+  so it looks like the apps the phone shipped with: light, flat, high contrast. Upstream
+  defaults to a dark theme with colours taken from the wallpaper, both of which cost more than
+  they give here.
+- **Paged lists.** Scrolling on E Ink is limited by the panel, not the processor, so the only
+  thing that helps is producing fewer frames. The lists use MMD's, which page rather than
+  glide.
+- **Grey cover art.** Converted properly rather than left for the panel to do badly.
+- **No system chooser.** There is one system; the tab opens the games.
+
+## Games
+
+**No games are included and none ever will be.** The app reads Game Boy files you provide:
+point it at a directory in Settings.
+
+If you have none, the [Homebrew Hub](https://hh.gbdev.io) is an archive of Game Boy games
+written in the last few years and given away by the people who wrote them. Plenty of it is
+puzzle and turn-based work that suits this screen better than most commercial releases do.
+
+## Where this is up to
+
+Version 0.1.0. It plays, on a real Kompakt, and has not been through anybody else's hands yet.
+Forked from Lemuroid at `53752bf2`.
+
+## Licence
+
+GPL-3.0-only, © wander wildwood, inheriting Lemuroid's GPL-3.0. See [COPYING](COPYING).

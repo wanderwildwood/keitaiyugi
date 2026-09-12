@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -10,8 +11,11 @@ plugins {
 
 android {
     defaultConfig {
-        versionCode = 252
-        versionName = "1.17.0" // Always remember to update Cores Tag!
+        // This fork's own version, not upstream's. The Lemuroid release it is based on
+        // is recorded in the README instead, where it can be read without git.
+        // versionCode is major*10000 + minor*100 + patch, as the other apps here.
+        versionCode = 100
+        versionName = "0.1.0"
         // Its own id, so it installs alongside anything upstream rather than colliding
         // with it. The code package stays com.swordfish.lemuroid: that is shared
         // code and its attribution, and renaming it would be a rename for its own sake.
@@ -117,27 +121,40 @@ android {
         }
     }
 
-    signingConfigs {
-        maybeCreate("debug").apply {
-            storeFile = file("$rootDir/debug.keystore")
+    // A real keystore in signing/ signs every build type when it is present, so the very
+    // first install is already release-signed and a later update can never hit
+    // INSTALL_FAILED_UPDATE_INCOMPATIBLE. It is gitignored, and **there is no fallback**:
+    // a fresh clone builds an unsigned release APK, which will not install anywhere.
+    //
+    // Upstream's release config is deliberately gone. It named a keystore with the
+    // password "lemuroid" in the file, which is exactly the shape of key that lets
+    // anyone build an APK that installs over yours -- Android decides whether an update
+    // is legitimate purely by signature. Unsigned is the right failure: it fails loudly
+    // rather than handing someone something installable.
+    val signingPropertiesFile = rootProject.file("signing/signing.properties")
+    val realSigningConfig =
+        if (signingPropertiesFile.isFile) {
+            val signingProperties =
+                Properties().apply { signingPropertiesFile.inputStream().use(::load) }
+            signingConfigs.create("real") {
+                storeFile = rootProject.file("signing/signing.keystore")
+                storePassword = signingProperties.getProperty("STORE_PASSWORD")
+                keyAlias = signingProperties.getProperty("KEY_ALIAS")
+                keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+            }
+        } else {
+            null
         }
-
-        maybeCreate("release").apply {
-            storeFile = file("$rootDir/release.jks")
-            keyAlias = "lemuroid"
-            storePassword = "lemuroid"
-            keyPassword = "lemuroid"
-        }
-    }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            signingConfig = signingConfigs["release"]
+            realSigningConfig?.let { signingConfig = it }
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             resValue("string", "lemuroid_name", "Handheld Games")
         }
         getByName("debug") {
+            realSigningConfig?.let { signingConfig = it }
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
             resValue("string", "lemuroid_name", "Handheld Games (debug)")
