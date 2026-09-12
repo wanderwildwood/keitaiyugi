@@ -498,9 +498,15 @@ data class GameSystem(
                                     // ramp keeps all four distinguishable, which is the
                                     // whole of what this panel can show.
                                     CoreVariable("gambatte_gb_internal_palette", "GBC - Grayscale"),
-                                    // The panel ghosts by itself; it does not need the
-                                    // emulator blending frames on top of that.
-                                    CoreVariable("gambatte_mix_frames", "disabled"),
+                                    // ⚠ Blending frames REDUCES ghosting here, which is
+                                    // the opposite of what it sounds like and the opposite
+                                    // of what this default used to be. Reasoning said an
+                                    // E Ink panel that already smears needs no help
+                                    // smearing; trying it on the hardware said otherwise.
+                                    // Blending gives the panel a smaller change to render
+                                    // between frames, so it has less to smear. The screen
+                                    // wins the argument.
+                                    CoreVariable("gambatte_mix_frames", "lcd_ghosting_fast"),
                                     // Force Game Boy hardware. A .gb file can still be
                                     // Game Boy Color *enhanced*, and on Auto the core
                                     // then runs in colour -- where the grayscale palette
