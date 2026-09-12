@@ -18,6 +18,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
+import com.swordfish.lemuroid.lib.library.MetaSystemID
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swordfish.lemuroid.R
@@ -59,8 +60,10 @@ enum class MainRoute(
     SYSTEM_GAMES(
         route = "systems/{metaSystemId}",
         titleId = R.string.title_games,
-        parent = SYSTEMS,
-        listOf(navArgument("metaSystemId") { type = NavType.StringType }),
+        // No parent, deliberately. This is a top-level destination here: the bottom bar
+        // opens it directly, so a back arrow pointing at the systems chooser would offer
+        // a way into the one screen this app has decided not to have.
+        arguments = listOf(navArgument("metaSystemId") { type = NavType.StringType }),
     ),
     SETTINGS(
         route = "settings/home",
@@ -117,9 +120,28 @@ enum class MainNavigationRoutes(
     @StringRes val titleId: Int,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
+    /** Where the tab goes, when that is not simply [route]. */
+    val navigationRoute: String? = null,
 ) {
     HOME(MainRoute.HOME, R.string.title_home, Icons.Filled.Home, Icons.Outlined.Home),
     FAVORITES(MainRoute.FAVORITES, R.string.favorites, Icons.Filled.Favorite, Icons.Filled.FavoriteBorder),
-    SYSTEMS(MainRoute.SYSTEMS, R.string.title_systems, Icons.Filled.VideogameAsset, Icons.Outlined.VideogameAsset),
+
+    /**
+     * Upstream's tab here opens a chooser of systems. This app has one system and always
+     * will, so that screen is a list of length one standing between you and the games --
+     * a tap that can only ever have one answer. The tab goes straight to the games.
+     *
+     * The chooser screen itself is left in place, unrouted: it costs nothing, keeps the
+     * diff against upstream small, and is correct again the day a second core is added --
+     * though whoever does that will need to give SYSTEM_GAMES its parent back, or arrive
+     * at a game list with no way up.
+     */
+    GAMES(
+        MainRoute.SYSTEM_GAMES,
+        R.string.title_games,
+        Icons.Filled.VideogameAsset,
+        Icons.Outlined.VideogameAsset,
+        navigationRoute = "systems/" + MetaSystemID.GB.name,
+    ),
     SEARCH(MainRoute.SEARCH, R.string.title_search, Icons.Filled.Search, Icons.Outlined.Search),
 }

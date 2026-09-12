@@ -48,7 +48,7 @@ private fun LemuroidNavigationBar(
                 label = { Text(stringResource(destination.titleId)) },
                 selected = isSelected,
                 onClick = {
-                    navController.navigate(destination.route.route) {
+                    navController.navigate(destination.navigationRoute ?: destination.route.route) {
                         // Pop up to the start destination of the graph to
                         // avoid building up a large stack of destinations
                         // on the back stack as users select items
