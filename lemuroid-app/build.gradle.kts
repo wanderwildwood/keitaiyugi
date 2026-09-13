@@ -14,8 +14,8 @@ android {
         // This fork's own version, not upstream's. The Lemuroid release it is based on
         // is recorded in the README instead, where it can be read without git.
         // versionCode is major*10000 + minor*100 + patch, as the other apps here.
-        versionCode = 100
-        versionName = "0.1.0"
+        versionCode = 101
+        versionName = "0.1.1"
         // Its own id, so it installs alongside anything upstream rather than colliding
         // with it. The code package stays com.swordfish.lemuroid: that is shared
         // code and its attribution, and renaming it would be a rename for its own sake.
@@ -105,6 +105,14 @@ android {
 
     buildTypes {
         getByName("release") {
+            // The one thing that differs between a release built here and the one GitHub
+            // publishes: AGP stamps the git revision into META-INF, and the build box works
+            // from an rsync with no .git, so it writes NO_SUPPORTED_VCS_FOUND where the CI
+            // runner writes the commit. Off, so the two have identical contents.
+            vcsInfo {
+                include = false
+            }
+
             isMinifyEnabled = true
             // Upstream minifies code but not resources, so everything unreferenced still
             // shipped: drawables for twenty consoles, the leanback and TV resources this
