@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,6 +43,7 @@ import com.swordfish.lemuroid.app.mobile.feature.gamemenu.coreoptions.GameMenuCo
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.states.GameMenuStatesScreen
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.states.GameMenuStatesViewModel
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.shared.GameMenuContract
 import com.swordfish.lemuroid.app.shared.coreoptions.LemuroidCoreOption
 import com.swordfish.lemuroid.app.shared.input.InputDeviceManager
@@ -156,14 +154,14 @@ class GameMenuActivity : RetrogradeComponentActivity() {
                             if (canGoBack) {
                                 IconButton(onClick = { navController.popBackStack() }) {
                                     Icon(
-                                        Icons.AutoMirrored.Outlined.ArrowBack,
+                                        Icons.Back,
                                         stringResource(R.string.back),
                                     )
                                 }
                             } else {
                                 IconButton(onClick = { onResult { } }) {
                                     Icon(
-                                        Icons.Outlined.Close,
+                                        Icons.Close,
                                         stringResource(R.string.close),
                                     )
                                 }

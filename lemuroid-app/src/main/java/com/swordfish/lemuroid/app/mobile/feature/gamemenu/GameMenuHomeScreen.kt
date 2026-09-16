@@ -2,8 +2,6 @@ package com.swordfish.lemuroid.app.mobile.feature.gamemenu
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Sensors
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +14,7 @@ import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.tilt.TiltConfigurationMenuEntry
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.shared.GameMenuContract
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
@@ -179,7 +178,7 @@ fun GameMenuHomeScreen(
                     useSelectedValueAsSubtitle = false,
                     icon = {
                         Icon(
-                            imageVector = Icons.Outlined.Sensors,
+                            imageVector = Icons.Sensors,
                             contentDescription = stringResource(id = R.string.game_menu_tilt_sensor),
                         )
                     },

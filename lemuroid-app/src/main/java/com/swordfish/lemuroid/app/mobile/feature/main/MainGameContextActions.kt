@@ -15,12 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AppShortcut
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameTexts
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidSmallGameImage
 import com.swordfish.lemuroid.lib.library.db.entity.Game
@@ -102,7 +97,7 @@ private fun ContextActionContent(
         HorizontalDividerMMD()
         ContextActionEntry(
             label = stringResource(id = R.string.game_context_menu_resume),
-            icon = Icons.Outlined.PlayArrow,
+            icon = Icons.Play,
             onClick = {
                 onGamePlay(selectedGame)
                 selectedGameState.value = null
@@ -110,7 +105,7 @@ private fun ContextActionContent(
         )
         ContextActionEntry(
             label = stringResource(id = R.string.game_context_menu_restart),
-            icon = Icons.Outlined.RestartAlt,
+            icon = Icons.RestartAlt,
             onClick = {
                 onGameRestart(selectedGame)
                 selectedGameState.value = null
@@ -120,7 +115,7 @@ private fun ContextActionContent(
         if (selectedGame.isFavorite) {
             ContextActionEntry(
                 label = stringResource(id = R.string.game_context_menu_remove_from_favorites),
-                icon = Icons.Outlined.FavoriteBorder,
+                icon = Icons.FavoriteBorder,
                 onClick = {
                     onFavoriteToggle(selectedGame, false)
                     selectedGameState.value = null
@@ -129,7 +124,7 @@ private fun ContextActionContent(
         } else {
             ContextActionEntry(
                 label = stringResource(id = R.string.game_context_menu_add_to_favorites),
-                icon = Icons.Outlined.Favorite,
+                icon = Icons.Favorite,
                 onClick = {
                     onFavoriteToggle(selectedGame, true)
                     selectedGameState.value = null
@@ -140,7 +135,7 @@ private fun ContextActionContent(
         if (shortcutSupported) {
             ContextActionEntry(
                 label = stringResource(id = R.string.game_context_menu_create_shortcut),
-                icon = Icons.Outlined.AppShortcut,
+                icon = Icons.AppShortcut,
                 onClick = {
                     onCreateShortcut(selectedGame)
                     selectedGameState.value = null

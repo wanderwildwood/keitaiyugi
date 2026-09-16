@@ -2,11 +2,6 @@ package com.swordfish.touchinput.radial.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -26,16 +21,16 @@ fun LemuroidCrossForeground(
         directionState = directionState,
         allowDiagonals = allowDiagonals,
         leftDial = {
-            LemuroidCrossButton(it, Icons.Default.KeyboardArrowLeft)
+            LemuroidCrossButton(it, Icons.ChevronLeft)
         },
         rightDial = {
-            LemuroidCrossButton(it, Icons.Default.KeyboardArrowRight)
+            LemuroidCrossButton(it, Icons.ChevronRight)
         },
         topDial = {
-            LemuroidCrossButton(it, Icons.Default.KeyboardArrowUp)
+            LemuroidCrossButton(it, Icons.ChevronUp)
         },
         bottomDial = {
-            LemuroidCrossButton(it, Icons.Default.KeyboardArrowDown)
+            LemuroidCrossButton(it, Icons.ChevronDown)
         },
         foregroundComposite = {
             LemuroidCompositeForeground(it)

@@ -10,12 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.CloudSync
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,6 +36,7 @@ import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.text_field.TextFieldMMD
 import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.shared.savesync.SaveSyncWork
 
 @Composable
@@ -106,7 +101,7 @@ fun LemuroidTopAppBar(
             if (route.parent != null)  {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
-                        Icons.AutoMirrored.Outlined.ArrowBack,
+                        Icons.Back,
                         stringResource(id = R.string.back),
                     )
                 }
@@ -139,7 +134,7 @@ fun LemuroidTopBarActions(
             onClick = { onHelpPressed() },
         ) {
             Icon(
-                Icons.Outlined.Info,
+                Icons.Info,
                 stringResource(R.string.mobile_settings_help),
             )
         }
@@ -149,7 +144,7 @@ fun LemuroidTopBarActions(
                 enabled = !operationsInProgress,
             ) {
                 Icon(
-                    Icons.Outlined.CloudSync,
+                    Icons.CloudSync,
                     stringResource(R.string.save_sync),
                 )
             }
@@ -159,7 +154,7 @@ fun LemuroidTopBarActions(
                 onClick = { navController.navigate(MainRoute.SETTINGS.route) },
             ) {
                 Icon(
-                    Icons.Outlined.Settings,
+                    Icons.Settings,
                     stringResource(R.string.settings),
                 )
             }
@@ -188,7 +183,7 @@ private fun LemuroidSearchView(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
+        leadingIcon = { Icon(Icons.Search, contentDescription = null) },
         singleLine = true,
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus(true) }),
     )

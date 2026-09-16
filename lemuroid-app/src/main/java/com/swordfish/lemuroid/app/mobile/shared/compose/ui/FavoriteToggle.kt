@@ -2,9 +2,6 @@ package com.swordfish.lemuroid.app.mobile.shared.compose.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +23,9 @@ fun FavoriteToggle(
     ) {
         val image =
             if (isToggled) {
-                Icons.Outlined.Favorite
+                Icons.Favorite
             } else {
-                Icons.Outlined.FavoriteBorder
+                Icons.FavoriteBorder
             }
         Icon(
             image,

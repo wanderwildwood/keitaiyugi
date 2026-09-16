@@ -2,15 +2,6 @@ package com.swordfish.lemuroid.app.mobile.feature.main
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.VideogameAsset
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.VideogameAsset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
@@ -21,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.lib.library.MetaSystemID
 
 fun NavGraphBuilder.composable(
@@ -127,8 +119,8 @@ enum class MainNavigationRoutes(
     /** Where the tab goes, when that is not simply [route]. */
     val navigationRoute: String? = null,
 ) {
-    HOME(MainRoute.HOME, R.string.title_home, Icons.Outlined.Home, Icons.Outlined.Home),
-    FAVORITES(MainRoute.FAVORITES, R.string.favorites, Icons.Outlined.Favorite, Icons.Outlined.FavoriteBorder),
+    HOME(MainRoute.HOME, R.string.title_home, Icons.Home, Icons.Home),
+    FAVORITES(MainRoute.FAVORITES, R.string.favorites, Icons.Favorite, Icons.FavoriteBorder),
 
     /**
      * Upstream's tab here opens a chooser of systems. This app has one system and always
@@ -143,9 +135,9 @@ enum class MainNavigationRoutes(
     GAMES(
         MainRoute.SYSTEM_GAMES,
         R.string.title_games,
-        Icons.Outlined.VideogameAsset,
-        Icons.Outlined.VideogameAsset,
+        Icons.VideogameAsset,
+        Icons.VideogameAsset,
         navigationRoute = "systems/" + MetaSystemID.GB.name,
     ),
-    SEARCH(MainRoute.SEARCH, R.string.title_search, Icons.Outlined.Search, Icons.Outlined.Search),
+    SEARCH(MainRoute.SEARCH, R.string.title_search, Icons.Search, Icons.Search),
 }
