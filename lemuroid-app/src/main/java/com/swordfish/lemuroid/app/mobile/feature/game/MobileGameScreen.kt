@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Height
-import androidx.compose.material.icons.filled.OpenInFull
-import androidx.compose.material.icons.filled.RotateLeft
+import androidx.compose.material.icons.outlined.Height
+import androidx.compose.material.icons.outlined.OpenInFull
+import androidx.compose.material.icons.outlined.RotateLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -278,7 +278,7 @@ private fun MenuEditTouchControls(
                         .padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                MenuEditTouchControlRow(Icons.Default.OpenInFull, "Scale", 0f) {
+                MenuEditTouchControlRow(Icons.Outlined.OpenInFull, "Scale", 0f) {
                     SliderMMD(
                         value = touchControllerSettings.scale,
                         onValueChange = {
@@ -288,7 +288,7 @@ private fun MenuEditTouchControls(
                         },
                     )
                 }
-                MenuEditTouchControlRow(Icons.Default.Height, "Horizontal Margin", 90f) {
+                MenuEditTouchControlRow(Icons.Outlined.Height, "Horizontal Margin", 90f) {
                     SliderMMD(
                         value = touchControllerSettings.marginX,
                         onValueChange = {
@@ -298,7 +298,7 @@ private fun MenuEditTouchControls(
                         },
                     )
                 }
-                MenuEditTouchControlRow(Icons.Default.Height, "Vertical Margin", 0f) {
+                MenuEditTouchControlRow(Icons.Outlined.Height, "Vertical Margin", 0f) {
                     SliderMMD(
                         value = touchControllerSettings.marginY,
                         onValueChange = {
@@ -309,7 +309,7 @@ private fun MenuEditTouchControls(
                     )
                 }
                 if (controllerConfig.allowTouchRotation) {
-                    MenuEditTouchControlRow(Icons.Default.RotateLeft, "Rotate", 0f) {
+                    MenuEditTouchControlRow(Icons.Outlined.RotateLeft, "Rotate", 0f) {
                         SliderMMD(
                             value = touchControllerSettings.rotation,
                             onValueChange = {

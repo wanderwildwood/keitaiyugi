@@ -3,7 +3,7 @@ package com.swordfish.lemuroid.app.mobile.feature.gamemenu
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Sensors
+import androidx.compose.material.icons.outlined.Sensors
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -179,7 +179,7 @@ fun GameMenuHomeScreen(
                     useSelectedValueAsSubtitle = false,
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Sensors,
+                            imageVector = Icons.Outlined.Sensors,
                             contentDescription = stringResource(id = R.string.game_menu_tilt_sensor),
                         )
                     },

@@ -3,11 +3,11 @@ package com.swordfish.lemuroid.app.mobile.feature.main
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VideogameAsset
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.VideogameAsset
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VideogameAsset
@@ -127,8 +127,8 @@ enum class MainNavigationRoutes(
     /** Where the tab goes, when that is not simply [route]. */
     val navigationRoute: String? = null,
 ) {
-    HOME(MainRoute.HOME, R.string.title_home, Icons.Filled.Home, Icons.Outlined.Home),
-    FAVORITES(MainRoute.FAVORITES, R.string.favorites, Icons.Filled.Favorite, Icons.Filled.FavoriteBorder),
+    HOME(MainRoute.HOME, R.string.title_home, Icons.Outlined.Home, Icons.Outlined.Home),
+    FAVORITES(MainRoute.FAVORITES, R.string.favorites, Icons.Outlined.Favorite, Icons.Outlined.FavoriteBorder),
 
     /**
      * Upstream's tab here opens a chooser of systems. This app has one system and always
@@ -143,9 +143,9 @@ enum class MainNavigationRoutes(
     GAMES(
         MainRoute.SYSTEM_GAMES,
         R.string.title_games,
-        Icons.Filled.VideogameAsset,
+        Icons.Outlined.VideogameAsset,
         Icons.Outlined.VideogameAsset,
         navigationRoute = "systems/" + MetaSystemID.GB.name,
     ),
-    SEARCH(MainRoute.SEARCH, R.string.title_search, Icons.Filled.Search, Icons.Outlined.Search),
+    SEARCH(MainRoute.SEARCH, R.string.title_search, Icons.Outlined.Search, Icons.Outlined.Search),
 }

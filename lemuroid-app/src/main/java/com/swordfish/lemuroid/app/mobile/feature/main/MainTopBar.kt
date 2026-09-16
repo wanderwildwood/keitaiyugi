@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.CloudSync
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
@@ -106,7 +106,7 @@ fun LemuroidTopAppBar(
             if (route.parent != null)  {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
+                        Icons.AutoMirrored.Outlined.ArrowBack,
                         stringResource(id = R.string.back),
                     )
                 }
@@ -188,7 +188,7 @@ private fun LemuroidSearchView(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
         singleLine = true,
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus(true) }),
     )

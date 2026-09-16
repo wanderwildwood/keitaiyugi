@@ -50,6 +50,7 @@ import com.swordfish.lemuroid.app.mobile.feature.settings.savesync.SaveSyncSetti
 import com.swordfish.lemuroid.app.mobile.feature.shortcuts.ShortcutsGenerator
 import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsScreen
 import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsViewModel
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AboutDialog
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
 import com.swordfish.lemuroid.app.shared.GameInteractor
@@ -72,7 +73,6 @@ import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
 import com.swordfish.lemuroid.lib.savesync.SaveSyncManager
 import com.swordfish.lemuroid.lib.storage.DirectoriesManager
 import dagger.Provides
-import de.charlex.compose.material3.HtmlText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import javax.inject.Inject
@@ -363,15 +363,11 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
             )
 
             if (infoDialogDisplayed.value) {
-                // The help text no longer enumerates systems: there is one, and it is
-                // named in the sentence. Upstream substituted all twenty-five here.
-                val message = remember { getString(R.string.lemuroid_help_content) }
-
-                EInkAlertDialog(
-                    text = { HtmlText(text = message) },
-                    onDismissRequest = { infoDialogDisplayed.value = false },
-                    confirmButton = { },
-                )
+                // The i used to open the help text alone -- no version, no licence, no source,
+                // and no button to close it with. It opens the About now, which carries the
+                // help text first and then the things a stranger looks for before trusting an
+                // app, in the order every other app of this shop uses.
+                AboutDialog(onDismiss = { infoDialogDisplayed.value = false })
             }
         }
     }
