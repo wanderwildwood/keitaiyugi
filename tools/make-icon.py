@@ -56,24 +56,34 @@ SHOTS = os.path.join(ROOT, "screenshots")
 
 CENTRE = (54.0, 54.0)
 SAFE_RADIUS = 33.0
-CELL = 5.0
-ORIGIN = (29.0, 29.0)        # top-left of the grid, so a 10x10 grid centres on 54,54
+CELL = 4.2
 BLEED = 0.02                # rectangles overlap by a hair so no seam shows between them
 
-# Ten columns, ten rows. The cross takes the left six, the two buttons the right, set
+# Twelve columns, ten rows. The cross takes the left six, the two buttons the right, set
 # on a diagonal at unequal distances from it rather than stacked in a tidy column.
+#
+# Two of those columns are air. The mark began ten wide, with a single cell between the
+# cross's arm and the A button, and at launcher size the two closed up into one shape —
+# a thumb and a blot rather than a cross and two buttons. Each column of air costs cell
+# size, because the drawing has to stay inside the 33 units the adaptive mask guarantees:
+# 5.0 at ten wide, 4.6 at eleven, 4.2 here. Paying in pixel size rather than in
+# composition is deliberate — the buttons stay on their diagonal, off-centre and at
+# unequal distances, which is the one place this drawing is allowed to be crooked.
 GRID = [
-    "..........",
-    ".......XXX",
-    "..XX...XXX",
-    "..XX...XXX",
-    "XXXXXX....",
-    "XXXXXX....",
-    "..XX......",
-    "..XX..XXX.",
-    "......XXX.",
-    "......XXX.",
+    "............",
+    ".........XXX",
+    "..XX.....XXX",
+    "..XX.....XXX",
+    "XXXXXX......",
+    "XXXXXX......",
+    "..XX........",
+    "..XX....XXX.",
+    "........XXX.",
+    "........XXX.",
 ]
+
+# Top-left of the grid, so whatever shape it is centres on 54,54.
+ORIGIN = (CENTRE[0] - len(GRID[0]) * CELL / 2.0, CENTRE[1] - len(GRID) * CELL / 2.0)
 
 
 def cells():
@@ -140,7 +150,7 @@ def main():
             '<vector xmlns:android="http://schemas.android.com/apk/res/android"\n'
             '    android:width="108dp"\n    android:height="108dp"\n'
             '    android:viewportWidth="108"\n    android:viewportHeight="108">\n\n'
-            "    <!-- the cross and the two buttons, on a 6-unit grid -->\n"
+            "    <!-- the cross and the two buttons, on a pixel grid -->\n"
             '    <path\n        android:fillColor="#FF000000"\n'
             '        android:pathData="%s" />\n\n</vector>\n' % data
         )
