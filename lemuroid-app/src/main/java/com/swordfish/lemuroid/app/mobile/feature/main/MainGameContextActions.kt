@@ -1,8 +1,5 @@
 package com.swordfish.lemuroid.app.mobile.feature.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,13 +22,11 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mudita.mmd.components.divider.HorizontalDividerMMD
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameTexts
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidSmallGameImage
@@ -102,7 +99,7 @@ private fun ContextActionContent(
                 .windowInsetsPadding(WindowInsets.safeContent.only(WindowInsetsSides.Bottom)),
     ) {
         ContextActionHeader(game = selectedGame)
-        Divider()
+        HorizontalDividerMMD()
         ContextActionEntry(
             label = stringResource(id = R.string.game_context_menu_resume),
             icon = Icons.Default.PlayArrow,
@@ -202,7 +199,7 @@ private fun ContextActionEntry(
             imageVector = icon,
             contentDescription = label,
         )
-        Text(
+        TextMMD(
             modifier = Modifier.padding(start = 16.dp),
             text = label,
         )
@@ -212,11 +209,7 @@ private fun ContextActionEntry(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun FakeScrim(modalSheetState: SheetState) {
-    AnimatedVisibility(
-        visible = modalSheetState.targetValue != SheetValue.Hidden,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
+    if (modalSheetState.targetValue != SheetValue.Hidden)  {
         Box(
             modifier =
                 Modifier

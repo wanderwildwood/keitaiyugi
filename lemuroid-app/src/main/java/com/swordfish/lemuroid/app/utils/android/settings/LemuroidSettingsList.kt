@@ -11,10 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.storage.base.SettingValueState
+import com.mudita.mmd.components.radio_button.RadioButtonMMD
+import com.mudita.mmd.components.text.TextMMD
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,7 +51,7 @@ fun LemuroidSettingsList(
 
     val safeSubtitle =
         if (state.value >= 0 && useSelectedValueAsSubtitle) {
-            { Text(text = items[state.value]) }
+            { TextMMD(text = items[state.value]) }
         } else {
             subtitle
         }
@@ -77,7 +77,7 @@ fun LemuroidSettingsList(
         }
     }
 
-    AlertDialog(
+    EInkAlertDialog(
         title = title,
         text = {
             Column(
@@ -109,11 +109,11 @@ fun LemuroidSettingsList(
                                 ),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        RadioButton(
+                        RadioButtonMMD(
                             selected = isSelected,
                             onClick = null,
                         )
-                        Text(
+                        TextMMD(
                             text = item,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(start = 16.dp),

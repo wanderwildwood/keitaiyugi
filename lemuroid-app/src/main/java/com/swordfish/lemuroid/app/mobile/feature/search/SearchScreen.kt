@@ -1,13 +1,8 @@
 package com.swordfish.lemuroid.app.mobile.feature.search
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mudita.mmd.components.lazy.LazyColumnMMD
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidEmptyView
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameListRow
@@ -43,11 +39,10 @@ fun SearchScreen(
         viewModel.queryString.value = searchQuery
     }
 
-    AnimatedContent(
-        targetState = searchState.value,
-        label = "SearchContent",
-        transitionSpec = { fadeIn() togetherWith fadeOut() },
-    ) { state ->
+    // Was an AnimatedContent cross-fading between the four states. A cross-fade on E Ink is
+    // two full repaints and a grey smear in between; the state simply changes.
+    run {
+        val state = searchState.value
         when {
             state == SearchViewModel.UIState.Idle -> {
                 SearchEmptyView(modifier, stringResource(R.string.game_page_search_suggestion))
@@ -117,6 +112,6 @@ private fun SearchLoadingView(modifier: Modifier) {
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator()
+        TextMMD(text = stringResource(R.string.working))
     }
 }

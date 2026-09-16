@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.focusable
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.onGloballyPositioned
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
 import com.swordfish.lemuroid.app.shared.input.InputBindingUpdater
 import com.swordfish.lemuroid.app.shared.input.InputDeviceManager
 import com.swordfish.lemuroid.lib.android.RetrogradeActivity
@@ -34,15 +34,15 @@ class GamePadBindingActivity : RetrogradeActivity() {
             AppTheme {
                 val focusRequester = remember { FocusRequester() }
 
-                AlertDialog(
+                EInkAlertDialog(
                     modifier =
                         Modifier
                             .focusRequester(focusRequester)
                             .focusable()
                             .onKeyEvent { handleKeyEvent(it.nativeKeyEvent) }
                             .onGloballyPositioned { focusRequester.requestFocus() },
-                    title = { Text(text = inputBindingUpdater.getTitle(applicationContext)) },
-                    text = { Text(text = inputBindingUpdater.getMessage(applicationContext)) },
+                    title = { TextMMD(text = inputBindingUpdater.getTitle(applicationContext)) },
+                    text = { TextMMD(text = inputBindingUpdater.getMessage(applicationContext)) },
                     onDismissRequest = { finish() },
                     confirmButton = {},
                 )

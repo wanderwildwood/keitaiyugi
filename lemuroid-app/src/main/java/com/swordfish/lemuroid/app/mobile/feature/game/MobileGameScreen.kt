@@ -20,11 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Height
 import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.filled.RotateLeft
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -49,6 +45,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.mudita.mmd.components.cards.CardMMD
+import com.mudita.mmd.components.slider.SliderMMD
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.app.shared.game.BaseGameScreenViewModel
 import com.swordfish.lemuroid.app.shared.game.viewmodel.GameViewModelTouchControls.Companion.MENU_LOADING_ANIMATION_MILLIS
 import com.swordfish.lemuroid.app.shared.settings.HapticFeedbackMode
@@ -216,7 +215,7 @@ fun MobileGameScreen(viewModel: BaseGameScreenViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator()
+                TextMMD(text = stringResource(com.swordfish.lemuroid.R.string.working))
             }
         }
     }
@@ -265,7 +264,7 @@ private fun MenuEditTouchControls(
     if (!showEditControls.value) return
 
     Dialog(onDismissRequest = { viewModel.showEditControls(false) }) {
-        Card(
+        CardMMD(
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -280,7 +279,7 @@ private fun MenuEditTouchControls(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 MenuEditTouchControlRow(Icons.Default.OpenInFull, "Scale", 0f) {
-                    Slider(
+                    SliderMMD(
                         value = touchControllerSettings.scale,
                         onValueChange = {
                             viewModel.updateTouchControllerSettings(
@@ -290,7 +289,7 @@ private fun MenuEditTouchControls(
                     )
                 }
                 MenuEditTouchControlRow(Icons.Default.Height, "Horizontal Margin", 90f) {
-                    Slider(
+                    SliderMMD(
                         value = touchControllerSettings.marginX,
                         onValueChange = {
                             viewModel.updateTouchControllerSettings(
@@ -300,7 +299,7 @@ private fun MenuEditTouchControls(
                     )
                 }
                 MenuEditTouchControlRow(Icons.Default.Height, "Vertical Margin", 0f) {
-                    Slider(
+                    SliderMMD(
                         value = touchControllerSettings.marginY,
                         onValueChange = {
                             viewModel.updateTouchControllerSettings(
@@ -311,7 +310,7 @@ private fun MenuEditTouchControls(
                 }
                 if (controllerConfig.allowTouchRotation) {
                     MenuEditTouchControlRow(Icons.Default.RotateLeft, "Rotate", 0f) {
-                        Slider(
+                        SliderMMD(
                             value = touchControllerSettings.rotation,
                             onValueChange = {
                                 viewModel.updateTouchControllerSettings(
@@ -329,13 +328,13 @@ private fun MenuEditTouchControls(
                         onClick = { viewModel.resetTouchControls() },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text(text = stringResource(R.string.touch_customize_button_reset))
+                        TextMMD(text = stringResource(R.string.touch_customize_button_reset))
                     }
                     TextButton(
                         onClick = { viewModel.showEditControls(false) },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text(text = stringResource(R.string.touch_customize_button_done))
+                        TextMMD(text = stringResource(R.string.touch_customize_button_done))
                     }
                 }
             }

@@ -1,29 +1,22 @@
 package com.swordfish.lemuroid.app.mobile.feature.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.mudita.mmd.components.nav_bar.NavigationBarMMD
+import com.mudita.mmd.components.text.TextMMD
 
 @Composable
 fun MainNavigationBar(
     currentRoute: MainRoute?,
     navController: NavHostController,
 ) {
-    AnimatedVisibility(
-        visible = currentRoute?.showBottomNavigation != false,
-        enter = expandVertically(),
-        exit = shrinkVertically(),
-    ) {
+    if (currentRoute?.showBottomNavigation != false)  {
         LemuroidNavigationBar(currentRoute, navController)
     }
 }
@@ -33,7 +26,7 @@ private fun LemuroidNavigationBar(
     currentRoute: MainRoute?,
     navController: NavHostController,
 ) {
-    NavigationBar(modifier = Modifier.fillMaxWidth()) {
+    NavigationBarMMD(modifier = Modifier.fillMaxWidth()) {
         MainNavigationRoutes.values().forEach { destination ->
             val isSelected = currentRoute?.root == destination.route
             val iconDrawable = if (isSelected) destination.selectedIcon else destination.unselectedIcon
@@ -45,7 +38,7 @@ private fun LemuroidNavigationBar(
                         contentDescription = stringResource(destination.titleId),
                     )
                 },
-                label = { Text(stringResource(destination.titleId)) },
+                label = { TextMMD(stringResource(destination.titleId)) },
                 selected = isSelected,
                 onClick = {
                     navController.navigate(destination.navigationRoute ?: destination.route.route) {

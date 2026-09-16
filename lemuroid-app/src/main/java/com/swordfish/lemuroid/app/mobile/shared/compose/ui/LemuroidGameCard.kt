@@ -4,9 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mudita.mmd.components.cards.CardMMD
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 
 @Composable
@@ -17,7 +17,7 @@ fun LemuroidGameCard(
     onClick: () -> Unit = { },
     onLongClick: () -> Unit = { },
 ) {
-    ElevatedCard(
+    CardMMD(
         modifier = modifier,
     ) {
         Column(

@@ -5,15 +5,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.storage.base.SettingValueState
+import com.mudita.mmd.components.buttons.OutlinedButtonMMD
+import com.mudita.mmd.components.checkbox.CheckboxMMD
+import com.mudita.mmd.components.lazy.LazyColumnMMD
+import com.mudita.mmd.components.text.TextMMD
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
 
 @Composable
 fun LemuroidSettingsListMultiSelect(
@@ -69,19 +71,20 @@ fun LemuroidSettingsListMultiSelect(
         state.value = mutable
     }
 
-    AlertDialog(
+    EInkAlertDialog(
         title = title,
         text = {
-            Column(
-                modifier = Modifier.verticalScroll(scrollState),
-            ) {
+            // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
+            // the chevron rail with it. Nothing on this panel coasts.
+            LazyColumnMMD(modifier = Modifier.heightIn(max = 420.dp)) {
                 if (subtitle != null) {
-                    subtitle()
-                    Spacer(modifier = Modifier.size(8.dp))
+                    item {
+                        subtitle()
+                        Spacer(modifier = Modifier.size(8.dp))
+                    }
                 }
-
-                entryValues.forEachIndexed { index, item ->
-                    val isSelected by rememberUpdatedState(newValue = state.value.contains(item))
+                itemsIndexed(entryValues) { index, entryValue ->
+                    val isSelected by rememberUpdatedState(newValue = state.value.contains(entryValue))
                     Row(
                         modifier =
                             Modifier
@@ -100,12 +103,12 @@ fun LemuroidSettingsListMultiSelect(
                                 ),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
+                        TextMMD(
                             text = entries[index],
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f),
                         )
-                        Checkbox(
+                        CheckboxMMD(
                             checked = isSelected,
                             onCheckedChange = null,
                         )
@@ -115,14 +118,13 @@ fun LemuroidSettingsListMultiSelect(
         },
         onDismissRequest = { showDialog = false },
         confirmButton = {
-            TextButton(
+            OutlinedButtonMMD(
                 onClick = {
                     showDialog = false
                     onItemsSelected?.invoke(entryValues.filter { state.value.contains(it) })
                 },
-            ) {
-                Text(text = confirmButton)
-            }
+                modifier = Modifier.fillMaxWidth(),
+            ) { TextMMD(text = confirmButton) }
         },
     )
 }

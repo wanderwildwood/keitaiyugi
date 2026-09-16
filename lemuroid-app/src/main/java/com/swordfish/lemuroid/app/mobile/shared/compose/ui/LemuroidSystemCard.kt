@@ -2,11 +2,11 @@ package com.swordfish.lemuroid.app.mobile.shared.compose.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.mudita.mmd.components.cards.CardMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.shared.systems.MetaSystemInfo
 
@@ -31,7 +31,7 @@ fun LemuroidSystemCard(
             )
         }
 
-    ElevatedCard(
+    CardMMD(
         modifier = modifier,
         onClick = onClick,
     ) {

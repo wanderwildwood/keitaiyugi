@@ -4,7 +4,6 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,13 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -27,6 +20,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import com.mudita.mmd.components.buttons.OutlinedButtonMMD
+import com.mudita.mmd.components.cards.CardMMD
+import com.mudita.mmd.components.lazy.LazyColumnMMD
+import com.mudita.mmd.components.lazy.LazyRowMMD
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameCard
 import com.swordfish.lemuroid.app.utils.android.ComposableLifecycle
@@ -92,64 +90,78 @@ private fun HomeScreen(
     onEnableMicrophoneClicked: () -> Unit,
     onSetDirectoryClicked: () -> Unit,
 ) {
-    Column(
-        modifier =
+    // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
+    // the chevron rail with it. Nothing on this panel coasts.
+    LazyColumnMMD(modifier =
             modifier
-                .verticalScroll(rememberScrollState())
                 .padding(top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        AnimatedVisibility(state.showNoNotificationPermissionCard) {
-            HomeNotification(
-                titleId = R.string.home_notification_title,
-                messageId = R.string.home_notification_message,
-                actionId = R.string.home_notification_action,
-                onAction = onEnableNotificationsClicked,
+        item {
+            if (state.showNoNotificationPermissionCard)  {
+                HomeNotification(
+                    titleId = R.string.home_notification_title,
+                    messageId = R.string.home_notification_message,
+                    actionId = R.string.home_notification_action,
+                    onAction = onEnableNotificationsClicked,
+                )
+            }
+        }
+        item {
+            if (state.showNoGamesCard)  {
+                HomeNotification(
+                    titleId = R.string.home_empty_title,
+                    messageId = R.string.home_empty_message,
+                    actionId = R.string.home_empty_action,
+                    onAction = onSetDirectoryClicked,
+                    enabled = !state.indexInProgress,
+                )
+            }
+        }
+        item {
+            if (state.showNoMicrophonePermissionCard)  {
+                HomeNotification(
+                    titleId = R.string.home_microphone_title,
+                    messageId = R.string.home_microphone_message,
+                    actionId = R.string.home_microphone_action,
+                    onAction = onEnableMicrophoneClicked,
+                )
+            }
+        }
+        item {
+            if (state.showDesmumeDeprecatedCard)  {
+                HomeNotification(
+                    titleId = R.string.home_notification_desmume_deprecated_title,
+                    messageId = R.string.home_notification_desmume_deprecated_message,
+                    actionId = R.string.home_notification_desmume_deprecated_action,
+                    onAction = onOpenCoreSelection,
+                )
+            }
+        }
+        item {
+            HomeRow(
+                stringResource(id = R.string.recent),
+                state.recentGames,
+                onGameClicked,
+                onGameLongClick,
             )
         }
-        AnimatedVisibility(state.showNoGamesCard) {
-            HomeNotification(
-                titleId = R.string.home_empty_title,
-                messageId = R.string.home_empty_message,
-                actionId = R.string.home_empty_action,
-                onAction = onSetDirectoryClicked,
-                enabled = !state.indexInProgress,
+        item {
+            HomeRow(
+                stringResource(id = R.string.favorites),
+                state.favoritesGames,
+                onGameClicked,
+                onGameLongClick,
             )
         }
-        AnimatedVisibility(state.showNoMicrophonePermissionCard) {
-            HomeNotification(
-                titleId = R.string.home_microphone_title,
-                messageId = R.string.home_microphone_message,
-                actionId = R.string.home_microphone_action,
-                onAction = onEnableMicrophoneClicked,
+        item {
+            HomeRow(
+                stringResource(id = R.string.discover),
+                state.discoveryGames,
+                onGameClicked,
+                onGameLongClick,
             )
         }
-        AnimatedVisibility(state.showDesmumeDeprecatedCard) {
-            HomeNotification(
-                titleId = R.string.home_notification_desmume_deprecated_title,
-                messageId = R.string.home_notification_desmume_deprecated_message,
-                actionId = R.string.home_notification_desmume_deprecated_action,
-                onAction = onOpenCoreSelection,
-            )
-        }
-        HomeRow(
-            stringResource(id = R.string.recent),
-            state.recentGames,
-            onGameClicked,
-            onGameLongClick,
-        )
-        HomeRow(
-            stringResource(id = R.string.favorites),
-            state.favoritesGames,
-            onGameClicked,
-            onGameLongClick,
-        )
-        HomeRow(
-            stringResource(id = R.string.discover),
-            state.discoveryGames,
-            onGameClicked,
-            onGameLongClick,
-        )
     }
 }
 
@@ -166,12 +178,12 @@ private fun HomeRow(
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
+        TextMMD(
             text = title,
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
         )
-        LazyRow(
+        LazyRowMMD(
             modifier =
                 Modifier
                     .fillMaxWidth(),
@@ -202,7 +214,7 @@ private fun HomeNotification(
     enabled: Boolean = true,
     onAction: () -> Unit = { },
 ) {
-    ElevatedCard(
+    CardMMD(
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -215,20 +227,20 @@ private fun HomeNotification(
                     .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(
+            TextMMD(
                 text = stringResource(titleId),
                 style = MaterialTheme.typography.titleMedium,
             )
-            Text(
+            TextMMD(
                 text = stringResource(messageId),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            OutlinedButton(
+            OutlinedButtonMMD(
                 modifier = Modifier.align(Alignment.End),
                 onClick = onAction,
                 enabled = enabled,
             ) {
-                Text(stringResource(id = actionId))
+                TextMMD(stringResource(id = actionId))
             }
         }
     }

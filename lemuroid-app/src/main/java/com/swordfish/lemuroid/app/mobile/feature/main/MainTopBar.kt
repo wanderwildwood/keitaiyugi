@@ -1,9 +1,6 @@
 package com.swordfish.lemuroid.app.mobile.feature.main
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +20,9 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.mudita.mmd.components.progress_indicator.LinearProgressIndicatorMMD
+import com.mudita.mmd.components.text.TextMMD
+import com.mudita.mmd.components.text_field.TextFieldMMD
+import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.shared.savesync.SaveSyncWork
 
@@ -64,8 +61,15 @@ fun MainTopBar(
             onUpdateQueryString = onUpdateQueryString,
         )
 
-        AnimatedVisibility(mainUIState.operationInProgress) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        // Upstream slid an indeterminate bar in here. Nothing on this panel animates, and a
+        // bar that moves for its own sake costs a redraw a frame to say what one word says
+        // once. It appears and disappears; it does not travel.
+        if (mainUIState.operationInProgress) {
+            TextMMD(
+                text = stringResource(R.string.scanning_games),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+            )
         }
     }
 }
@@ -82,7 +86,7 @@ fun LemuroidTopAppBar(
     val context = LocalContext.current
     val topBarColor = BottomAppBarDefaults.containerColor
 
-    TopAppBar(
+    TopAppBarMMD(
         title = {
             if (route == MainRoute.SEARCH) {
                 LemuroidSearchView(
@@ -90,7 +94,7 @@ fun LemuroidTopAppBar(
                     onUpdateQueryString = onUpdateQueryString,
                 )
             } else {
-                Text(text = stringResource(route.titleId))
+                TextMMD(text = stringResource(route.titleId))
             }
         },
         colors =
@@ -99,11 +103,7 @@ fun LemuroidTopAppBar(
                 containerColor = topBarColor,
             ),
         navigationIcon = {
-            AnimatedVisibility(
-                visible = route.parent != null,
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
+            if (route.parent != null)  {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
@@ -179,42 +179,17 @@ private fun LemuroidSearchView(
         focusRequester.requestFocus()
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-    ) {
-        Surface(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(top = 8.dp, bottom = 8.dp, end = 8.dp),
-            shape = RoundedCornerShape(100),
-            tonalElevation = 16.dp,
-        ) { }
-
-        TextField(
-            value = mainUIState.searchQuery,
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .focusRequester(focusRequester),
-            textStyle = MaterialTheme.typography.bodyMedium,
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-            onValueChange = { onUpdateQueryString(it) },
-            singleLine = true,
-            keyboardActions =
-                KeyboardActions(
-                    onDone = { focusManager.clearFocus(true) },
-                ),
-            colors =
-                TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-        )
-    }
+    // The pill this sat in was a tonal-elevation Surface, which on two colours is white on
+    // white. MMD's text field draws its own edge — one rule under the line — so the pill is
+    // gone and the field looks like every other field on this phone.
+    TextFieldMMD(
+        value = mainUIState.searchQuery,
+        onValueChange = { onUpdateQueryString(it) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        singleLine = true,
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus(true) }),
+    )
 }

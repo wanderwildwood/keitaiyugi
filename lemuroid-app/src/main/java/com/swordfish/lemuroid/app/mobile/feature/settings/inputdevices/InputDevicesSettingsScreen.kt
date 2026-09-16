@@ -5,12 +5,12 @@ import android.content.Intent
 import android.view.InputDevice
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.input.GamePadBindingActivity
 import com.swordfish.lemuroid.app.mobile.feature.input.GamePadShortcutBindingActivity
@@ -52,13 +52,13 @@ private fun DeviceBindingCategory(
     val context = LocalContext.current
     val customizableKeys = device.getLemuroidInputDevice().getCustomizableKeys()
 
-    LemuroidCardSettingsGroup(title = { Text(text = device.name) }) {
+    LemuroidCardSettingsGroup(title = { TextMMD(text = device.name) }) {
         customizableKeys.forEach { retroKey ->
             val inputKey = bindings.keys[retroKey] ?: InputKey(KeyEvent.KEYCODE_UNKNOWN)
 
             LemuroidSettingsMenuLink(
-                title = { Text(text = retroKey.displayName(LocalContext.current)) },
-                subtitle = { Text(text = inputKey.displayName()) },
+                title = { TextMMD(text = retroKey.displayName(LocalContext.current)) },
+                subtitle = { TextMMD(text = inputKey.displayName()) },
                 onClick = {
                     val intent =
                         Intent(context, GamePadBindingActivity::class.java).apply {
@@ -83,8 +83,8 @@ private fun DeviceShortcutBinding(
     shortcut: GameShortcut,
 ) {
     LemuroidSettingsMenuLink(
-        title = { Text(text = shortcut.type.displayName()) },
-        subtitle = { Text(text = shortcut.name) },
+        title = { TextMMD(text = shortcut.type.displayName()) },
+        subtitle = { TextMMD(text = shortcut.name) },
         onClick = {
             val intent =
                 Intent(context, GamePadShortcutBindingActivity::class.java).apply {
@@ -98,11 +98,11 @@ private fun DeviceShortcutBinding(
 
 @Composable
 private fun EnabledDeviceCategory(state: InputDevicesSettingsViewModel.State) {
-    LemuroidCardSettingsGroup(title = { Text(text = stringResource(R.string.settings_gamepad_category_enabled)) }) {
+    LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(R.string.settings_gamepad_category_enabled)) }) {
         state.devices.forEach { device ->
             LemuroidSettingsSwitch(
                 state = booleanPreferenceState(key = device.key, default = device.enabledByDefault),
-                title = { Text(text = device.name) },
+                title = { TextMMD(text = device.name) },
             )
         }
     }
@@ -110,9 +110,9 @@ private fun EnabledDeviceCategory(state: InputDevicesSettingsViewModel.State) {
 
 @Composable
 private fun GeneralOptionsCategory(viewModel: InputDevicesSettingsViewModel) {
-    LemuroidCardSettingsGroup(title = { Text(text = stringResource(R.string.settings_gamepad_category_general)) }) {
+    LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(R.string.settings_gamepad_category_general)) }) {
         LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(R.string.settings_gamepad_title_reset_bindings)) },
+            title = { TextMMD(text = stringResource(R.string.settings_gamepad_title_reset_bindings)) },
             onClick = { viewModel.resetAllBindings() },
         )
     }

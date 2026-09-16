@@ -2,12 +2,12 @@ package com.swordfish.lemuroid.app.mobile.feature.settings.savesync
 
 import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.shared.savesync.SaveSyncWork
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
@@ -39,7 +39,7 @@ fun SaveSyncSettingsScreen(
         LemuroidCardSettingsGroup {
             LemuroidSettingsMenuLink(
                 title = {
-                    Text(
+                    TextMMD(
                         text =
                             stringResource(
                                 id = R.string.settings_save_sync_configure,
@@ -47,15 +47,15 @@ fun SaveSyncSettingsScreen(
                             ),
                     )
                 },
-                subtitle = { Text(text = saveSyncState.configInfo) },
+                subtitle = { TextMMD(text = saveSyncState.configInfo) },
                 enabled = !isSyncInProgress,
                 onClick = { context.startActivity(Intent(context, saveSyncState.settingsActivity)) },
             )
             LemuroidSettingsSwitch(
                 state = booleanPreferenceState(R.string.pref_key_save_sync_enable, default = false),
-                title = { Text(text = stringResource(id = R.string.settings_save_sync_include_saves)) },
+                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_saves)) },
                 subtitle = {
-                    Text(
+                    TextMMD(
                         text =
                             stringResource(
                                 id = R.string.settings_save_sync_include_saves_description,
@@ -71,8 +71,8 @@ fun SaveSyncSettingsScreen(
                         stringResource(R.string.pref_key_save_sync_cores),
                         emptySet(),
                     ),
-                title = { Text(text = stringResource(id = R.string.settings_save_sync_include_states)) },
-                subtitle = { Text(text = stringResource(id = R.string.settings_save_sync_include_states_description)) },
+                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states)) },
+                subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states_description)) },
                 entryValues = saveSyncState.coreNames,
                 entries = saveSyncState.coreVisibleNames,
                 enabled = saveSyncState.isConfigured && !isSyncInProgress,
@@ -80,14 +80,14 @@ fun SaveSyncSettingsScreen(
             )
             LemuroidSettingsSwitch(
                 state = booleanPreferenceState(R.string.pref_key_save_sync_auto, default = false),
-                title = { Text(text = stringResource(id = R.string.settings_save_sync_enable_auto)) },
-                subtitle = { Text(text = stringResource(id = R.string.settings_save_sync_enable_auto_description)) },
+                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto)) },
+                subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto_description)) },
                 enabled = saveSyncState.isConfigured && !isSyncInProgress,
             )
             LemuroidSettingsMenuLink(
-                title = { Text(text = stringResource(id = R.string.settings_save_sync_refresh)) },
+                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_refresh)) },
                 subtitle = {
-                    Text(
+                    TextMMD(
                         text =
                             stringResource(
                                 id = R.string.settings_save_sync_refresh_description,

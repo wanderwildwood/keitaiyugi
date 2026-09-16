@@ -2,9 +2,6 @@ package com.swordfish.lemuroid.app.mobile.feature.gamemenu.coreoptions
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,6 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.mudita.mmd.components.lazy.LazyColumnMMD
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.GameMenuActivity
 import com.swordfish.lemuroid.app.shared.coreoptions.CoreOptionsPreferenceHelper
@@ -38,9 +37,15 @@ fun GameMenuCoreOptionsScreen(
             gameMenuRequest.coreOptions + gameMenuRequest.advancedCoreOptions
         }
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        CoreOptions(gameMenuRequest.game.systemId, allOptions, context)
-        ControllersOptions(gameMenuRequest, maxOf(1, connectedGamePads), context)
+    // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
+    // the chevron rail with it. Nothing on this panel coasts.
+    LazyColumnMMD {
+        item {
+            CoreOptions(gameMenuRequest.game.systemId, allOptions, context)
+        }
+        item {
+            ControllersOptions(gameMenuRequest, maxOf(1, connectedGamePads), context)
+        }
     }
 }
 
@@ -62,11 +67,11 @@ private fun CoreOptions(
                         CoreVariablesManager.computeSharedPreferenceKey(coreOption.getKey(), systemID),
                         coreOption.getCurrentValue() == "enabled",
                     ),
-                title = { Text(text = coreOption.getDisplayName(context)) },
+                title = { TextMMD(text = coreOption.getDisplayName(context)) },
             )
         } else {
             LemuroidSettingsList(
-                title = { Text(text = coreOption.getDisplayName(context)) },
+                title = { TextMMD(text = coreOption.getDisplayName(context)) },
                 items = coreOption.getEntries(context),
                 state =
                     indexPreferenceState(
@@ -97,11 +102,11 @@ private fun ControllersOptions(
     }
 
     LemuroidSettingsGroup(
-        title = { Text(text = stringResource(R.string.core_settings_category_controllers)) },
+        title = { TextMMD(text = stringResource(R.string.core_settings_category_controllers)) },
     ) {
         visibleControllers.forEach { (port, controllerConfigs) ->
             LemuroidSettingsList(
-                title = { Text(text = context.getString(R.string.core_settings_controller, (port + 1).toString())) },
+                title = { TextMMD(text = context.getString(R.string.core_settings_controller, (port + 1).toString())) },
                 items = controllerConfigs!!.map { stringResource(id = it.displayName) },
                 state =
                     indexPreferenceState(

@@ -1,7 +1,6 @@
 package com.swordfish.lemuroid.app.mobile.feature.settings.general
 
 import android.net.Uri
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -10,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.documentfile.provider.DocumentFile
 import androidx.navigation.NavController
+import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.main.MainRoute
 import com.swordfish.lemuroid.app.mobile.feature.main.navigateToRoute
@@ -68,13 +68,13 @@ private fun MiscSettings(
     navController: NavController,
 ) {
     LemuroidCardSettingsGroup(
-        title = { Text(text = stringResource(id = R.string.settings_category_misc)) },
+        title = { TextMMD(text = stringResource(id = R.string.settings_category_misc)) },
     ) {
         if (isSaveSyncSupported) {
             LemuroidSettingsMenuLink(
-                title = { Text(text = stringResource(id = R.string.settings_title_save_sync)) },
+                title = { TextMMD(text = stringResource(id = R.string.settings_title_save_sync)) },
                 subtitle = {
-                    Text(text = stringResource(id = R.string.settings_description_save_sync))
+                    TextMMD(text = stringResource(id = R.string.settings_description_save_sync))
                 },
                 onClick = { navController.navigateToRoute(MainRoute.SETTINGS_SAVE_SYNC) },
             )
@@ -84,9 +84,9 @@ private fun MiscSettings(
         // -- a Game Boy needs no BIOS file and gambatte asks for none, so it could only
         // ever report that nothing is missing.
         LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(id = R.string.settings_title_advanced_settings)) },
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_advanced_settings)) },
             subtitle = {
-                Text(text = stringResource(id = R.string.settings_description_advanced_settings))
+                TextMMD(text = stringResource(id = R.string.settings_description_advanced_settings))
             },
             onClick = { navController.navigateToRoute(MainRoute.SETTINGS_ADVANCED) },
         )
@@ -96,7 +96,7 @@ private fun MiscSettings(
 @Composable
 private fun InputSettings(navController: NavController) {
     LemuroidCardSettingsGroup(
-        title = { Text(text = stringResource(id = R.string.settings_category_input)) },
+        title = { TextMMD(text = stringResource(id = R.string.settings_category_input)) },
     ) {
         LemuroidSettingsList(
             state =
@@ -106,14 +106,14 @@ private fun InputSettings(navController: NavController) {
                     stringListResource(R.array.pref_key_haptic_feedback_mode_values),
                 ),
             title = {
-                Text(text = stringResource(id = R.string.settings_title_enable_touch_feedback))
+                TextMMD(text = stringResource(id = R.string.settings_title_enable_touch_feedback))
             },
             items = stringListResource(R.array.pref_key_haptic_feedback_mode_display_names),
         )
         LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(id = R.string.settings_title_gamepad_settings)) },
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_gamepad_settings)) },
             subtitle = {
-                Text(text = stringResource(id = R.string.settings_description_gamepad_settings))
+                TextMMD(text = stringResource(id = R.string.settings_description_gamepad_settings))
             },
             onClick = { navController.navigateToRoute(MainRoute.SETTINGS_INPUT_DEVICES) },
         )
@@ -123,12 +123,12 @@ private fun InputSettings(navController: NavController) {
 @Composable
 private fun GeneralSettings() {
     LemuroidCardSettingsGroup(
-        title = { Text(text = stringResource(id = R.string.settings_category_general)) },
+        title = { TextMMD(text = stringResource(id = R.string.settings_category_general)) },
     ) {
         LemuroidSettingsSwitch(
             state = booleanPreferenceState(R.string.pref_key_autosave, true),
-            title = { Text(text = stringResource(id = R.string.settings_title_enable_autosave)) },
-            subtitle = { Text(text = stringResource(id = R.string.settings_description_enable_autosave)) },
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_enable_autosave)) },
+            subtitle = { TextMMD(text = stringResource(id = R.string.settings_description_enable_autosave)) },
         )
         // Immersive mode is gone. It colours the letterbox from the game's own visuals,
         // which on four greys is a grey wash -- more ink held on the panel, more
@@ -143,7 +143,7 @@ private fun GeneralSettings() {
                     "auto",
                     stringListResource(R.array.pref_key_shader_filter_values).toList(),
                 ),
-            title = { Text(text = stringResource(id = R.string.display_filter)) },
+            title = { TextMMD(text = stringResource(id = R.string.display_filter)) },
             items = stringListResource(R.array.pref_key_shader_filter_display_names),
         )
     }
@@ -168,21 +168,21 @@ private fun RomsSettings(
             }.getOrNull() ?: emptyDirectory
         }
 
-    LemuroidCardSettingsGroup(title = { Text(text = stringResource(id = R.string.roms)) }) {
+    LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(id = R.string.roms)) }) {
         LemuroidSettingsMenuLink(
-            title = { Text(text = stringResource(id = R.string.directory)) },
-            subtitle = { Text(text = currentDirectoryName) },
+            title = { TextMMD(text = stringResource(id = R.string.directory)) },
+            subtitle = { TextMMD(text = currentDirectoryName) },
             onClick = { onChangeFolder() },
             enabled = !indexingInProgress,
         )
         if (scanInProgress) {
             LemuroidSettingsMenuLink(
-                title = { Text(text = stringResource(id = R.string.stop)) },
+                title = { TextMMD(text = stringResource(id = R.string.stop)) },
                 onClick = { LibraryIndexScheduler.cancelLibrarySync(context) },
             )
         } else {
             LemuroidSettingsMenuLink(
-                title = { Text(text = stringResource(id = R.string.rescan)) },
+                title = { TextMMD(text = stringResource(id = R.string.rescan)) },
                 onClick = { LibraryIndexScheduler.scheduleLibrarySync(context) },
                 enabled = !indexingInProgress,
             )

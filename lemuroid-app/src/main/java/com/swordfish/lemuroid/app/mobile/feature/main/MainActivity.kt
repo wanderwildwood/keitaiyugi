@@ -8,9 +8,10 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import com.swordfish.lemuroid.app.mobile.feature.shortcuts.ShortcutsGenerator
 import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsScreen
 import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsViewModel
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
 import com.swordfish.lemuroid.app.shared.GameInteractor
 import com.swordfish.lemuroid.app.shared.game.BaseGameActivity
 import com.swordfish.lemuroid.app.shared.game.GameLauncher
@@ -186,6 +188,10 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                     modifier = Modifier.fillMaxSize(),
                     navController = navController,
                     startDestination = MainRoute.HOME.route,
+                    // Navigation's default is a slide. On E Ink that is the old screen and the
+                    // new one both being redrawn, repeatedly, on the way past each other.
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
                 ) {
                     composable(MainRoute.HOME) {
                         HomeScreen(
@@ -361,7 +367,7 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                 // named in the sentence. Upstream substituted all twenty-five here.
                 val message = remember { getString(R.string.lemuroid_help_content) }
 
-                AlertDialog(
+                EInkAlertDialog(
                     text = { HtmlText(text = message) },
                     onDismissRequest = { infoDialogDisplayed.value = false },
                     confirmButton = { },

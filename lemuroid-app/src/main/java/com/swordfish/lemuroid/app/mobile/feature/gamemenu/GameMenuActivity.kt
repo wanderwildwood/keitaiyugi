@@ -8,9 +8,8 @@ import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,14 +21,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,6 +37,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.mudita.mmd.components.divider.HorizontalDividerMMD
+import com.mudita.mmd.components.text.TextMMD
+import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.coreoptions.GameMenuCoreOptionsScreen
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.coreoptions.GameMenuCoreOptionsViewModel
@@ -148,11 +147,12 @@ class GameMenuActivity : RetrogradeComponentActivity() {
                     ?: GameMenuRoute.HOME
 
             SideMenu {
-                TopAppBar(
-                    title = { Text(stringResource(currentRoute.titleId)) },
+                TopAppBarMMD(
+                    title = { TextMMD(stringResource(currentRoute.titleId)) },
                     windowInsets = WindowInsets(0.dp),
                     navigationIcon = {
-                        AnimatedContent(targetState = currentRoute.canGoBack(), label = "Back") { canGoBack ->
+                        run {
+                            val canGoBack = currentRoute.canGoBack()
                             if (canGoBack) {
                                 IconButton(onClick = { navController.popBackStack() }) {
                                     Icon(
@@ -171,15 +171,17 @@ class GameMenuActivity : RetrogradeComponentActivity() {
                         }
                     },
                 )
-                Divider(modifier = Modifier.fillMaxWidth())
+                HorizontalDividerMMD(modifier = Modifier.fillMaxWidth())
                 NavHost(
                     modifier =
                         Modifier
                             .fillMaxSize(),
                     navController = navController,
                     startDestination = GameMenuRoute.HOME.route,
-                    enterTransition = { fadeIn() },
-                    exitTransition = { fadeOut() },
+                    // No transition between menu pages: a cross-fade is a full repaint of a
+                    // panel that has just drawn the page you asked for.
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
                 ) {
                     composable(GameMenuRoute.HOME) {
                         GameMenuHomeScreen(navController, gameMenuRequest, ::onResult)
