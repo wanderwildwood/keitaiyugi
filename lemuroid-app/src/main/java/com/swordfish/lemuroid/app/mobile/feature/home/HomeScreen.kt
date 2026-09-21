@@ -92,13 +92,14 @@ private fun HomeScreen(
 ) {
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
     // the chevron rail with it. Nothing on this panel coasts.
-    LazyColumnMMD(modifier =
+    LazyColumnMMD(
+        modifier =
             modifier
                 .padding(top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
-            if (state.showNoNotificationPermissionCard)  {
+            if (state.showNoNotificationPermissionCard) {
                 HomeNotification(
                     titleId = R.string.home_notification_title,
                     messageId = R.string.home_notification_message,
@@ -108,7 +109,7 @@ private fun HomeScreen(
             }
         }
         item {
-            if (state.showNoGamesCard)  {
+            if (state.showNoGamesCard) {
                 HomeNotification(
                     titleId = R.string.home_empty_title,
                     messageId = R.string.home_empty_message,
@@ -119,7 +120,7 @@ private fun HomeScreen(
             }
         }
         item {
-            if (state.showNoMicrophonePermissionCard)  {
+            if (state.showNoMicrophonePermissionCard) {
                 HomeNotification(
                     titleId = R.string.home_microphone_title,
                     messageId = R.string.home_microphone_message,
@@ -129,7 +130,7 @@ private fun HomeScreen(
             }
         }
         item {
-            if (state.showDesmumeDeprecatedCard)  {
+            if (state.showDesmumeDeprecatedCard) {
                 HomeNotification(
                     titleId = R.string.home_notification_desmume_deprecated_title,
                     messageId = R.string.home_notification_desmume_deprecated_message,

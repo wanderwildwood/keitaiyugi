@@ -204,7 +204,7 @@ private fun ContextActionEntry(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun FakeScrim(modalSheetState: SheetState) {
-    if (modalSheetState.targetValue != SheetValue.Hidden)  {
+    if (modalSheetState.targetValue != SheetValue.Hidden) {
         Box(
             modifier =
                 Modifier

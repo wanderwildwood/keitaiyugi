@@ -20,13 +20,15 @@ import androidx.compose.ui.unit.dp
  * outlined cuts of a chevron are the same path, so there is nothing to choose here.
  */
 object Icons {
-
     /**
      * Material Symbols are authored in a 960 grid whose origin sits at the bottom left, so the
      * path data runs from -960 to 0 vertically. Shifting the whole thing down by 960 puts it in
      * the top-left grid Compose uses.
      */
-    private fun symbol(name: String, pathData: String): ImageVector =
+    private fun symbol(
+        name: String,
+        pathData: String,
+    ): ImageVector =
         ImageVector.Builder(
             name = name,
             defaultWidth = 24.dp,

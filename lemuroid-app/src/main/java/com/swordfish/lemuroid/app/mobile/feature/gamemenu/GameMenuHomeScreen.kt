@@ -1,10 +1,8 @@
 package com.swordfish.lemuroid.app.mobile.feature.gamemenu
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -119,7 +117,13 @@ fun GameMenuHomeScreen(
             if (gameMenuRequest.numDisks > 1) {
                 LemuroidSettingsList(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_change_disk_button)) },
-                    items = (1..gameMenuRequest.numDisks).map { stringResource(R.string.game_menu_change_disk_disk, it) },
+                    items =
+                        (1..gameMenuRequest.numDisks).map {
+                            stringResource(
+                                R.string.game_menu_change_disk_disk,
+                                it,
+                            )
+                        },
                     useSelectedValueAsSubtitle = false,
                     icon = {
                         Icon(

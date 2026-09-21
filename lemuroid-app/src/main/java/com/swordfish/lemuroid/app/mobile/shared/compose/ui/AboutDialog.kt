@@ -52,22 +52,25 @@ fun AboutDialog(onDismiss: () -> Unit) {
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text = "It reads the folder you point it at, and nothing else on the phone. " +
-                "Nothing is sent anywhere.",
+            text =
+                "It reads the folder you point it at, and nothing else on the phone. " +
+                    "Nothing is sent anywhere.",
             style = MaterialTheme.typography.labelSmall,
         )
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text = "A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through " +
-                "the Gambatte core via LibretroDroid. None of the hard part is mine.",
+            text =
+                "A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through " +
+                    "the Gambatte core via LibretroDroid. None of the hard part is mine.",
             style = MaterialTheme.typography.labelSmall,
         )
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text = "GNU General Public License v3 only, inheriting Lemuroid's. The Game Boy " +
-                "core is GPL-2.0 with no \"or later\" clause.",
+            text =
+                "GNU General Public License v3 only, inheriting Lemuroid's. The Game Boy " +
+                    "core is GPL-2.0 with no \"or later\" clause.",
             style = MaterialTheme.typography.labelSmall,
         )
 
@@ -103,27 +106,28 @@ private fun Llama() {
     val context = LocalContext.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                // Straight to the checkout. The Donate button on the site only leads
-                // here anyway, so the page in between is a press the reader does not need.
-                // The short square.link form, not the long checkout.square.site address it
-                // redirects to -- the short one is what the site itself links to, so a
-                // regenerated checkout follows it and a published app does not break.
-                runCatching {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse("https://square.link/u/AGu8oT10")),
-                    )
-                }.onFailure {
-                    Toast.makeText(
-                        context,
-                        "There is no browser on this phone to open that with.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable {
+                    // Straight to the checkout. The Donate button on the site only leads
+                    // here anyway, so the page in between is a press the reader does not need.
+                    // The short square.link form, not the long checkout.square.site address it
+                    // redirects to -- the short one is what the site itself links to, so a
+                    // regenerated checkout follows it and a published app does not break.
+                    runCatching {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse("https://square.link/u/AGu8oT10")),
+                        )
+                    }.onFailure {
+                        Toast.makeText(
+                            context,
+                            "There is no browser on this phone to open that with.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
                 }
-            }
-            .padding(vertical = 4.dp),
+                .padding(vertical = 4.dp),
     ) {
         Image(
             painter = painterResource(R.drawable.llama),

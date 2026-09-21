@@ -16,7 +16,7 @@ fun MainNavigationBar(
     currentRoute: MainRoute?,
     navController: NavHostController,
 ) {
-    if (currentRoute?.showBottomNavigation != false)  {
+    if (currentRoute?.showBottomNavigation != false) {
         LemuroidNavigationBar(currentRoute, navController)
     }
 }

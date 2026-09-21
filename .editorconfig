@@ -9,3 +9,29 @@ ktlint_function_naming_ignore_when_annotated_with=Composable
 
 [lemuroid-app/src/main/java/com/swordfish/lemuroid/app/shared/game/ShaderChooser.kt]
 max_line_length = off
+
+# Monochrome.kt is the shared MMD colour scheme, carried byte-for-byte by every
+# app here apart from its package line. This fork is the only one that runs
+# ktlint, so reformatting the declaration to satisfy it would fork the one file
+# that is meant not to differ. The rule is switched off for that file instead.
+#
+# string-template-indent declares a dependency on multiline-expression-wrapping,
+# and ktlint aborts with a parse error rather than a violation if one is loaded
+# without the other, so the pair has to be disabled together.
+[lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/Monochrome.kt]
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
+
+# EInkDialog.kt is shared the same way and carried by every app here, so it is
+# held to the same bargain as Monochrome.kt above.
+[lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/EInkDialog.kt]
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
+
+# Both Icons.kt files are a table of Material Symbols, one icon to a line, and
+# the path data is a few hundred characters of coordinates that cannot be broken
+# anywhere meaningful. Wrapping them turns a readable table into a hundred lines
+# and still leaves the path over the limit, so the length rule is off here the
+# way it is off for ShaderChooser.kt above.
+[{lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/Icons.kt,lemuroid-touchinput/src/main/java/com/swordfish/touchinput/radial/ui/Icons.kt}]
+max_line_length = off

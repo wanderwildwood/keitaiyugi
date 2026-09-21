@@ -45,7 +45,7 @@ fun BaseGameScreen(
                 TextMMD(text = stringResource(R.string.working))
 
                 val message = if (gameState is GameViewModelRetroGameView.GameState.Loading) gameState.message else null
-                if (message != null)  {
+                if (message != null) {
                     TextMMD(text = message!!, color = MaterialTheme.colorScheme.onBackground)
                 }
             }

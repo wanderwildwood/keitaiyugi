@@ -72,7 +72,11 @@ fun SaveSyncSettingsScreen(
                         emptySet(),
                     ),
                 title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states)) },
-                subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states_description)) },
+                subtitle = {
+                    TextMMD(
+                        text = stringResource(id = R.string.settings_save_sync_include_states_description),
+                    )
+                },
                 entryValues = saveSyncState.coreNames,
                 entries = saveSyncState.coreVisibleNames,
                 enabled = saveSyncState.isConfigured && !isSyncInProgress,

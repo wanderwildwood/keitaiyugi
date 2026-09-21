@@ -1,7 +1,6 @@
 package com.swordfish.lemuroid.app.mobile.feature.gamemenu.states
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,22 +24,22 @@ fun GameMenuStatesScreen(
     LazyColumnMMD {
         state.value.entries.forEachIndexed { index, entry ->
             item {
-                    LemuroidSettingsMenuLink(
-                        title = { TextMMD(text = entry.title) },
-                        subtitle = { TextMMD(text = entry.description) },
-                        enabled = entry.enabled,
-                        icon = {
-                            if (entry.preview != null) {
-                                Image(
-                                    modifier = Modifier.size(48.dp),
-                                    bitmap = entry.preview.asImageBitmap(),
-                                    contentScale = ContentScale.Crop,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                        onClick = { onStateClicked(index) },
-                    )
+                LemuroidSettingsMenuLink(
+                    title = { TextMMD(text = entry.title) },
+                    subtitle = { TextMMD(text = entry.description) },
+                    enabled = entry.enabled,
+                    icon = {
+                        if (entry.preview != null) {
+                            Image(
+                                modifier = Modifier.size(48.dp),
+                                bitmap = entry.preview.asImageBitmap(),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    onClick = { onStateClicked(index) },
+                )
             }
         }
     }
