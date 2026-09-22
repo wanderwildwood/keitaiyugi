@@ -42,7 +42,7 @@ import de.charlex.compose.material3.HtmlText
 fun AboutDialog(onDismiss: () -> Unit) {
     EInkDialog(onDismiss = onDismiss) {
         TextMMD(
-            text = "Handheld Games ${BuildConfig.VERSION_NAME}",
+            text = stringResource(R.string.about_title, BuildConfig.VERSION_NAME),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
         )
@@ -52,25 +52,19 @@ fun AboutDialog(onDismiss: () -> Unit) {
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text =
-                "It reads the folder you point it at, and nothing else on the phone. " +
-                    "Nothing is sent anywhere.",
+            text = stringResource(R.string.about_privacy),
             style = MaterialTheme.typography.labelSmall,
         )
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text =
-                "A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through " +
-                    "the Gambatte core via LibretroDroid. None of the hard part is mine.",
+            text = stringResource(R.string.about_built_on),
             style = MaterialTheme.typography.labelSmall,
         )
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text =
-                "GNU General Public License v3 only, inheriting Lemuroid's. The Game Boy " +
-                    "core is GPL-2.0 with no \"or later\" clause.",
+            text = stringResource(R.string.about_licence),
             style = MaterialTheme.typography.labelSmall,
         )
 
@@ -122,7 +116,7 @@ private fun Llama() {
                     }.onFailure {
                         Toast.makeText(
                             context,
-                            "There is no browser on this phone to open that with.",
+                            context.getString(R.string.about_no_browser),
                             Toast.LENGTH_SHORT,
                         ).show()
                     }
@@ -135,6 +129,6 @@ private fun Llama() {
             modifier = Modifier.size(22.dp),
         )
         Spacer(Modifier.width(6.dp))
-        TextMMD(text = "Feed the llamas", style = MaterialTheme.typography.labelSmall)
+        TextMMD(text = stringResource(R.string.about_feed_the_llamas), style = MaterialTheme.typography.labelSmall)
     }
 }

@@ -275,7 +275,7 @@ private fun MenuEditTouchControls(
                         .padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                MenuEditTouchControlRow(Icons.OpenInFull, "Scale", 0f) {
+                MenuEditTouchControlRow(Icons.OpenInFull, stringResource(R.string.touch_customize_scale), 0f) {
                     SliderMMD(
                         value = touchControllerSettings.scale,
                         onValueChange = {
@@ -285,7 +285,7 @@ private fun MenuEditTouchControls(
                         },
                     )
                 }
-                MenuEditTouchControlRow(Icons.Height, "Horizontal Margin", 90f) {
+                MenuEditTouchControlRow(Icons.Height, stringResource(R.string.touch_customize_horizontal_margin), 90f) {
                     SliderMMD(
                         value = touchControllerSettings.marginX,
                         onValueChange = {
@@ -295,7 +295,7 @@ private fun MenuEditTouchControls(
                         },
                     )
                 }
-                MenuEditTouchControlRow(Icons.Height, "Vertical Margin", 0f) {
+                MenuEditTouchControlRow(Icons.Height, stringResource(R.string.touch_customize_vertical_margin), 0f) {
                     SliderMMD(
                         value = touchControllerSettings.marginY,
                         onValueChange = {
@@ -306,7 +306,7 @@ private fun MenuEditTouchControls(
                     )
                 }
                 if (controllerConfig.allowTouchRotation) {
-                    MenuEditTouchControlRow(Icons.RotateLeft, "Rotate", 0f) {
+                    MenuEditTouchControlRow(Icons.RotateLeft, stringResource(R.string.touch_customize_rotate), 0f) {
                         SliderMMD(
                             value = touchControllerSettings.rotation,
                             onValueChange = {

@@ -3,4 +3,10 @@
     <string name="touch_customize_button_done">Done</string>
     <string name="touch_customize_button_reset">Reset</string>
     <string name="touch_customize_info">Drag and Pinch controls to change position and size</string>
+    <!-- The sliders in the dialog that adjusts the on-screen controls. Each is read aloud
+         for the icon beside its slider; there is no text on screen -->
+    <string name="touch_customize_scale">Scale</string>
+    <string name="touch_customize_horizontal_margin">Horizontal Margin</string>
+    <string name="touch_customize_vertical_margin">Vertical Margin</string>
+    <string name="touch_customize_rotate">Rotate</string>
 </resources>

@@ -242,4 +242,17 @@
     <string name="tilt_configuration_buttons_l1_r1">L1 - R1</string>
     <string name="tilt_configuration_buttons_l2_r2">L2 - R2</string>
 
+    <!-- The About, behind the i in the top bar. Keep the names of the app, people,
+         projects and licences as they are -->
+    <!-- Heading. %1$s is the version number, e.g. 0.1.2 -->
+    <string name="about_title">Handheld Games %1$s</string>
+    <string name="about_privacy">It reads the folder you point it at, and nothing else on the phone. Nothing is sent anywhere.</string>
+    <string name="about_built_on">A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through the Gambatte core via LibretroDroid. None of the hard part is mine.</string>
+    <string name="about_licence">GNU General Public License v3 only, inheriting Lemuroid\'s. The Game Boy core is GPL-2.0 with no \"or later\" clause.</string>
+    <!-- The donation link, beside a drawing of a llama. A fixed phrase: a verb and an
+         object, so the reader knows what pressing it does -->
+    <string name="about_feed_the_llamas">Feed the llamas</string>
+    <!-- Toast when the donation link cannot be opened -->
+    <string name="about_no_browser">There is no browser on this phone to open that with.</string>
+
 </resources>
