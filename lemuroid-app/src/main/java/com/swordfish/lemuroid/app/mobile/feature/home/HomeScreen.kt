@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
@@ -16,9 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.lifecycle.Lifecycle
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.cards.CardMMD
@@ -92,14 +98,18 @@ private fun HomeScreen(
 ) {
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
     // the chevron rail with it. Nothing on this panel coasts.
+    //
+    // Every block is added only when it has something to show. An item that draws nothing
+    // still gets the list's 16dp gap, and with no notices and no recent or favourite games
+    // five of them stacked an empty band above Discover.
     LazyColumnMMD(
         modifier =
             modifier
                 .padding(top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        item {
-            if (state.showNoNotificationPermissionCard) {
+        if (state.showNoNotificationPermissionCard) {
+            item {
                 HomeNotification(
                     titleId = R.string.home_notification_title,
                     messageId = R.string.home_notification_message,
@@ -108,8 +118,8 @@ private fun HomeScreen(
                 )
             }
         }
-        item {
-            if (state.showNoGamesCard) {
+        if (state.showNoGamesCard) {
+            item {
                 HomeNotification(
                     titleId = R.string.home_empty_title,
                     messageId = R.string.home_empty_message,
@@ -119,8 +129,8 @@ private fun HomeScreen(
                 )
             }
         }
-        item {
-            if (state.showNoMicrophonePermissionCard) {
+        if (state.showNoMicrophonePermissionCard) {
+            item {
                 HomeNotification(
                     titleId = R.string.home_microphone_title,
                     messageId = R.string.home_microphone_message,
@@ -129,8 +139,8 @@ private fun HomeScreen(
                 )
             }
         }
-        item {
-            if (state.showDesmumeDeprecatedCard) {
+        if (state.showDesmumeDeprecatedCard) {
+            item {
                 HomeNotification(
                     titleId = R.string.home_notification_desmume_deprecated_title,
                     messageId = R.string.home_notification_desmume_deprecated_message,
@@ -139,29 +149,35 @@ private fun HomeScreen(
                 )
             }
         }
-        item {
-            HomeRow(
-                stringResource(id = R.string.recent),
-                state.recentGames,
-                onGameClicked,
-                onGameLongClick,
-            )
+        if (state.recentGames.isNotEmpty()) {
+            item {
+                HomeRow(
+                    stringResource(id = R.string.recent),
+                    state.recentGames,
+                    onGameClicked,
+                    onGameLongClick,
+                )
+            }
         }
-        item {
-            HomeRow(
-                stringResource(id = R.string.favorites),
-                state.favoritesGames,
-                onGameClicked,
-                onGameLongClick,
-            )
+        if (state.favoritesGames.isNotEmpty()) {
+            item {
+                HomeRow(
+                    stringResource(id = R.string.favorites),
+                    state.favoritesGames,
+                    onGameClicked,
+                    onGameLongClick,
+                )
+            }
         }
-        item {
-            HomeRow(
-                stringResource(id = R.string.discover),
-                state.discoveryGames,
-                onGameClicked,
-                onGameLongClick,
-            )
+        if (state.discoveryGames.isNotEmpty()) {
+            item {
+                HomeRow(
+                    stringResource(id = R.string.discover),
+                    state.discoveryGames,
+                    onGameClicked,
+                    onGameLongClick,
+                )
+            }
         }
     }
 }
@@ -184,19 +200,26 @@ private fun HomeRow(
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
         )
+        // MMD's row gives its list weight(1f) above the rail, which fills whatever height it
+        // is given -- and inside the home screen's vertical list it is given none, so the
+        // cards came out zero high and only the rail was drawn: an empty "Discover" row on
+        // every home screen from 0.1.2 to 0.1.3. So the row is told its height: one card
+        // (a square picture, a line of title, a line of subtitle) plus the row's padding
+        // and MMD's rail beneath.
         LazyRowMMD(
             modifier =
                 Modifier
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(16.dp),
+                    .fillMaxWidth()
+                    .height(homeRowHeight(scrolls = rowScrolls(games.size))),
+            horizontalArrangement = Arrangement.spacedBy(ROW_SPACING),
+            contentPadding = PaddingValues(ROW_PADDING),
         ) {
             items(games.size, key = { games[it].id }) { index ->
                 val game = games[index]
                 LemuroidGameCard(
                     modifier =
                         Modifier
-                            .widthIn(0.dp, 144.dp)
+                            .widthIn(0.dp, CARD_WIDTH)
                             .animateItem(),
                     game = game,
                     onClick = { onGameClicked(game) },
@@ -205,6 +228,38 @@ private fun HomeRow(
             }
         }
     }
+}
+
+private val CARD_WIDTH = 144.dp
+private val ROW_PADDING = 16.dp
+private val ROW_SPACING = 16.dp
+private val TEXT_PADDING = 8.dp
+
+// MMD's rail under a scrollable row: a 24dp chevron with 8dp above and below. The size is
+// internal to MMD, so it is restated here.
+private val RAIL_HEIGHT = 24.dp + 8.dp * 2
+
+// Whether a row of this many cards is wider than the screen, which is when MMD draws its
+// rail beneath it. A row that fits keeps no room for a rail it does not have.
+@Composable
+private fun rowScrolls(count: Int): Boolean {
+    val screen = LocalConfiguration.current.screenWidthDp.dp
+    val cards = CARD_WIDTH * count + ROW_SPACING * (count - 1) + ROW_PADDING * 2
+    return cards > screen
+}
+
+@Composable
+private fun homeRowHeight(scrolls: Boolean): Dp {
+    val type = MaterialTheme.typography
+    val density = LocalDensity.current
+
+    fun lineOf(style: TextStyle): Dp {
+        val line = if (style.lineHeight.isSp) style.lineHeight else style.fontSize * 1.25f
+        return with(density) { line.toDp() }
+    }
+    val rail = if (scrolls) RAIL_HEIGHT else 0.dp
+    return ROW_PADDING * 2 + CARD_WIDTH + TEXT_PADDING * 2 +
+        lineOf(type.titleSmall) + lineOf(type.labelSmall) + rail
 }
 
 @Composable
