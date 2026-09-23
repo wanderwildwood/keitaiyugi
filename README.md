@@ -8,8 +8,8 @@ can be on a quiet afternoon.
 
 | | |
 |---|---|
-| ![The library](screenshots/1-home.png) | ![All the games](screenshots/2-games.png) |
-| ![2048gb, playing](screenshots/3-playing.png) | ![Why everything is grey](screenshots/4-help.png) |
+| ![All the games](screenshots/1-games.png) | ![2048gb, playing](screenshots/2-playing.png) |
+| ![Settings](screenshots/3-settings.png) | ![About, and why everything is grey](screenshots/4-about.png) |
 
 Every game shown is freely licensed homebrew from the [Homebrew Hub](https://hh.gbdev.io).
 No commercial game appears in this repository, and none is bundled in the app.
