@@ -70,7 +70,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
 
         Spacer(Modifier.height(14.dp))
         TextMMD(
-            text = "github.com/wanderwildwood/keitaiyugi",
+            text = "wanderthe.dev",
             style = MaterialTheme.typography.labelSmall,
         )
 
