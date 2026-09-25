@@ -26,7 +26,13 @@ class SavesManager(private val directoriesManager: DirectoriesManager) {
                         savesMigrator?.loadPreviousSaveForGame(game, directoriesManager)
                     }
                 }
-            result.getOrNull()
+            // ⚠ A save that is there and would not read is an error, not "no save". Returning
+            // null for it, which is what this did, walked straight past the loader's guard: the
+            // game started with blank save memory and, on the way out, wrote that blank memory
+            // over the real save. Raised, the loader stops with its save error and the file is
+            // left exactly as it was. Only a save that genuinely is not there starts fresh.
+            val existing = getSaveFile(getSaveRAMFileName(game))
+            result.getOrElse { e -> if (existing.exists() && existing.length() > 0) throw e else null }
         }
     }
 

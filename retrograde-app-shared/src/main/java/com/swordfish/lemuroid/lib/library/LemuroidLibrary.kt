@@ -21,6 +21,7 @@ package com.swordfish.lemuroid.lib.library
 
 import com.swordfish.lemuroid.common.coroutines.batchWithSizeAndTime
 import com.swordfish.lemuroid.lib.bios.BiosManager
+import com.swordfish.lemuroid.lib.saves.FollowRenames
 import com.swordfish.lemuroid.lib.library.db.RetrogradeDatabase
 import com.swordfish.lemuroid.lib.library.db.entity.DataFile
 import com.swordfish.lemuroid.lib.library.db.entity.Game
@@ -49,6 +50,8 @@ class LemuroidLibrary(
     private val storageProviderRegistry: Lazy<StorageProviderRegistry>,
     private val gameMetadataProvider: Lazy<GameMetadataProvider>,
     private val biosManager: BiosManager,
+    /** Where saves live, so a renamed ROM's can follow it. See [FollowRenames]. */
+    private val directoriesManager: com.swordfish.lemuroid.lib.storage.DirectoriesManager? = null,
 ) {
     suspend fun indexLibrary() {
         val startedAtMs = System.currentTimeMillis()
@@ -315,7 +318,40 @@ class LemuroidLibrary(
     private fun removeDeletedGames(startedAtMs: Long) {
         Timber.d("Deleting games from db before: $startedAtMs")
         val games = retrogradedb.gameDao().selectByLastIndexedAtLessThan(startedAtMs)
+        runCatching { followRenames(games, startedAtMs) }
+            .onFailure { Timber.w(it, "Could not carry saves across renamed games") }
         retrogradedb.gameDao().delete(games)
+    }
+
+    /**
+     * Before a vanished game's row goes: if it reappeared under another name, or moved, its
+     * saves and what the library knew about it go with it. See [FollowRenames].
+     */
+    private fun followRenames(gone: List<Game>, startedAtMs: Long) {
+        if (gone.isEmpty()) return
+        val present = retrogradedb.gameDao().selectByLastIndexedAtAtLeast(startedAtMs)
+        for (old in gone) {
+            // Moved, same name: the saves already match; only favourite and last played were
+            // being lost with the row.
+            val moved = present.firstOrNull { it.fileName == old.fileName && it.systemId == old.systemId }
+            // Renamed: exactly one candidate, and one with no saves of its own.
+            val renamed = if (moved == null) present.filter { FollowRenames.sameGame(old, it) }.singleOrNull() else null
+            val target = moved ?: renamed ?: continue
+            val dirs = directoriesManager
+            if (renamed != null) {
+                if (dirs == null || FollowRenames.hasAny(dirs, renamed.fileName)) continue
+                val count = FollowRenames.move(dirs, old.fileName, renamed.fileName)
+                Timber.i("Carried $count save file(s) from ${old.fileName} to ${renamed.fileName}")
+            }
+            retrogradedb.gameDao().update(
+                listOf(
+                    target.copy(
+                        isFavorite = target.isFavorite || old.isFavorite,
+                        lastPlayedAt = listOfNotNull(target.lastPlayedAt, old.lastPlayedAt).maxOrNull(),
+                    ),
+                ),
+            )
+        }
     }
 
     fun getGameFiles(

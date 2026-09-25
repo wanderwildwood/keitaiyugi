@@ -39,6 +39,9 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE lastIndexedAt < :lastIndexedAt")
     fun selectByLastIndexedAtLessThan(lastIndexedAt: Long): List<Game>
 
+    @Query("SELECT * FROM games WHERE lastIndexedAt >= :lastIndexedAt")
+    fun selectByLastIndexedAtAtLeast(lastIndexedAt: Long): List<Game>
+
     @Query("SELECT * FROM games WHERE isFavorite = 1 ORDER BY title ASC")
     fun selectFavorites(): PagingSource<Int, Game>
 
