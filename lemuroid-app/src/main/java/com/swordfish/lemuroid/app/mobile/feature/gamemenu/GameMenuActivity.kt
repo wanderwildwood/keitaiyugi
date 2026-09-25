@@ -4,6 +4,7 @@ package com.swordfish.lemuroid.app.mobile.feature.gamemenu
 
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioManager
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -83,6 +84,8 @@ class GameMenuActivity : RetrogradeComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // The game is paused under this menu, so nothing is playing to steer the volume keys.
+        volumeControlStream = AudioManager.STREAM_MUSIC
 
         enableEdgeToEdge(
             SystemBarStyle.dark(Color.TRANSPARENT),
