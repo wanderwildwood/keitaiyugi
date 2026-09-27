@@ -102,7 +102,7 @@ private val PARAGRAPH_BREAK = Regex("""<br\s*/?>\s*<br\s*/?>""")
 /**
  * The site's address, then a llama which opens the page a donation goes to, on one line.
  *
- * Only the llama and its words open the page; the address beside it is there to be read.
+ * The llama and its words open the page; the address beside it opens the site.
  */
 @Composable
 private fun Llama() {
@@ -111,7 +111,26 @@ private fun Llama() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        TextMMD(text = "wanderthe.dev", style = MaterialTheme.typography.labelSmall)
+        TextMMD(
+            text = "wanderthe.dev",
+            style = MaterialTheme.typography.labelSmall,
+            // The site's address opens the site, the way the llama beside it opens its page.
+            modifier = Modifier
+                .clickable {
+                    runCatching {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse("https://wanderthe.dev")),
+                        )
+                    }.onFailure {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.about_no_browser),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                }
+                .padding(vertical = 4.dp),
+        )
         Spacer(Modifier.width(6.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
