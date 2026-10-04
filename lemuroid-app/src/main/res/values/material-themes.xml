@@ -1,5 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="LemuroidMaterialTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <!-- The launcher theme is split in two so values-v31 can add the splash attributes to
+         LemuroidMaterialTheme without restating all of this. -->
+    <style name="LemuroidMaterialTheme" parent="Base.LemuroidMaterialTheme" />
+
+    <style name="Base.LemuroidMaterialTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
