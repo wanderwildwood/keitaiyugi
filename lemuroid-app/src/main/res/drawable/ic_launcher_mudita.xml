@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Handheld Games: launcher icon in the Mudita Kompakt stock style (81 grid, ring r=19.25 x 2.5,
+     glyph stroke 2.5, black on transparent). Built by icons/mudita-style/final.py. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="81dp"
+    android:height="81dp"
+    android:viewportWidth="81"
+    android:viewportHeight="81">
+    <path
+        android:pathData="M19.25,2.5C9.999,2.5 2.5,9.999 2.5,19.25V61.75C2.5,71.001 9.999,78.5 19.25,78.5H61.75C71.001,78.5 78.5,71.001 78.5,61.75V19.25C78.5,9.999 71.001,2.5 61.75,2.5H19.25ZM0,19.25C0,8.619 8.619,0 19.25,0H61.75C72.382,0 81,8.619 81,19.25V61.75C81,72.382 72.382,81 61.75,81H19.25C8.619,81 0,72.382 0,61.75V19.25Z"
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd"/>
+    <path
+        android:pathData="M32,21 H49 A4,4 0 0,1 53,25 V56 A4,4 0 0,1 49,60 H32 A4,4 0 0,1 28,56 V25 A4,4 0 0,1 32,21Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+    <path
+        android:pathData="M33.5,25 H47.5 A1.5,1.5 0 0,1 49,26.5 V37.5 A1.5,1.5 0 0,1 47.5,39 H33.5 A1.5,1.5 0 0,1 32,37.5 V26.5 A1.5,1.5 0 0,1 33.5,25Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+    <path
+        android:pathData="M31.5,48.5 H38 M34.75,45.25 V51.75"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+    <path
+        android:pathData="M43.2,50 A1.8,1.8 0 1,0 46.8,50 A1.8,1.8 0 1,0 43.2,50Z"
+        android:fillColor="#FF000000"/>
+    <path
+        android:pathData="M47.2,46.5 A1.8,1.8 0 1,0 50.8,46.5 A1.8,1.8 0 1,0 47.2,46.5Z"
+        android:fillColor="#FF000000"/>
+</vector>
