@@ -4,6 +4,9 @@
     <style name="LemuroidMaterialTheme" parent="Base.LemuroidMaterialTheme" />
 
     <style name="Base.LemuroidMaterialTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- No scrollbars: a list moves a page to a swipe, and nothing else needs one. -->
+        <item name="android:scrollbarThumbVertical">@android:color/transparent</item>
+        <item name="android:scrollbarThumbHorizontal">@android:color/transparent</item>
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>

@@ -25,9 +25,9 @@ fun GameMenuHomeScreen(
     gameMenuRequest: GameMenuActivity.GameMenuRequest,
     onResult: KFunction1<Intent.() -> Unit, Unit>,
 ) {
-    // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
-    // the chevron rail with it. Nothing on this panel coasts.
-    LazyColumnMMD {
+    // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
+    // scrollbar beside it. Nothing on this panel coasts.
+    LazyColumnMMD(isScrollbarVisible = false) {
         item {
             if (gameMenuRequest.coreConfig.statesSupported) {
                 LemuroidSettingsMenuLink(

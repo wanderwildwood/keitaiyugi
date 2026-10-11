@@ -73,9 +73,9 @@ fun LemuroidSettingsListMultiSelect(
     EInkAlertDialog(
         title = title,
         text = {
-            // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, and brings
-            // the chevron rail with it. Nothing on this panel coasts.
-            LazyColumnMMD(modifier = Modifier.heightIn(max = 420.dp)) {
+            // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
+            // scrollbar beside it. Nothing on this panel coasts.
+            LazyColumnMMD(modifier = Modifier.heightIn(max = 420.dp), isScrollbarVisible = false) {
                 if (subtitle != null) {
                     item {
                         subtitle()

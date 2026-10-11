@@ -78,7 +78,7 @@ private fun SearchResultsView(
     onGameLongClick: (Game) -> Unit,
     onGameFavoriteToggle: (Game, Boolean) -> Unit,
 ) {
-    LazyColumnMMD(modifier = modifier) {
+    LazyColumnMMD(modifier = modifier, isScrollbarVisible = false) {
         items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
             val game = games[index] ?: return@items
 

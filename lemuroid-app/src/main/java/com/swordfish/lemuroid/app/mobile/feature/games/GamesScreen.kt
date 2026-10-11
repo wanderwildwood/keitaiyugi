@@ -26,12 +26,12 @@ fun GamesScreen(
         return
     }
 
-    // MMD's list rather than a plain LazyColumn. It brings the fling behaviour and
-    // scroll step Mudita tuned for this panel, plus the page-navigation scrollbar the
-    // phone's own apps use. A smooth fling is the worst thing to ask of this screen:
+    // MMD's list rather than a plain LazyColumn. It brings the paging and the
+    // scroll step Mudita tuned for this panel; its scrollbar is turned off, as it is in
+    // every one of these apps. A smooth fling is the worst thing to ask of this screen:
     // scrolling here is display-bound, not CPU-bound, so the only lever that helps is
     // producing fewer frames -- which is why e-ink readers page instead of scrolling.
-    LazyColumnMMD(modifier = modifier.fillMaxSize()) {
+    LazyColumnMMD(modifier = modifier.fillMaxSize(), isScrollbarVisible = false) {
         items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
             val game = games[index] ?: return@items
 

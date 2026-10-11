@@ -65,6 +65,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
             modifier = Modifier.heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             scrollStep = 1,
+            isScrollbarVisible = false,
         ) {
             items(questions) { question -> HtmlText(text = question) }
             item {
