@@ -17,13 +17,18 @@ import java.io.File
  * into a game that has none of its own. Nothing is ever overwritten.
  */
 object FollowRenames {
-
     /** Whether any save, state or preview is filed under this ROM's name. */
-    fun hasAny(dirs: DirectoriesManager, fileName: String): Boolean =
-        srm(dirs, fileName).exists() || named(dirs, fileName).isNotEmpty()
+    fun hasAny(
+        dirs: DirectoriesManager,
+        fileName: String,
+    ): Boolean = srm(dirs, fileName).exists() || named(dirs, fileName).isNotEmpty()
 
     /** Moves every save, state and preview from one ROM's name to another's. */
-    fun move(dirs: DirectoriesManager, from: String, to: String): Int {
+    fun move(
+        dirs: DirectoriesManager,
+        from: String,
+        to: String,
+    ): Int {
         var moved = 0
         val oldSrm = srm(dirs, from)
         if (oldSrm.exists() && oldSrm.renameTo(srm(dirs, to))) moved++
@@ -35,15 +40,22 @@ object FollowRenames {
     }
 
     /** The battery save, named for the ROM without its extension. See `SavesManager`. */
-    private fun srm(dirs: DirectoriesManager, fileName: String) =
-        File(dirs.getSavesDirectory(), "${fileName.substringBeforeLast(".")}.srm")
+    private fun srm(
+        dirs: DirectoriesManager,
+        fileName: String,
+    ) = File(dirs.getSavesDirectory(), "${fileName.substringBeforeLast(".")}.srm")
 
     /** States, their metadata and their previews: "<rom>.state", "<rom>.slotN", ".jpg", per core. */
-    private fun named(dirs: DirectoriesManager, fileName: String): List<File> =
+    private fun named(
+        dirs: DirectoriesManager,
+        fileName: String,
+    ): List<File> =
         listOf(dirs.getStatesDirectory(), dirs.getStatesPreviewDirectory())
             .flatMap { root -> root.walkTopDown().filter { it.isFile && it.name.startsWith("$fileName.") }.toList() }
 
     /** The same game, as far as a rescan can tell. */
-    fun sameGame(old: Game, new: Game): Boolean =
-        old.systemId == new.systemId && old.title == new.title && old.fileName != new.fileName
+    fun sameGame(
+        old: Game,
+        new: Game,
+    ): Boolean = old.systemId == new.systemId && old.title == new.title && old.fileName != new.fileName
 }

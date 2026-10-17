@@ -58,9 +58,10 @@ fun AboutDialog(onDismiss: () -> Unit) {
         // list steps four items a swipe; four of these paragraphs are more than a screen, so a
         // swipe would have stepped straight past text nobody had read.
         val help = stringResource(R.string.lemuroid_help_content)
-        val questions = remember(help) {
-            help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
-        }
+        val questions =
+            remember(help) {
+                help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
+            }
         LazyColumnMMD(
             modifier = Modifier.heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -116,21 +117,22 @@ private fun Llama() {
             text = "wanderthe.dev",
             style = MaterialTheme.typography.labelSmall,
             // The site's address opens the site, the way the llama beside it opens its page.
-            modifier = Modifier
-                .clickable {
-                    runCatching {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://wanderthe.dev")),
-                        )
-                    }.onFailure {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.about_no_browser),
-                            Toast.LENGTH_SHORT,
-                        ).show()
+            modifier =
+                Modifier
+                    .clickable {
+                        runCatching {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse("https://wanderthe.dev")),
+                            )
+                        }.onFailure {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.about_no_browser),
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     }
-                }
-                .padding(vertical = 4.dp),
+                    .padding(vertical = 4.dp),
         )
         Spacer(Modifier.width(6.dp))
         Row(

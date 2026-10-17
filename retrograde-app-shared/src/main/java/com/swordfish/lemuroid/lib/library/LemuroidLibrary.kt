@@ -21,12 +21,12 @@ package com.swordfish.lemuroid.lib.library
 
 import com.swordfish.lemuroid.common.coroutines.batchWithSizeAndTime
 import com.swordfish.lemuroid.lib.bios.BiosManager
-import com.swordfish.lemuroid.lib.saves.FollowRenames
 import com.swordfish.lemuroid.lib.library.db.RetrogradeDatabase
 import com.swordfish.lemuroid.lib.library.db.entity.DataFile
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.library.metadata.GameMetadata
 import com.swordfish.lemuroid.lib.library.metadata.GameMetadataProvider
+import com.swordfish.lemuroid.lib.saves.FollowRenames
 import com.swordfish.lemuroid.lib.storage.BaseStorageFile
 import com.swordfish.lemuroid.lib.storage.GroupedStorageFiles
 import com.swordfish.lemuroid.lib.storage.RomFiles
@@ -327,7 +327,10 @@ class LemuroidLibrary(
      * Before a vanished game's row goes: if it reappeared under another name, or moved, its
      * saves and what the library knew about it go with it. See [FollowRenames].
      */
-    private fun followRenames(gone: List<Game>, startedAtMs: Long) {
+    private fun followRenames(
+        gone: List<Game>,
+        startedAtMs: Long,
+    ) {
         if (gone.isEmpty()) return
         val present = retrogradedb.gameDao().selectByLastIndexedAtAtLeast(startedAtMs)
         for (old in gone) {
