@@ -70,6 +70,10 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE systemId IN (:systemIds) ORDER BY title ASC, id DESC")
     fun selectBySystems(systemIds: List<String>): PagingSource<Int, Game>
 
+    /** Every title [selectBySystems] pages through, in the same order, for the letters beside the list. */
+    @Query("SELECT title FROM games WHERE systemId IN (:systemIds) ORDER BY title ASC, id DESC")
+    fun selectTitlesBySystems(systemIds: List<String>): Flow<List<String>>
+
     @Query("SELECT DISTINCT systemId FROM games ORDER BY systemId ASC")
     suspend fun selectSystems(): List<String>
 
