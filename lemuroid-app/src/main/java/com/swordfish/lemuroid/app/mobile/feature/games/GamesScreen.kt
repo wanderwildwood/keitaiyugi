@@ -9,11 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidEmptyView
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameListRow
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.ListJump
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.ListJumpBox
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -47,7 +47,7 @@ fun GamesScreen(
     // scrolling here is display-bound, not CPU-bound, so the only lever that helps is
     // producing fewer frames -- which is why e-ink readers page instead of scrolling.
     ListJumpBox(state, jump, modifier) {
-        LazyColumnMMD(modifier = Modifier.fillMaxSize(), state = state, isScrollbarVisible = false) {
+        PagedColumn(Modifier.fillMaxSize(), state = state) {
             items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
                 val game = games[index] ?: return@items
 

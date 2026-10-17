@@ -8,11 +8,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.alorma.compose.settings.storage.memory.rememberMemoryBooleanSettingState
 import com.alorma.compose.settings.storage.memory.rememberMemoryIntSettingState
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.tilt.TiltConfigurationMenuEntry
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.shared.GameMenuContract
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
@@ -27,7 +27,7 @@ fun GameMenuHomeScreen(
 ) {
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
     // scrollbar beside it. Nothing on this panel coasts.
-    LazyColumnMMD(isScrollbarVisible = false) {
+    PagedColumn {
         item {
             if (gameMenuRequest.coreConfig.statesSupported) {
                 LemuroidSettingsMenuLink(

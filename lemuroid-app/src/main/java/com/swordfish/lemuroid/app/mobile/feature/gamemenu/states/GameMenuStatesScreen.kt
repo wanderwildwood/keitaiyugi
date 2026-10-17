@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 
 @Composable
@@ -21,7 +21,7 @@ fun GameMenuStatesScreen(
 
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
     // scrollbar beside it. Nothing on this panel coasts.
-    LazyColumnMMD(isScrollbarVisible = false) {
+    PagedColumn {
         state.value.entries.forEachIndexed { index, entry ->
             item {
                 LemuroidSettingsMenuLink(

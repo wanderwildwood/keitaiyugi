@@ -7,10 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.gamemenu.GameMenuActivity
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.shared.coreoptions.CoreOptionsPreferenceHelper
 import com.swordfish.lemuroid.app.shared.coreoptions.LemuroidCoreOption
 import com.swordfish.lemuroid.app.shared.settings.ControllerConfigsManager
@@ -37,7 +37,7 @@ fun GameMenuCoreOptionsScreen(
 
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
     // scrollbar beside it. Nothing on this panel coasts.
-    LazyColumnMMD(isScrollbarVisible = false) {
+    PagedColumn {
         item {
             CoreOptions(gameMenuRequest.game.systemId, allOptions, context)
         }

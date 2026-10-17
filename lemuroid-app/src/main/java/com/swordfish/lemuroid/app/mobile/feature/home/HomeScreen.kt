@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.times
 import androidx.lifecycle.Lifecycle
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.cards.CardMMD
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.lazy.LazyRowMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameCard
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.utils.android.ComposableLifecycle
 import com.swordfish.lemuroid.common.displayDetailsSettingsScreen
 import com.swordfish.lemuroid.lib.library.db.entity.Game
@@ -101,12 +101,11 @@ private fun HomeScreen(
     // Every block is added only when it has something to show. An item that draws nothing
     // still gets the list's 16dp gap, and with no notices and no recent or favourite games
     // five of them stacked an empty band above Discover.
-    LazyColumnMMD(
+    PagedColumn(
         modifier =
             modifier
                 .padding(top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        isScrollbarVisible = false,
     ) {
         if (state.showNoNotificationPermissionCard) {
             item {

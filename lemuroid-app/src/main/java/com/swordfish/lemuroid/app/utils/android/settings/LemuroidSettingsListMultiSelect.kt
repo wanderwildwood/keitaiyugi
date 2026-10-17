@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.storage.base.SettingValueState
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.checkbox.CheckboxMMD
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkAlertDialog
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 
 @Composable
 fun LemuroidSettingsListMultiSelect(
@@ -75,7 +75,7 @@ fun LemuroidSettingsListMultiSelect(
         text = {
             // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
             // scrollbar beside it. Nothing on this panel coasts.
-            LazyColumnMMD(modifier = Modifier.heightIn(max = 420.dp), isScrollbarVisible = false) {
+            PagedColumn(Modifier.heightIn(max = 420.dp)) {
                 if (subtitle != null) {
                     item {
                         subtitle()
@@ -107,9 +107,17 @@ fun LemuroidSettingsListMultiSelect(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f),
                         )
+                        // MMD's box takes the press whatever it is given, so it is given the
+                        // same toggle as the row; with null a press on the box did nothing.
                         CheckboxMMD(
                             checked = isSelected,
-                            onCheckedChange = null,
+                            onCheckedChange = {
+                                if (isSelected) {
+                                    onRemove(index)
+                                } else {
+                                    onAdd(index)
+                                }
+                            },
                         )
                     }
                 }

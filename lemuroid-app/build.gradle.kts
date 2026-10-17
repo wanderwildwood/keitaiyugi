@@ -14,8 +14,8 @@ android {
         // This fork's own version, not upstream's. The Lemuroid release it is based on
         // is recorded in the README instead, where it can be read without git.
         // versionCode is major*10000 + minor*100 + patch, as the other apps here.
-        versionCode = 112
-        versionName = "0.1.12"
+        versionCode = 113
+        versionName = "0.1.13"
         // Its own id, so it installs alongside anything upstream rather than colliding
         // with it. The code package stays com.swordfish.lemuroid: that is shared
         // code and its attribution, and renaming it would be a rename for its own sake.

@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.BuildConfig
 import com.swordfish.lemuroid.R
@@ -53,20 +52,18 @@ fun AboutDialog(onDismiss: () -> Unit) {
         )
 
         Spacer(Modifier.height(14.dp))
-        // Paged, not scrolled, and paged one paragraph at a time. The help runs taller than the
-        // panel at 480x800, and it used to run off the bottom with Close underneath it. MMD's
-        // list steps four items a swipe; four of these paragraphs are more than a screen, so a
-        // swipe would have stepped straight past text nobody had read.
+        // Paged, not scrolled, on whole paragraphs. The help runs taller than the panel at
+        // 480x800, and it used to run off the bottom with Close underneath it. MMD's list
+        // stepped four items a swipe, which stepped straight past text nobody had read; a
+        // swipe here opens on the paragraph the foot cut off.
         val help = stringResource(R.string.lemuroid_help_content)
         val questions =
             remember(help) {
                 help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
             }
-        LazyColumnMMD(
+        PagedColumn(
             modifier = Modifier.heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            scrollStep = 1,
-            isScrollbarVisible = false,
         ) {
             items(questions) { question -> HtmlText(text = question) }
             item {

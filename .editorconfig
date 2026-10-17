@@ -42,3 +42,8 @@ max_line_length = off
 # rather than forking it.
 [lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/ListJump.kt]
 ktlint_standard = disabled
+
+# PagedColumn.kt is the shared whole-row list, carried byte-for-byte by every app here apart
+# from its package line, and held to the same bargain as ListJump.kt above.
+[lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/PagedColumn.kt]
+ktlint_standard = disabled
