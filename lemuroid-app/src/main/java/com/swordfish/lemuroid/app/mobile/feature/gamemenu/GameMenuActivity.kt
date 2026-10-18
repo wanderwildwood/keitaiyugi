@@ -87,9 +87,11 @@ class GameMenuActivity : RetrogradeComponentActivity() {
         // The game is paused under this menu, so nothing is playing to steer the volume keys.
         volumeControlStream = AudioManager.STREAM_MUSIC
 
+        // Dark icons on the clear bar: the app is white, and Android 15 and later draw it
+        // under the bar, so upstream's white icons vanish into it.
         enableEdgeToEdge(
-            SystemBarStyle.dark(Color.TRANSPARENT),
-            SystemBarStyle.dark(Color.TRANSPARENT),
+            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
+            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
         )
 
         val extras = intent.extras

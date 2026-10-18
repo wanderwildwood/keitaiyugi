@@ -108,9 +108,11 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Dark icons on the clear bar: the app is white, and Android 15 and later draw it
+        // under the bar, so upstream's white icons vanish into it.
         enableEdgeToEdge(
-            SystemBarStyle.dark(Color.TRANSPARENT),
-            SystemBarStyle.dark(Color.TRANSPARENT),
+            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
+            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
         )
         super.onCreate(savedInstanceState)
 
