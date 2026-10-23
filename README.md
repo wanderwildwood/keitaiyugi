@@ -71,6 +71,10 @@ puzzle and turn-based work that suits this screen better than most commercial re
 Version 0.1.0. It plays, on a real Kompakt, and has not been through anybody else's hands yet.
 Forked from Lemuroid at `53752bf2`.
 
+## Privacy
+
+Privacy: what the app stores and what it sends is set out in [PRIVACY.md](PRIVACY.md).
+
 ## Licence
 
 GPL-3.0-only, © wander wildwood, inheriting Lemuroid's GPL-3.0. See [COPYING](COPYING).
