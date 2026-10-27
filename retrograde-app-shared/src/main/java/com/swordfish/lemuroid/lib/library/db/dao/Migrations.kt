@@ -45,4 +45,21 @@ object Migrations {
                 )
             }
         }
+
+    /**
+     * Every game gets a save key equal to its file name, so each existing battery save, state and
+     * preview stays under the name it already has. Nothing on disk is touched.
+     */
+    val VERSION_9_10_SQL: List<String> =
+        listOf(
+            "ALTER TABLE `games` ADD COLUMN `saveKey` TEXT NOT NULL DEFAULT ''",
+            "UPDATE `games` SET `saveKey` = `fileName`",
+        )
+
+    val VERSION_9_10: Migration =
+        object : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                VERSION_9_10_SQL.forEach { database.execSQL(it) }
+            }
+        }
 }

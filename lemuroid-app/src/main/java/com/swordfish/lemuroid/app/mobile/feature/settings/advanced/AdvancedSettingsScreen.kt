@@ -44,8 +44,8 @@ fun AdvancedSettingsScreen(
             return@LemuroidSettingsPage
         }
 
-        InputSettings()
-        GeneralSettings(uiState.cache, viewModel, navController)
+        item { InputSettings() }
+        item { GeneralSettings(uiState.cache, viewModel, navController) }
     }
 }
 
@@ -64,7 +64,19 @@ private fun InputSettings() {
             enabled = rumbleEnabled.value,
             state = booleanPreferenceState(R.string.pref_key_enable_device_rumble, false),
             title = { TextMMD(text = stringResource(id = R.string.settings_title_enable_device_rumble)) },
-            subtitle = { TextMMD(text = stringResource(id = R.string.settings_description_enable_device_rumble)) },
+            subtitle = {
+                TextMMD(
+                    text =
+                        stringResource(
+                            id =
+                                if (rumbleEnabled.value) {
+                                    R.string.settings_description_enable_device_rumble
+                                } else {
+                                    R.string.settings_device_rumble_needs_rumble
+                                },
+                        ),
+                )
+            },
         )
         LemuroidSettingsSlider(
             state =

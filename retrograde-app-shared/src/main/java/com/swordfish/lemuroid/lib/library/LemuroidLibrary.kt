@@ -27,6 +27,8 @@ import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.library.metadata.GameMetadata
 import com.swordfish.lemuroid.lib.library.metadata.GameMetadataProvider
 import com.swordfish.lemuroid.lib.saves.FollowRenames
+import com.swordfish.lemuroid.lib.saves.SaveKeyMigration
+import com.swordfish.lemuroid.lib.saves.SaveKeys
 import com.swordfish.lemuroid.lib.storage.BaseStorageFile
 import com.swordfish.lemuroid.lib.storage.GroupedStorageFiles
 import com.swordfish.lemuroid.lib.storage.RomFiles
@@ -56,6 +58,9 @@ class LemuroidLibrary(
     suspend fun indexLibrary() {
         val startedAtMs = System.currentTimeMillis()
 
+        runCatching { splitSharedSaveKeys() }
+            .onFailure { Timber.w(it, "Could not split saves that games share") }
+
         try {
             indexProviders(startedAtMs)
         } catch (e: Throwable) {
@@ -66,6 +71,24 @@ class LemuroidLibrary(
 
         val executionTime = System.currentTimeMillis() - startedAtMs
         Timber.i("Library indexing completed in: $executionTime ms")
+    }
+
+    /** Games that shared one set of saves before save keys each get their own. See [SaveKeyMigration]. */
+    private fun splitSharedSaveKeys() {
+        val dirs = directoriesManager ?: return
+        val games = retrogradedb.gameDao().selectAll()
+        val changes =
+            SaveKeyMigration.split(
+                games,
+                dirs.getSavesDirectory(),
+                dirs.getStatesDirectory(),
+                dirs.getStatesPreviewDirectory(),
+            )
+        if (changes.isEmpty()) return
+        retrogradedb.gameDao().update(
+            games.filter { it.id in changes }.map { it.copy(saveKey = changes.getValue(it.id)) },
+        )
+        Timber.i("Gave ${changes.size} game(s) a save key of their own")
     }
 
     @OptIn(FlowPreview::class)
@@ -197,9 +220,15 @@ class LemuroidLibrary(
         pairs: List<ScanEntry.GameFile>,
         startedAtMs: Long,
     ) {
+        val taken = retrogradedb.gameDao().selectSaveKeys().toMutableList()
         val games =
             pairs
                 .map { it.game }
+                .map { game ->
+                    val key = SaveKeys.assign(game.fileName, game.fileUri, taken)
+                    taken.add(key)
+                    game.copy(saveKey = key)
+                }
 
         games.forEach { Timber.d("Insert: $it") }
 
@@ -287,6 +316,12 @@ class LemuroidLibrary(
         if (gameMetadata == null) {
             return null
         }
+        // Only a Game Boy ROM is a game here: .gb or .gbc, loose or the one file inside a zip.
+        // The scanner's fallbacks (a folder named for a system, a file the database matched by
+        // name) also let pictures, text files and unrelated archives through.
+        if (!RomFilter.isGameBoyRom(gameMetadata.system, storageFile.name)) {
+            return null
+        }
 
         val gameSystem = GameSystem.findById(gameMetadata.system!!)
 
@@ -341,10 +376,18 @@ class LemuroidLibrary(
             val renamed = if (moved == null) present.filter { FollowRenames.sameGame(old, it) }.singleOrNull() else null
             val target = moved ?: renamed ?: continue
             val dirs = directoriesManager
-            if (renamed != null) {
-                if (dirs == null || FollowRenames.hasAny(dirs, renamed.fileName)) continue
-                val count = FollowRenames.move(dirs, old.fileName, renamed.fileName)
-                Timber.i("Carried $count save file(s) from ${old.fileName} to ${renamed.fileName}")
+            // A moved game is a new row, and the old row still held its name when the new one was
+            // keyed, so it may have been given a key of its own: its saves follow it there.
+            val stillShared = present.any { it.id != target.id && it.saveName() == old.saveName() }
+            if (dirs != null && !stillShared && (renamed != null || target.saveName() != old.saveName())) {
+                if (FollowRenames.hasAny(dirs, target.saveName())) {
+                    if (renamed != null) continue
+                } else {
+                    val count = FollowRenames.move(dirs, old.saveName(), target.saveName())
+                    Timber.i("Carried $count save file(s) from ${old.saveName()} to ${target.saveName()}")
+                }
+            } else if (renamed != null) {
+                continue
             }
             retrogradedb.gameDao().update(
                 listOf(

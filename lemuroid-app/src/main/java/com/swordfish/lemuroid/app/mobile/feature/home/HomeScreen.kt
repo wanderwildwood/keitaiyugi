@@ -1,6 +1,8 @@
 package com.swordfish.lemuroid.app.mobile.feature.home
 
 import android.Manifest
+import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +17,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Lifecycle
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.cards.CardMMD
@@ -35,6 +42,7 @@ import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.utils.android.ComposableLifecycle
 import com.swordfish.lemuroid.common.displayDetailsSettingsScreen
 import com.swordfish.lemuroid.lib.library.db.entity.Game
+import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
 
 @Composable
 fun HomeScreen(
@@ -47,10 +55,15 @@ fun HomeScreen(
     val context = LocalContext.current
     val applicationContext = context.applicationContext
 
+    // The folder the games are read from, once one has been chosen: with it, an empty library is
+    // "nothing found in that folder", not a request to pick one.
+    var folderName by remember { mutableStateOf(chosenFolderName(applicationContext)) }
+
     ComposableLifecycle { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
                 viewModel.updatePermissions(applicationContext)
+                folderName = chosenFolderName(applicationContext)
             }
             else -> { }
         }
@@ -69,6 +82,7 @@ fun HomeScreen(
     HomeScreen(
         modifier,
         state.value,
+        folderName,
         onGameClick,
         onGameLongClick,
         onOpenCoreSelection,
@@ -84,10 +98,20 @@ fun HomeScreen(
     ) // TODO COMPOSE We need to understand what's going to happen here.
 }
 
+@Suppress("DEPRECATION")
+private fun chosenFolderName(context: Context): String? {
+    val uri =
+        SharedPreferencesHelper.getLegacySharedPreferences(context)
+            .getString(context.getString(com.swordfish.lemuroid.lib.R.string.pref_key_extenral_folder), null)
+    if (uri.isNullOrEmpty()) return null
+    return runCatching { DocumentFile.fromTreeUri(context, Uri.parse(uri))?.name }.getOrNull()
+}
+
 @Composable
 private fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeViewModel.UIState,
+    folderName: String?,
     onGameClicked: (Game) -> Unit,
     onGameLongClick: (Game) -> Unit,
     onOpenCoreSelection: () -> Unit,
@@ -110,8 +134,8 @@ private fun HomeScreen(
         if (state.showNoNotificationPermissionCard) {
             item {
                 HomeNotification(
-                    titleId = R.string.home_notification_title,
-                    messageId = R.string.home_notification_message,
+                    title = stringResource(R.string.home_notification_title),
+                    message = stringResource(R.string.home_notification_message),
                     actionId = R.string.home_notification_action,
                     onAction = onEnableNotificationsClicked,
                 )
@@ -119,20 +143,37 @@ private fun HomeScreen(
         }
         if (state.showNoGamesCard) {
             item {
-                HomeNotification(
-                    titleId = R.string.home_empty_title,
-                    messageId = R.string.home_empty_message,
-                    actionId = R.string.home_empty_action,
-                    onAction = onSetDirectoryClicked,
-                    enabled = !state.indexInProgress,
-                )
+                if (folderName == null) {
+                    HomeNotification(
+                        title = stringResource(R.string.home_empty_title),
+                        message = stringResource(R.string.home_empty_message),
+                        actionId = R.string.home_empty_action,
+                        onAction = onSetDirectoryClicked,
+                        enabled = !state.indexInProgress,
+                    )
+                } else if (state.indexInProgress) {
+                    HomeNotification(
+                        title = stringResource(R.string.home_scanning_title, folderName),
+                        message = stringResource(R.string.home_scanning_message),
+                        actionId = R.string.home_empty_action,
+                        onAction = onSetDirectoryClicked,
+                        enabled = false,
+                    )
+                } else {
+                    HomeNotification(
+                        title = stringResource(R.string.home_none_found_title, folderName),
+                        message = stringResource(R.string.home_none_found_message),
+                        actionId = R.string.home_empty_action,
+                        onAction = onSetDirectoryClicked,
+                    )
+                }
             }
         }
         if (state.showNoMicrophonePermissionCard) {
             item {
                 HomeNotification(
-                    titleId = R.string.home_microphone_title,
-                    messageId = R.string.home_microphone_message,
+                    title = stringResource(R.string.home_microphone_title),
+                    message = stringResource(R.string.home_microphone_message),
                     actionId = R.string.home_microphone_action,
                     onAction = onEnableMicrophoneClicked,
                 )
@@ -141,8 +182,8 @@ private fun HomeScreen(
         if (state.showDesmumeDeprecatedCard) {
             item {
                 HomeNotification(
-                    titleId = R.string.home_notification_desmume_deprecated_title,
-                    messageId = R.string.home_notification_desmume_deprecated_message,
+                    title = stringResource(R.string.home_notification_desmume_deprecated_title),
+                    message = stringResource(R.string.home_notification_desmume_deprecated_message),
                     actionId = R.string.home_notification_desmume_deprecated_action,
                     onAction = onOpenCoreSelection,
                 )
@@ -216,10 +257,7 @@ private fun HomeRow(
             items(games.size, key = { games[it].id }) { index ->
                 val game = games[index]
                 LemuroidGameCard(
-                    modifier =
-                        Modifier
-                            .widthIn(0.dp, CARD_WIDTH)
-                            .animateItem(),
+                    modifier = Modifier.widthIn(0.dp, CARD_WIDTH),
                     game = game,
                     onClick = { onGameClicked(game) },
                     onLongClick = { onGameLongClick(game) },
@@ -249,8 +287,8 @@ private fun homeRowHeight(): Dp {
 
 @Composable
 private fun HomeNotification(
-    titleId: Int,
-    messageId: Int,
+    title: String,
+    message: String,
     actionId: Int,
     enabled: Boolean = true,
     onAction: () -> Unit = { },
@@ -269,11 +307,11 @@ private fun HomeNotification(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TextMMD(
-                text = stringResource(titleId),
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
             )
             TextMMD(
-                text = stringResource(messageId),
+                text = message,
                 style = MaterialTheme.typography.bodyMedium,
             )
             OutlinedButtonMMD(

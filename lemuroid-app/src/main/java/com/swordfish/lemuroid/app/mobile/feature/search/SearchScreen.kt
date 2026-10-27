@@ -2,7 +2,9 @@ package com.swordfish.lemuroid.app.mobile.feature.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,6 +17,7 @@ import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidEmptyView
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameListRow
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LongPressHint
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 
@@ -78,19 +81,21 @@ private fun SearchResultsView(
     onGameLongClick: (Game) -> Unit,
     onGameFavoriteToggle: (Game, Boolean) -> Unit,
 ) {
-    PagedColumn(modifier) {
-        items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
-            val game = games[index] ?: return@items
+    Column(modifier) {
+        LongPressHint()
+        PagedColumn(Modifier.weight(1f).fillMaxWidth()) {
+            items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
+                val game = games[index] ?: return@items
 
-            LemuroidGameListRow(
-                modifier = Modifier.animateItem(),
-                game = game,
-                onClick = { onGameClick(game) },
-                onLongClick = { onGameLongClick(game) },
-                onFavoriteToggle = { isFavorite ->
-                    onGameFavoriteToggle(game, isFavorite)
-                },
-            )
+                LemuroidGameListRow(
+                    game = game,
+                    onClick = { onGameClick(game) },
+                    onLongClick = { onGameLongClick(game) },
+                    onFavoriteToggle = { isFavorite ->
+                        onGameFavoriteToggle(game, isFavorite)
+                    },
+                )
+            }
         }
     }
 }

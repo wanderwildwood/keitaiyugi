@@ -32,31 +32,35 @@ fun CoresSelectionScreen(
         // The tinted container this asked for is black under [monochrome], which would put
         // black text on it. CardMMD's own face is what a card looks like here: white, flat,
         // inside a black rim.
-        CardMMD(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-        ) {
-            TextMMD(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.settings_core_selection_ds_info),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
-        LemuroidCardSettingsGroup {
-            cores.forEach { (system, core) ->
-                val state = rememberMemoryIntSettingState(system.systemCoreConfigs.indexOf(core))
-
-                LemuroidSettingsList(
-                    state = state,
-                    title = { TextMMD(text = stringResource(system.titleResId)) },
-                    items = system.systemCoreConfigs.map { it.coreID.coreDisplayName },
-                    enabled = !indexingInProgress,
-                    onItemSelected = { index, _ ->
-                        viewModel.changeCore(system, system.systemCoreConfigs[index], applicationContext)
-                    },
+        item {
+            CardMMD(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+            ) {
+                TextMMD(
+                    modifier = Modifier.padding(16.dp),
+                    text = stringResource(R.string.settings_core_selection_ds_info),
+                    style = MaterialTheme.typography.bodyMedium,
                 )
+            }
+        }
+        item {
+            LemuroidCardSettingsGroup {
+                cores.forEach { (system, core) ->
+                    val state = rememberMemoryIntSettingState(system.systemCoreConfigs.indexOf(core))
+
+                    LemuroidSettingsList(
+                        state = state,
+                        title = { TextMMD(text = stringResource(system.titleResId)) },
+                        items = system.systemCoreConfigs.map { it.coreID.coreDisplayName },
+                        enabled = !indexingInProgress,
+                        onItemSelected = { index, _ ->
+                            viewModel.changeCore(system, system.systemCoreConfigs[index], applicationContext)
+                        },
+                    )
+                }
             }
         }
     }

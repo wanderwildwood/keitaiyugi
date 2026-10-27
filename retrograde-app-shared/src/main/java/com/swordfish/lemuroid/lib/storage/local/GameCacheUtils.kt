@@ -3,6 +3,7 @@ package com.swordfish.lemuroid.lib.storage.local
 import android.content.Context
 import com.swordfish.lemuroid.lib.library.db.entity.DataFile
 import com.swordfish.lemuroid.lib.library.db.entity.Game
+import com.swordfish.lemuroid.lib.saves.SaveKeys
 import java.io.File
 
 object GameCacheUtils {
@@ -30,7 +31,9 @@ object GameCacheUtils {
         game: Game,
         context: Context,
     ): File {
-        val gamesCachePath = buildPath(folderName, game.systemId)
+        // One folder per game, named for its address: two ROMs with the same file name in different
+        // folders used to share one cached copy, and the second game started the first one's ROM.
+        val gamesCachePath = buildPath(folderName, game.systemId, SaveKeys.hash(game.fileUri))
         val gamesCacheDir = File(context.cacheDir, gamesCachePath)
         gamesCacheDir.mkdirs()
         return gamesCacheDir

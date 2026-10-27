@@ -60,8 +60,8 @@ fun LemuroidGameListRow(
             Box(
                 modifier =
                     Modifier
-                        .width(40.dp)
-                        .height(40.dp)
+                        .width(48.dp)
+                        .height(48.dp)
                         .align(Alignment.CenterVertically),
             ) {
                 FavoriteToggle(

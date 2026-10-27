@@ -1,6 +1,8 @@
 package com.swordfish.lemuroid.app.mobile.shared.compose.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalCursorBlinkEnabled
 import com.mudita.mmd.ThemeMMD
 
 /**
@@ -26,5 +28,9 @@ fun AppTheme(
     @Suppress("UNUSED_PARAMETER") darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    ThemeMMD(colorScheme = monochrome, content = content)
+    // A text cursor that blinks redraws the field twice a second for as long as it has focus,
+    // and on e-ink every redraw is visible. A steady one costs nothing while idle.
+    CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
+        ThemeMMD(colorScheme = monochrome, content = content)
+    }
 }

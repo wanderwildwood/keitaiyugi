@@ -36,14 +36,8 @@ ktlint_standard_string-template-indent = disabled
 [{lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/Icons.kt,lemuroid-touchinput/src/main/java/com/swordfish/touchinput/radial/ui/Icons.kt}]
 max_line_length = off
 
-# ListJump.kt is the shared jump control (letters or page dots beside a long list), carried
-# byte-for-byte by every app here apart from its package line, like Monochrome.kt. Its layout
-# trips a dozen of the standard wrapping rules, so the standard set is off for that one file
-# rather than forking it.
-[lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/ListJump.kt]
-ktlint_standard = disabled
-
 # PagedColumn.kt is the shared whole-row list, carried byte-for-byte by every app here apart
-# from its package line, and held to the same bargain as ListJump.kt above.
+# from its package line. Its layout trips a dozen of the standard wrapping rules, so the
+# standard set is off for that one file rather than forking it.
 [lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/PagedColumn.kt]
 ktlint_standard = disabled

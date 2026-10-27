@@ -20,6 +20,7 @@
 package com.swordfish.lemuroid.lib.library.db.entity
 
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -49,7 +50,17 @@ data class Game(
     val lastIndexedAt: Long,
     val lastPlayedAt: Long? = null,
     val isFavorite: Boolean = false,
+    /**
+     * The name this game's saves, states and previews are filed under. Old rows carry their file
+     * name (so existing saves stay exactly where they were); a game that arrives later under a
+     * name another game already uses gets its own key. See `SaveKeys`.
+     */
+    @ColumnInfo(defaultValue = "''")
+    val saveKey: String = "",
 ) : Serializable {
+    /** [saveKey], or the file name for a game that was built without one. */
+    fun saveName(): String = saveKey.ifEmpty { fileName }
+
     companion object {
         val DIFF_CALLBACK =
             object : DiffUtil.ItemCallback<Game>() {

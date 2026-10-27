@@ -39,7 +39,6 @@ fun FavoritesScreen(
         items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
             val game = games[index] ?: return@items
             LemuroidGameCard(
-                modifier = Modifier.animateItem(),
                 game = game,
                 onClick = { onGameClick(game) },
                 onLongClick = { onGameLongClick(game) },

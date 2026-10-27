@@ -42,7 +42,7 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE lastIndexedAt >= :lastIndexedAt")
     fun selectByLastIndexedAtAtLeast(lastIndexedAt: Long): List<Game>
 
-    @Query("SELECT * FROM games WHERE isFavorite = 1 ORDER BY title ASC")
+    @Query("SELECT * FROM games WHERE isFavorite = 1 ORDER BY title COLLATE NOCASE ASC")
     fun selectFavorites(): PagingSource<Int, Game>
 
     @Query(
@@ -64,21 +64,24 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE lastPlayedAt IS NULL LIMIT :limit")
     fun selectFirstNotPlayed(limit: Int): Flow<List<Game>>
 
-    @Query("SELECT * FROM games WHERE systemId = :systemId ORDER BY title ASC, id DESC")
+    @Query("SELECT * FROM games WHERE systemId = :systemId ORDER BY title COLLATE NOCASE ASC, id DESC")
     fun selectBySystem(systemId: String): PagingSource<Int, Game>
 
-    @Query("SELECT * FROM games WHERE systemId IN (:systemIds) ORDER BY title ASC, id DESC")
+    @Query("SELECT * FROM games WHERE systemId IN (:systemIds) ORDER BY title COLLATE NOCASE ASC, id DESC")
     fun selectBySystems(systemIds: List<String>): PagingSource<Int, Game>
-
-    /** Every title [selectBySystems] pages through, in the same order, for the letters beside the list. */
-    @Query("SELECT title FROM games WHERE systemId IN (:systemIds) ORDER BY title ASC, id DESC")
-    fun selectTitlesBySystems(systemIds: List<String>): Flow<List<String>>
 
     @Query("SELECT DISTINCT systemId FROM games ORDER BY systemId ASC")
     suspend fun selectSystems(): List<String>
 
     @Query("SELECT count(*) count, systemId systemId FROM games GROUP BY systemId")
     fun selectSystemsWithCount(): Flow<List<SystemCount>>
+
+    @Query("SELECT * FROM games")
+    fun selectAll(): List<Game>
+
+    /** Every key a game's saves are filed under, so a new game can be given one nobody else uses. */
+    @Query("SELECT saveKey FROM games")
+    fun selectSaveKeys(): List<String>
 
     @Insert
     fun insert(games: List<Game>): List<Long>

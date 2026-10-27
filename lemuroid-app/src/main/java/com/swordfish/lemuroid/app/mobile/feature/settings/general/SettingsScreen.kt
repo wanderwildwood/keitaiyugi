@@ -14,8 +14,6 @@ import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.main.MainRoute
 import com.swordfish.lemuroid.app.mobile.feature.main.navigateToRoute
-import com.swordfish.lemuroid.app.mobile.shared.compose.ui.ListJumpPrefs
-import com.swordfish.lemuroid.app.mobile.shared.compose.ui.rememberListJumpShown
 import com.swordfish.lemuroid.app.shared.library.LibraryIndexScheduler
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
@@ -48,19 +46,23 @@ fun SettingsScreen(
             .value
 
     LemuroidSettingsPage(modifier = modifier) {
-        RomsSettings(
-            state = state,
-            onChangeFolder = { viewModel.changeLocalStorageFolder() },
-            indexingInProgress = indexingInProgress,
-            scanInProgress = scanInProgress,
-        )
-        GeneralSettings()
-        InputSettings(navController = navController)
-        MiscSettings(
-            indexingInProgress = indexingInProgress,
-            isSaveSyncSupported = state.isSaveSyncSupported,
-            navController = navController,
-        )
+        item {
+            RomsSettings(
+                state = state,
+                onChangeFolder = { viewModel.changeLocalStorageFolder() },
+                indexingInProgress = indexingInProgress,
+                scanInProgress = scanInProgress,
+            )
+        }
+        item { GeneralSettings() }
+        item { InputSettings(navController = navController) }
+        item {
+            MiscSettings(
+                indexingInProgress = indexingInProgress,
+                isSaveSyncSupported = state.isSaveSyncSupported,
+                navController = navController,
+            )
+        }
     }
 }
 
@@ -149,28 +151,6 @@ private fun GeneralSettings() {
             title = { TextMMD(text = stringResource(id = R.string.display_filter)) },
             items = stringListResource(R.array.pref_key_shader_filter_display_names),
         )
-        LemuroidSettingsSwitch(
-            state = listJumpState(),
-            title = { TextMMD(text = stringResource(id = R.string.list_jump_setting)) },
-        )
-    }
-}
-
-/** The letters and page dots switch, kept in ListJump's own store rather than the app's. */
-@Composable
-private fun listJumpState(): SettingValueState<Boolean> {
-    val context = LocalContext.current
-    val shown = rememberListJumpShown()
-    return remember(context) {
-        object : SettingValueState<Boolean> {
-            override var value: Boolean
-                get() = shown.value
-                set(value) = ListJumpPrefs.setShown(context, value)
-
-            override fun reset() {
-                value = false
-            }
-        }
     }
 }
 
@@ -196,7 +176,16 @@ private fun RomsSettings(
     LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(id = R.string.roms)) }) {
         LemuroidSettingsMenuLink(
             title = { TextMMD(text = stringResource(id = R.string.directory)) },
-            subtitle = { TextMMD(text = currentDirectoryName) },
+            subtitle = {
+                TextMMD(
+                    text =
+                        if (indexingInProgress) {
+                            stringResource(R.string.settings_directory_wait)
+                        } else {
+                            currentDirectoryName
+                        },
+                )
+            },
             onClick = { onChangeFolder() },
             enabled = !indexingInProgress,
         )

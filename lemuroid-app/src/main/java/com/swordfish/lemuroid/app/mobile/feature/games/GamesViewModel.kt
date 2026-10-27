@@ -42,11 +42,4 @@ class GamesViewModel(
                     else -> buildFlowPaging(20, viewModelScope) { retrogradeDb.gameDao().selectBySystems(it) }
                 }
             }
-
-    /** The titles of [games], all of them and in the same order, for the letters down its edge. */
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val titles: Flow<List<String>> =
-        metaSystemId
-            .map { metaSystem -> metaSystem.systemIDs.map { it.dbname } }
-            .flatMapLatest { if (it.isEmpty()) emptyFlow() else retrogradeDb.gameDao().selectTitlesBySystems(it) }
 }

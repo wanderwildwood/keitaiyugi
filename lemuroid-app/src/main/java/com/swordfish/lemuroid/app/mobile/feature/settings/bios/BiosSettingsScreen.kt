@@ -24,10 +24,10 @@ fun BiosScreen(
 
     LemuroidSettingsPage(modifier = modifier.fillMaxSize()) {
         if (uiState.detected.isNotEmpty()) {
-            DetectedEntries(uiState.detected)
+            item { DetectedEntries(uiState.detected) }
         }
         if (uiState.notDetected.isNotEmpty()) {
-            SupportedEntries(uiState.notDetected)
+            item { SupportedEntries(uiState.notDetected) }
         }
     }
 }

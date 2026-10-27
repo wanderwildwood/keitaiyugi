@@ -64,18 +64,42 @@ class GameSearchDao(private val internalDao: Internal) {
         }
     }
 
-    fun search(query: String): PagingSource<Int, Game> =
-        internalDao.rawSearch(
+    fun search(query: String): PagingSource<Int, Game> {
+        val match = buildMatchQuery(query)
+        // A blank query, or one with nothing but symbols, matches nothing: handing it to MATCH
+        // would be a syntax error.
+        if (match == null) {
+            return internalDao.rawSearch(SimpleSQLiteQuery("SELECT * FROM games WHERE 0"))
+        }
+        return internalDao.rawSearch(
             SimpleSQLiteQuery(
                 """
                 SELECT games.*
                     FROM fts_games
                     JOIN games ON games.id = fts_games.docid
                     WHERE fts_games MATCH ?
+                    ORDER BY games.title COLLATE NOCASE ASC, games.id DESC
                 """,
-                arrayOf(query),
+                arrayOf(match),
             ),
         )
+    }
+
+    companion object {
+        /**
+         * What the user typed, as a query the full-text index accepts: each word (letters and
+         * digits only, so quotes, minus, colon, parentheses and the like never reach the parser)
+         * becomes a prefix, and all of them have to match. "mar" finds "Mario" as well as "Mar".
+         * Null when nothing searchable is left.
+         */
+        fun buildMatchQuery(raw: String): String? {
+            val words =
+                raw.split(Regex("[^\\p{L}\\p{N}]+"))
+                    .filter { it.isNotEmpty() }
+            if (words.isEmpty()) return null
+            return words.joinToString(" ") { "$it*" }
+        }
+    }
 
     @Dao
     interface Internal {

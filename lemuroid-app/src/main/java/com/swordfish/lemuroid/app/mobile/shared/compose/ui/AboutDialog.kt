@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -66,21 +68,28 @@ fun AboutDialog(onDismiss: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             items(questions) { question -> HtmlText(text = question) }
+            // Heading and paragraph are one row, so a page never ends on a heading alone.
             item {
-                TextMMD(
-                    text = stringResource(R.string.about_privacy),
-                    style = MaterialTheme.typography.labelSmall,
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Heading(R.string.about_privacy_heading)
+                    TextMMD(
+                        text = stringResource(R.string.about_privacy),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Heading(R.string.about_terms_heading)
+                    TextMMD(
+                        text = stringResource(R.string.about_terms),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
             }
             item {
                 TextMMD(
                     text = stringResource(R.string.about_built_on),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
-            item {
-                TextMMD(
-                    text = stringResource(R.string.about_licence),
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
@@ -93,6 +102,15 @@ fun AboutDialog(onDismiss: () -> Unit) {
             modifier = Modifier.fillMaxWidth().height(48.dp),
         ) { TextMMD(text = stringResource(R.string.close), style = MaterialTheme.typography.bodySmall) }
     }
+}
+
+@Composable
+private fun Heading(textId: Int) {
+    TextMMD(
+        text = stringResource(textId),
+        style = MaterialTheme.typography.bodySmall,
+        fontWeight = FontWeight.Bold,
+    )
 }
 
 /** The blank line between two questions of the help, in every translation of it. */
@@ -129,7 +147,8 @@ private fun Llama() {
                             ).show()
                         }
                     }
-                    .padding(vertical = 4.dp),
+                    .heightIn(min = 48.dp)
+                    .wrapContentHeight(Alignment.CenterVertically),
         )
         Spacer(Modifier.width(6.dp))
         Row(
@@ -154,7 +173,7 @@ private fun Llama() {
                             ).show()
                         }
                     }
-                    .padding(vertical = 4.dp),
+                    .heightIn(min = 48.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.llama),

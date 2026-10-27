@@ -9,7 +9,6 @@ import coil.load
 import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import com.swordfish.lemuroid.common.drawable.TextDrawable
-import com.swordfish.lemuroid.common.graphics.ColorUtils
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -46,7 +45,7 @@ object CoverUtils {
                     .addNetworkInterceptor(ThrottleFailedThumbnailsInterceptor)
                     .build()
             }
-            .crossfade(true)
+            .crossfade(false)
             .interceptorDispatcher(Dispatchers.IO)
             .diskCachePolicy(CachePolicy.ENABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)
@@ -54,13 +53,7 @@ object CoverUtils {
             .build()
     }
 
-    fun getFallbackDrawable(game: Game) = TextDrawable(computeTitle(game), computeColor(game))
-
-    fun getFallbackRemoteUrl(game: Game): String {
-        val color = Integer.toHexString(computeColor(game)).substring(2)
-        val title = computeTitle(game)
-        return "https://fakeimg.pl/512x512/$color/fff/?font=bebas&text=$title"
-    }
+    fun getFallbackDrawable(game: Game) = TextDrawable(computeTitle(game))
 
     private fun computeTitle(game: Game): String {
         val sanitizedName =
@@ -73,9 +66,5 @@ object CoverUtils {
             .joinToString("")
             .ifBlank { game.title.first().toString() }
             .capitalize()
-    }
-
-    private fun computeColor(game: Game): Int {
-        return ColorUtils.randomColor(game.title)
     }
 }

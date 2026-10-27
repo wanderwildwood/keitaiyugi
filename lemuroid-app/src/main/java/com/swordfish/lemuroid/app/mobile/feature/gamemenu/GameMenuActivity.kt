@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -253,7 +254,8 @@ class GameMenuActivity : RetrogradeComponentActivity() {
                         .padding()
                         .fillMaxHeight()
                         .width(panelWidth)
-                        .clip(MaterialTheme.shapes.large),
+                        .clip(MaterialTheme.shapes.large)
+                        .border(2.dp, MaterialTheme.colorScheme.onSurface, MaterialTheme.shapes.large),
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
                     content()

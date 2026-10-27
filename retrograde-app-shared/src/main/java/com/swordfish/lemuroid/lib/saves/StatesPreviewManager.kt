@@ -50,7 +50,7 @@ class StatesPreviewManager(private val directoriesManager: DirectoriesManager) {
     private fun getSlotScreenshotName(
         game: Game,
         index: Int,
-    ) = "${game.fileName}.slot${index + 1}.jpg"
+    ) = SaveKeys.previewName(game.saveName(), index)
 
     companion object {
         val PREVIEW_SIZE_DP = 96f

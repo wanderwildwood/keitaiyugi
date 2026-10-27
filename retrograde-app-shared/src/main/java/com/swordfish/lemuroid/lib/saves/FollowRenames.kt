@@ -43,7 +43,7 @@ object FollowRenames {
     private fun srm(
         dirs: DirectoriesManager,
         fileName: String,
-    ) = File(dirs.getSavesDirectory(), "${fileName.substringBeforeLast(".")}.srm")
+    ) = File(dirs.getSavesDirectory(), SaveKeys.srmName(fileName))
 
     /** States, their metadata and their previews: "<rom>.state", "<rom>.slotN", ".jpg", per core. */
     private fun named(

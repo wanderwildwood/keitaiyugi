@@ -8,6 +8,9 @@ plugins {
 }
 
 android {
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -54,6 +57,9 @@ dependencies {
     implementation(deps.libs.flowPreferences)
 
     kapt(deps.libs.androidx.room.compiler)
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.xerial:sqlite-jdbc:3.46.1.0")
 }
 
 android {

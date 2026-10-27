@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.swordfish.lemuroid.common.compose.textUnit
 import com.swordfish.touchinput.radial.LocalLemuroidPadTheme
 
@@ -77,7 +78,8 @@ private fun BoxWithConstraintsScope.LemuroidButtonForegroundLabel(
     pressedState: State<Boolean>,
 ) {
     if (label == null) return
-    val fontSize = minOf(maxHeight * 0.5f * scale, maxWidth / label.length * scale)
+    // Never below 14: a label that fits the button but cannot be read is not a label.
+    val fontSize = maxOf(minOf(maxHeight * 0.5f * scale, maxWidth / label.length * scale), 14.dp)
     Text(
         modifier = Modifier.wrapContentSize(),
         textAlign = TextAlign.Center,

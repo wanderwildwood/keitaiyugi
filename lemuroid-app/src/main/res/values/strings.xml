@@ -47,7 +47,10 @@
 
     <string name="settings_gamepad_category_enabled">Enabled devices</string>
     <string name="settings_gamepad_category_general">General</string>
+    <string name="settings_directory_wait">Wait for the scan to finish</string>
+    <string name="settings_device_rumble_needs_rumble">Turn on Rumble first</string>
     <string name="settings_gamepad_title_reset_bindings">Reset bindings</string>
+    <string name="settings_gamepad_title_reset_bindings_armed">Reset bindings — tap again</string>
     <string name="settings_gamepad_title_game_menu">Menu</string>
 
     <string name="settings_title_open_cores_selection">Change Cores</string>
@@ -108,6 +111,10 @@
     <string name="home_empty_title">Select ROMs directory</string>
     <string name="home_empty_message">Handheld Games needs a directory of Game Boy files to scan.\nThis might take up to a few minutes.</string>
     <string name="home_empty_action">Select Directory</string>
+    <string name="home_scanning_title">Looking in %1$s</string>
+    <string name="home_scanning_message">Handheld Games is reading the folder for Game Boy files. This might take up to a few minutes.</string>
+    <string name="home_none_found_title">No Game Boy games in %1$s</string>
+    <string name="home_none_found_message">Handheld Games looks for .gb and .gbc files, or .zip files holding one, in this folder and the folders inside it. Pick another folder, or add files there and choose Rescan in Settings.</string>
 
     <string name="home_notification_desmume_deprecated_title">DeSmuME is being retired</string>
     <string name="home_notification_desmume_deprecated_message">Save in-game, then switch to melonDS to keep your progress. Save states won\’t transfer and will remain usable only in DeSmuME.</string>
@@ -116,6 +123,7 @@
     <string name="game_menu_save">Save</string>
     <string name="game_menu_load">Load</string>
     <string name="game_menu_restart">Restart</string>
+    <string name="game_menu_restart_armed">Restart — tap again</string>
     <string name="game_menu_quit">Quit</string>
     <string name="game_menu_settings">Settings</string>
     <string name="game_menu_state">State %1$s</string>
@@ -133,6 +141,7 @@
     <string name="game_toast_quick_save_loaded">Quick loaded</string>
     <string name="game_toast_quick_save_saved">Quick saved</string>
 
+    <string name="long_press_hint">Press and hold a game for more.</string>
     <string name="empty_view_default">No Items</string>
 
     <string name="core_settings_title">Core Settings</string>
@@ -246,16 +255,15 @@
          projects and licences as they are -->
     <!-- Heading. %1$s is the version number, e.g. 0.1.2 -->
     <string name="about_title">Handheld Games %1$s</string>
-    <string name="about_privacy">It reads the folder you point it at, and nothing else on the phone. Nothing is sent anywhere.</string>
+    <string name="about_privacy_heading">Privacy</string>
+    <string name="about_privacy">Your games, saves and settings stay on this phone, and the app reads only the folder you choose. It goes online only to fetch a cover picture for a game from libretro\'s thumbnail server; that request carries the game\'s title and the console, and nothing else. There are no ads, no analytics and no tracking, and nothing is collected about you. It shows a notification while the library is scanned or a game is running. If Android\'s backup is switched on, your phone may copy this app\'s saves and settings into its own backup; the developer never sees it.</string>
+    <string name="about_terms_heading">Terms</string>
+    <string name="about_terms">This app is free software under the GNU General Public License v3 only, inheriting Lemuroid\'s; the Game Boy core is GPL-2.0 with no \"or later\" clause. It comes with no warranty: use it at your own risk.</string>
     <string name="about_built_on">A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through the Gambatte core via LibretroDroid. None of the hard part is mine.</string>
-    <string name="about_licence">GNU General Public License v3 only, inheriting Lemuroid\'s. The Game Boy core is GPL-2.0 with no \"or later\" clause.</string>
     <!-- The donation link, beside a drawing of a llama. A fixed phrase: a verb and an
          object, so the reader knows what pressing it does -->
     <string name="about_feed_the_llamas">feed the llamas</string>
     <!-- Toast when the donation link cannot be opened -->
     <string name="about_no_browser">There is no browser on this phone to open that with.</string>
 
-    <string name="list_jump_setting">Letters and page dots</string>
-    <string name="list_jump_shown">Shown</string>
-    <string name="list_jump_hidden">Hidden</string>
 </resources>

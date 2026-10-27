@@ -36,72 +36,74 @@ fun SaveSyncSettingsScreen(
             .value
 
     LemuroidSettingsPage(modifier = modifier.fillMaxSize()) {
-        LemuroidCardSettingsGroup {
-            LemuroidSettingsMenuLink(
-                title = {
-                    TextMMD(
-                        text =
-                            stringResource(
-                                id = R.string.settings_save_sync_configure,
-                                saveSyncState.provider,
-                            ),
-                    )
-                },
-                subtitle = { TextMMD(text = saveSyncState.configInfo) },
-                enabled = !isSyncInProgress,
-                onClick = { context.startActivity(Intent(context, saveSyncState.settingsActivity)) },
-            )
-            LemuroidSettingsSwitch(
-                state = booleanPreferenceState(R.string.pref_key_save_sync_enable, default = false),
-                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_saves)) },
-                subtitle = {
-                    TextMMD(
-                        text =
-                            stringResource(
-                                id = R.string.settings_save_sync_include_saves_description,
-                                saveSyncState.savesSpace,
-                            ),
-                    )
-                },
-                enabled = saveSyncState.isConfigured && !isSyncInProgress,
-            )
-            LemuroidSettingsListMultiSelect(
-                state =
-                    stringsSetPreferenceState(
-                        stringResource(R.string.pref_key_save_sync_cores),
-                        emptySet(),
-                    ),
-                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states)) },
-                subtitle = {
-                    TextMMD(
-                        text = stringResource(id = R.string.settings_save_sync_include_states_description),
-                    )
-                },
-                entryValues = saveSyncState.coreNames,
-                entries = saveSyncState.coreVisibleNames,
-                enabled = saveSyncState.isConfigured && !isSyncInProgress,
-                confirmButton = stringResource(id = R.string.ok),
-            )
-            LemuroidSettingsSwitch(
-                state = booleanPreferenceState(R.string.pref_key_save_sync_auto, default = false),
-                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto)) },
-                subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto_description)) },
-                enabled = saveSyncState.isConfigured && !isSyncInProgress,
-            )
-            LemuroidSettingsMenuLink(
-                title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_refresh)) },
-                subtitle = {
-                    TextMMD(
-                        text =
-                            stringResource(
-                                id = R.string.settings_save_sync_refresh_description,
-                                saveSyncState.lastSyncInfo,
-                            ),
-                    )
-                },
-                enabled = saveSyncState.isConfigured && !isSyncInProgress,
-                onClick = { SaveSyncWork.enqueueManualWork(context) },
-            )
+        item {
+            LemuroidCardSettingsGroup {
+                LemuroidSettingsMenuLink(
+                    title = {
+                        TextMMD(
+                            text =
+                                stringResource(
+                                    id = R.string.settings_save_sync_configure,
+                                    saveSyncState.provider,
+                                ),
+                        )
+                    },
+                    subtitle = { TextMMD(text = saveSyncState.configInfo) },
+                    enabled = !isSyncInProgress,
+                    onClick = { context.startActivity(Intent(context, saveSyncState.settingsActivity)) },
+                )
+                LemuroidSettingsSwitch(
+                    state = booleanPreferenceState(R.string.pref_key_save_sync_enable, default = false),
+                    title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_saves)) },
+                    subtitle = {
+                        TextMMD(
+                            text =
+                                stringResource(
+                                    id = R.string.settings_save_sync_include_saves_description,
+                                    saveSyncState.savesSpace,
+                                ),
+                        )
+                    },
+                    enabled = saveSyncState.isConfigured && !isSyncInProgress,
+                )
+                LemuroidSettingsListMultiSelect(
+                    state =
+                        stringsSetPreferenceState(
+                            stringResource(R.string.pref_key_save_sync_cores),
+                            emptySet(),
+                        ),
+                    title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_include_states)) },
+                    subtitle = {
+                        TextMMD(
+                            text = stringResource(id = R.string.settings_save_sync_include_states_description),
+                        )
+                    },
+                    entryValues = saveSyncState.coreNames,
+                    entries = saveSyncState.coreVisibleNames,
+                    enabled = saveSyncState.isConfigured && !isSyncInProgress,
+                    confirmButton = stringResource(id = R.string.ok),
+                )
+                LemuroidSettingsSwitch(
+                    state = booleanPreferenceState(R.string.pref_key_save_sync_auto, default = false),
+                    title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto)) },
+                    subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto_description)) },
+                    enabled = saveSyncState.isConfigured && !isSyncInProgress,
+                )
+                LemuroidSettingsMenuLink(
+                    title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_refresh)) },
+                    subtitle = {
+                        TextMMD(
+                            text =
+                                stringResource(
+                                    id = R.string.settings_save_sync_refresh_description,
+                                    saveSyncState.lastSyncInfo,
+                                ),
+                        )
+                    },
+                    enabled = saveSyncState.isConfigured && !isSyncInProgress,
+                    onClick = { SaveSyncWork.enqueueManualWork(context) },
+                )
+            }
         }
     }
 }

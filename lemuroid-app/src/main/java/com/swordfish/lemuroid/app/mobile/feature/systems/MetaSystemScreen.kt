@@ -49,7 +49,6 @@ private fun MetaSystemsScreen(
         items(metaSystems.size, key = { metaSystems[it].metaSystem }) { index ->
             val system = metaSystems[index]
             LemuroidSystemCard(
-                modifier = Modifier.animateItem(),
                 system = system,
                 onClick = { onSystemClicked(system) },
             )

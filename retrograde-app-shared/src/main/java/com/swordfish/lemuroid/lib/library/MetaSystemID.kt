@@ -26,7 +26,9 @@ enum class MetaSystemID(val titleResId: Int, val imageResId: Int, val systemIDs:
     GB(
         R.string.game_system_title_gb,
         R.drawable.game_system_gb,
-        listOf(SystemID.GB),
+        // Game Boy Color games are listed with the Game Boy's: this app has one Games list, and
+        // a .gbc file had nowhere in it to appear.
+        listOf(SystemID.GB, SystemID.GBC),
     ),
     GBC(
         R.string.game_system_title_gbc,
@@ -126,7 +128,7 @@ enum class MetaSystemID(val titleResId: Int, val imageResId: Int, val systemIDs:
                 SystemID.MAME2003PLUS -> ARCADE
                 SystemID.ATARI2600 -> ATARI2600
                 SystemID.GB -> GB
-                SystemID.GBC -> GBC
+                SystemID.GBC -> GB
                 SystemID.GBA -> GBA
                 SystemID.GENESIS -> GENESIS
                 SystemID.SEGACD -> GENESIS

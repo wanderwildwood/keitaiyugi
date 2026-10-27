@@ -140,12 +140,12 @@ class StatesManager(private val directoriesManager: DirectoriesManager) {
         return File(statesDirectories, "$stateFileName.metadata")
     }
 
-    private fun getAutoSaveFileName(game: Game) = "${game.fileName}.state"
+    private fun getAutoSaveFileName(game: Game) = SaveKeys.stateName(game.saveName())
 
     private fun getSlotSaveFileName(
         game: Game,
         index: Int,
-    ) = "${game.fileName}.slot${index + 1}"
+    ) = SaveKeys.slotName(game.saveName(), index)
 
     companion object {
         const val MAX_STATES = 4

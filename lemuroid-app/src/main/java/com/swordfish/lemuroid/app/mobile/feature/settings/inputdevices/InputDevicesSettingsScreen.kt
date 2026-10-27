@@ -20,6 +20,7 @@ import com.swordfish.lemuroid.app.shared.input.ShortcutBindingUpdater
 import com.swordfish.lemuroid.app.shared.input.lemuroiddevice.getLemuroidInputDevice
 import com.swordfish.lemuroid.app.shared.settings.GameShortcut
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
+import com.swordfish.lemuroid.app.utils.android.settings.LemuroidArmedSettingsLink
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsPage
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
@@ -36,11 +37,11 @@ fun InputDevicesSettingsScreen(
             .value
 
     LemuroidSettingsPage(modifier = modifier.fillMaxSize()) {
-        EnabledDeviceCategory(state)
+        item { EnabledDeviceCategory(state) }
         state.bindings.forEach { (device, bindings) ->
-            DeviceBindingCategory(device, bindings)
+            item { DeviceBindingCategory(device, bindings) }
         }
-        GeneralOptionsCategory(viewModel)
+        item { GeneralOptionsCategory(viewModel) }
     }
 }
 
@@ -111,9 +112,10 @@ private fun EnabledDeviceCategory(state: InputDevicesSettingsViewModel.State) {
 @Composable
 private fun GeneralOptionsCategory(viewModel: InputDevicesSettingsViewModel) {
     LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(R.string.settings_gamepad_category_general)) }) {
-        LemuroidSettingsMenuLink(
-            title = { TextMMD(text = stringResource(R.string.settings_gamepad_title_reset_bindings)) },
-            onClick = { viewModel.resetAllBindings() },
+        LemuroidArmedSettingsLink(
+            title = stringResource(R.string.settings_gamepad_title_reset_bindings),
+            armedTitle = stringResource(R.string.settings_gamepad_title_reset_bindings_armed),
+            onConfirmed = { viewModel.resetAllBindings() },
         )
     }
 }

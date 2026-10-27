@@ -1,13 +1,10 @@
 package com.swordfish.lemuroid.app.mobile.feature.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -15,15 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.EInkDialog
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidGameTexts
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.LemuroidSmallGameImage
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainGameContextActions(
     selectedGameState: MutableState<Game?>,
@@ -48,32 +38,20 @@ fun MainGameContextActions(
     onFavoriteToggle: (Game, Boolean) -> Unit,
     onCreateShortcut: (Game) -> Unit,
 ) {
-    val modalSheetState = rememberModalBottomSheetState(true)
-    val selectedGame = selectedGameState.value
+    val selectedGame = selectedGameState.value ?: return
 
-    LaunchedEffect(selectedGame) {
-        if (selectedGame != null) {
-            modalSheetState.show()
-        } else {
-            modalSheetState.hide()
-        }
-    }
-
-    if (selectedGame != null) {
-        ModalBottomSheet(
-            sheetState = modalSheetState,
-            onDismissRequest = { selectedGameState.value = null },
-        ) {
-            ContextActionContent(
-                selectedGame = selectedGame,
-                onGamePlay = onGamePlay,
-                selectedGameState = selectedGameState,
-                onGameRestart = onGameRestart,
-                onFavoriteToggle = onFavoriteToggle,
-                shortcutSupported = shortcutSupported,
-                onCreateShortcut = onCreateShortcut,
-            )
-        }
+    // A dialog with a black rim and no dimming, not Material's bottom sheet: the sheet slides
+    // in over a grey scrim, and neither belongs on this panel.
+    EInkDialog(onDismiss = { selectedGameState.value = null }) {
+        ContextActionContent(
+            selectedGame = selectedGame,
+            onGamePlay = onGamePlay,
+            selectedGameState = selectedGameState,
+            onGameRestart = onGameRestart,
+            onFavoriteToggle = onFavoriteToggle,
+            shortcutSupported = shortcutSupported,
+            onCreateShortcut = onCreateShortcut,
+        )
     }
 }
 
@@ -197,19 +175,6 @@ private fun ContextActionEntry(
         TextMMD(
             modifier = Modifier.padding(start = 16.dp),
             text = label,
-        )
-    }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun FakeScrim(modalSheetState: SheetState) {
-    if (modalSheetState.targetValue != SheetValue.Hidden) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(BottomSheetDefaults.ScrimColor),
         )
     }
 }
