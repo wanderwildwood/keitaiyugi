@@ -21,6 +21,10 @@ android {
         compose = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     composeOptions {
         kotlinCompilerExtensionVersion = deps.versions.kotlinExtension
     }
@@ -49,4 +53,6 @@ dependencies {
     implementation(kotlin(deps.libs.kotlin.stdlib))
 
     kapt(deps.libs.androidx.lifecycle.processor)
+
+    testImplementation("junit:junit:4.13.2")
 }

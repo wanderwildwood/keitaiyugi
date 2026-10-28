@@ -47,6 +47,8 @@ context(PadKitScope)
 fun LemuroidControlFaceButtons(
     modifier: Modifier = Modifier,
     primaryAnchors: PersistentList<Anchor<Id.Key>>,
+    compositeAnchors: PersistentList<Anchor<Id.Key>> = persistentListOf(),
+    foregroundComposite: @Composable (State<Boolean>) -> Unit = { LemuroidCompositeForeground(it) },
     background: @Composable () -> Unit = { LemuroidControlBackground() },
     applyPadding: Boolean = true,
     trackPointers: Boolean = true,
@@ -58,10 +60,10 @@ fun LemuroidControlFaceButtons(
             modifier
                 .run { if (applyPadding) padding(theme.padding) else modifier },
         primaryAnchors = primaryAnchors,
-        compositeAnchors = persistentListOf(),
+        compositeAnchors = compositeAnchors,
         trackPointers = trackPointers,
         foreground = { id, pressed -> (idsForegrounds[id]!!)(pressed) },
         background = background,
-        foregroundComposite = { LemuroidCompositeForeground(it) },
+        foregroundComposite = foregroundComposite,
     )
 }
