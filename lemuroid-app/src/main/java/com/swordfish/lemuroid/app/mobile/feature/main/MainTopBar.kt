@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -142,12 +143,15 @@ fun LemuroidTopBarActions(
             }
         }
         if (route.showBottomNavigation) {
+            // The outlined cog, 22 dp inside a 48 dp place to press, as in the other apps.
             IconButton(
                 onClick = { navController.navigate(MainRoute.SETTINGS.route) },
+                modifier = Modifier.size(48.dp),
             ) {
                 Icon(
                     Icons.Settings,
                     stringResource(R.string.settings),
+                    modifier = Modifier.size(22.dp),
                 )
             }
         }

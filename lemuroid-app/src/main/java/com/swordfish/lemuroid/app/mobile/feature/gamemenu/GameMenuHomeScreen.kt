@@ -1,10 +1,15 @@
 package com.swordfish.lemuroid.app.mobile.feature.gamemenu
 
 import android.content.Intent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alorma.compose.settings.storage.memory.rememberMemoryBooleanSettingState
 import com.alorma.compose.settings.storage.memory.rememberMemoryIntSettingState
@@ -159,10 +164,14 @@ fun GameMenuHomeScreen(
                 LemuroidSettingsMenuLink(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_settings)) },
                     icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_menu_settings),
-                            contentDescription = stringResource(id = R.string.game_menu_settings),
-                        )
+                        // 22 dp, in the 24 dp the other rows' icons take, so the words line up.
+                        Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Settings,
+                                contentDescription = stringResource(id = R.string.game_menu_settings),
+                                modifier = Modifier.size(22.dp),
+                            )
+                        }
                     },
                     onClick = { navController.navigateToRoute(GameMenuRoute.OPTIONS) },
                 )

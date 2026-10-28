@@ -13,12 +13,14 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.game.GameActivity
 import com.swordfish.lemuroid.app.mobile.feature.game.GameService
 import com.swordfish.lemuroid.app.mobile.feature.settings.SettingsManager
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
 import com.swordfish.lemuroid.app.shared.GameMenuContract
 import com.swordfish.lemuroid.app.shared.ImmersiveActivity
+import com.swordfish.lemuroid.app.shared.TurnWithPhone
 import com.swordfish.lemuroid.app.shared.coreoptions.CoreOption
 import com.swordfish.lemuroid.app.shared.coreoptions.LemuroidCoreOption
 import com.swordfish.lemuroid.app.shared.game.viewmodel.GameViewModelSideEffects
@@ -87,10 +89,15 @@ abstract class BaseGameActivity : ImmersiveActivity() {
     private lateinit var baseGameScreenViewModel: BaseGameScreenViewModel
 
     private val startGameTime = System.currentTimeMillis()
+
+    // The game turns sideways with the phone. The manifest keeps this activity through a turn
+    // (configChanges), so the core runs on: the layout is only drawn again.
+    private val turner = TurnWithPhone(this)
     private var finishTriggered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        turner.set(turnWithPhone(sharedPreferences.get()))
         // The volume keys follow whatever is playing, so while a game is paused or still
         // loading they would change the ringer instead. Pin them to the game's stream.
         volumeControlStream = AudioManager.STREAM_MUSIC
@@ -345,6 +352,19 @@ abstract class BaseGameActivity : ImmersiveActivity() {
         finishTriggered = true
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Back from the game menu, which may have turned while it was up: come up the way it
+        // left the screen (the turn is kept for the process), not the way this was started.
+        turner.set(turnWithPhone(sharedPreferences.get()))
+        turner.resume()
+    }
+
+    override fun onPause() {
+        turner.pause()
+        super.onPause()
+    }
+
     override fun onStop() {
         if (!finishTriggered && !isFinishing && !isChangingConfigurations) {
             baseGameScreenViewModel.requestBackgroundSave()
@@ -452,3 +472,7 @@ abstract class BaseGameActivity : ImmersiveActivity() {
         }
     }
 }
+
+/** Whether the game and its menu turn sideways with the phone; Settings has the switch. */
+fun Activity.turnWithPhone(preferences: SharedPreferences): Boolean =
+    preferences.getBoolean(getString(R.string.pref_key_turn_with_phone), true)

@@ -113,6 +113,9 @@ object ControllerConfigs {
             R.string.controller_default,
             TouchControllerID.GB,
             mergeDPADAndLeftStickEvents = true,
+            // Sideways, the controls stand beside the screen rather than over it: on the panel a
+            // button drawn over the game is ink the game's own picture has to show through.
+            allowTouchOverlay = false,
             tiltConfigurations =
                 listOf(
                     TILT_CONFIGURATION_DISABLED,

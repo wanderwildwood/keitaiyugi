@@ -134,6 +134,11 @@ private fun GeneralSettings() {
             title = { TextMMD(text = stringResource(id = R.string.settings_title_enable_autosave)) },
             subtitle = { TextMMD(text = stringResource(id = R.string.settings_description_enable_autosave)) },
         )
+        LemuroidSettingsSwitch(
+            state = booleanPreferenceState(R.string.pref_key_turn_with_phone, true),
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_turn_with_phone)) },
+            subtitle = { TextMMD(text = stringResource(id = R.string.settings_description_turn_with_phone)) },
+        )
         // Immersive mode is gone. It colours the letterbox from the game's own visuals,
         // which on four greys is a grey wash -- more ink held on the panel, more
         // ghosting, and nothing gained. HD mode and its quality slider are gone for the

@@ -41,3 +41,8 @@ max_line_length = off
 # standard set is off for that one file rather than forking it.
 [lemuroid-app/src/main/java/com/swordfish/lemuroid/app/mobile/shared/compose/ui/PagedColumn.kt]
 ktlint_standard = disabled
+
+# TurnWithPhone.kt is the shared turn-with-the-phone helper, carried byte-for-byte by every app
+# that turns sideways apart from its package line, so it is held to the same bargain.
+[lemuroid-app/src/main/java/com/swordfish/lemuroid/app/shared/TurnWithPhone.kt]
+ktlint_standard = disabled
