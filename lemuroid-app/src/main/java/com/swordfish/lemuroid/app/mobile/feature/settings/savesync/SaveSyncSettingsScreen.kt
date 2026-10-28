@@ -86,7 +86,9 @@ fun SaveSyncSettingsScreen(
                 LemuroidSettingsSwitch(
                     state = booleanPreferenceState(R.string.pref_key_save_sync_auto, default = false),
                     title = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto)) },
-                    subtitle = { TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto_description)) },
+                    subtitle = {
+                        TextMMD(text = stringResource(id = R.string.settings_save_sync_enable_auto_description))
+                    },
                     enabled = saveSyncState.isConfigured && !isSyncInProgress,
                 )
                 LemuroidSettingsMenuLink(

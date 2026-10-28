@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -64,7 +63,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                 help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
             }
         PagedColumn(
-            modifier = Modifier.heightIn(max = 400.dp),
+            modifier = Modifier.weight(1f, fill = false).heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             items(questions) { question -> HtmlText(text = question) }
@@ -93,6 +92,16 @@ fun AboutDialog(onDismiss: () -> Unit) {
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Heading(R.string.about_licences_heading)
+                    TextMMD(
+                        text = stringResource(R.string.about_licences),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
+            }
+            item { SourceLink() }
             item { Llama() }
         }
 
@@ -110,6 +119,32 @@ private fun Heading(textId: Int) {
         text = stringResource(textId),
         style = MaterialTheme.typography.bodySmall,
         fontWeight = FontWeight.Bold,
+    )
+}
+
+/**
+ * The source code's address, which opens it: the licence promises the source, so it is a link.
+ * A phone with no browser says so rather than leaving a press that does nothing.
+ */
+@Composable
+private fun SourceLink() {
+    val context = LocalContext.current
+    TextMMD(
+        text = "github.com/wanderwildwood/keitaiyugi",
+        style = MaterialTheme.typography.labelSmall,
+        modifier =
+            Modifier
+                .heightIn(min = 48.dp)
+                .clickable {
+                    runCatching {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wanderwildwood/keitaiyugi")),
+                        )
+                    }.onFailure {
+                        Toast.makeText(context, context.getString(R.string.about_no_browser), Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .wrapContentHeight(Alignment.CenterVertically),
     )
 }
 

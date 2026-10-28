@@ -259,6 +259,8 @@
     <string name="about_privacy">Your games, saves and settings stay on this phone, and the app reads only the folder you choose. It goes online only to fetch a cover picture for a game from libretro\'s thumbnail server; that request carries the game\'s title and the console, and nothing else. There are no ads, no analytics and no tracking, and nothing is collected about you. It shows a notification while the library is scanned or a game is running. If Android\'s backup is switched on, your phone may copy this app\'s saves and settings into its own backup; the developer never sees it.</string>
     <string name="about_terms_heading">Terms</string>
     <string name="about_terms">This app is free software under the GNU General Public License v3 only, inheriting Lemuroid\'s; the Game Boy core is GPL-2.0 with no \"or later\" clause. It comes with no warranty: use it at your own risk.</string>
+    <string name="about_licences_heading">Licences</string>
+    <string name="about_licences">Handheld Games: GNU General Public License v3. Lemuroid and LibretroDroid: GPL-3.0. The Gambatte core: GPL-2.0 only. The game database: CC-BY-SA-4.0. MMD and AndroidX: Apache-2.0. Lato: SIL Open Font License 1.1. Icons from Material Symbols: Apache-2.0.</string>
     <string name="about_built_on">A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through the Gambatte core via LibretroDroid. None of the hard part is mine.</string>
     <!-- The donation link, beside a drawing of a llama. A fixed phrase: a verb and an
          object, so the reader knows what pressing it does -->

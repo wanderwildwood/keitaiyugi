@@ -22,7 +22,11 @@ class SaveKeysTest {
     @Before
     fun setUp() {
         db = DriverManager.getConnection("jdbc:sqlite::memory:")
-        dir = File.createTempFile("savekeys", "").also { it.delete(); it.mkdirs() }
+        dir =
+            File.createTempFile("savekeys", "").also {
+                it.delete()
+                it.mkdirs()
+            }
     }
 
     @After
@@ -108,7 +112,16 @@ class SaveKeysTest {
 
     @Test
     fun aGameWithNoKeyFallsBackToItsFileName() {
-        val g = Game(fileName = "Foo.gb", fileUri = "u", title = "Foo", systemId = "gb", developer = null, coverFrontUrl = null, lastIndexedAt = 0)
+        val g =
+            Game(
+                fileName = "Foo.gb",
+                fileUri = "u",
+                title = "Foo",
+                systemId = "gb",
+                developer = null,
+                coverFrontUrl = null,
+                lastIndexedAt = 0,
+            )
         assertEquals("Foo.gb", g.saveName())
     }
 

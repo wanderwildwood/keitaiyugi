@@ -2,9 +2,9 @@ package com.swordfish.lemuroid.app.utils.android.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -29,8 +29,8 @@ import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSlider
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.mudita.mmd.components.text.TextMMD
-import kotlinx.coroutines.delay
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 /**

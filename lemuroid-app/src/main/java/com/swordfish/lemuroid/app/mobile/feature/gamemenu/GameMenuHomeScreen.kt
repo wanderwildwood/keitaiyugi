@@ -14,8 +14,8 @@ import com.swordfish.lemuroid.app.mobile.feature.gamemenu.tilt.TiltConfiguration
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.shared.GameMenuContract
-import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidArmedSettingsLink
+import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
 import kotlin.reflect.KFunction1

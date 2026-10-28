@@ -19,8 +19,8 @@ import com.swordfish.lemuroid.app.shared.input.InputKey
 import com.swordfish.lemuroid.app.shared.input.ShortcutBindingUpdater
 import com.swordfish.lemuroid.app.shared.input.lemuroiddevice.getLemuroidInputDevice
 import com.swordfish.lemuroid.app.shared.settings.GameShortcut
-import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidArmedSettingsLink
+import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsPage
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch

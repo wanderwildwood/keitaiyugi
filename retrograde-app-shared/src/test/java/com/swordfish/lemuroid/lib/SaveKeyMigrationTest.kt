@@ -19,7 +19,11 @@ class SaveKeyMigrationTest {
 
     @Before
     fun setUp() {
-        root = File.createTempFile("savekeymig", "").also { it.delete(); it.mkdirs() }
+        root =
+            File.createTempFile("savekeymig", "").also {
+                it.delete()
+                it.mkdirs()
+            }
         saves = File(root, "saves").also { it.mkdirs() }
         states = File(root, "states/gambatte").also { it.mkdirs() }.parentFile
         previews = File(root, "previews/gambatte").also { it.mkdirs() }.parentFile
@@ -34,7 +38,17 @@ class SaveKeyMigrationTest {
         id: Int,
         name: String,
         uri: String,
-    ) = Game(id = id, fileName = name, fileUri = uri, title = name, systemId = "gb", developer = null, coverFrontUrl = null, lastIndexedAt = 0, saveKey = name)
+    ) = Game(
+        id = id,
+        fileName = name,
+        fileUri = uri,
+        title = name,
+        systemId = "gb",
+        developer = null,
+        coverFrontUrl = null,
+        lastIndexedAt = 0,
+        saveKey = name,
+    )
 
     private fun run(games: List<Game>) = SaveKeyMigration.split(games, saves, states, previews)
 

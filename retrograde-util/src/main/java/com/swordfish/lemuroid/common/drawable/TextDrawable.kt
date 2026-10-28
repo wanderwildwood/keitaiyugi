@@ -14,7 +14,6 @@ import android.text.TextPaint
  * coloured fill is a smear on this panel; ink on white is the one thing it draws well.
  */
 class TextDrawable(private val text: String) : Drawable() {
-
     private val mTextBounds = Rect()
     private val mPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 
