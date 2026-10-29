@@ -7,7 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,10 +39,7 @@ fun GameMenuHomeScreen(
                 LemuroidSettingsMenuLink(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_save)) },
                     icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_menu_save),
-                            contentDescription = stringResource(id = R.string.game_menu_save),
-                        )
+                        MenuIcon(Icons.Save, stringResource(id = R.string.game_menu_save))
                     },
                     onClick = { navController.navigateToRoute(GameMenuRoute.SAVE) },
                 )
@@ -50,10 +47,7 @@ fun GameMenuHomeScreen(
                 LemuroidSettingsMenuLink(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_load)) },
                     icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_menu_load),
-                            contentDescription = stringResource(id = R.string.game_menu_load),
-                        )
+                        MenuIcon(Icons.FolderOpen, stringResource(id = R.string.game_menu_load))
                     },
                     onClick = { navController.navigateToRoute(GameMenuRoute.LOAD) },
                 )
@@ -63,10 +57,7 @@ fun GameMenuHomeScreen(
             LemuroidSettingsMenuLink(
                 title = { TextMMD(text = stringResource(id = R.string.game_menu_quit)) },
                 icon = {
-                    Icon(
-                        painterResource(R.drawable.ic_menu_quit),
-                        contentDescription = stringResource(id = R.string.game_menu_quit),
-                    )
+                    MenuIcon(Icons.Logout, stringResource(id = R.string.game_menu_quit))
                 },
                 onClick = {
                     onResult { putExtra(GameMenuContract.RESULT_QUIT, true) }
@@ -78,10 +69,7 @@ fun GameMenuHomeScreen(
                 title = stringResource(id = R.string.game_menu_restart),
                 armedTitle = stringResource(id = R.string.game_menu_restart_armed),
                 icon = {
-                    Icon(
-                        painterResource(R.drawable.ic_menu_restart),
-                        contentDescription = stringResource(id = R.string.game_menu_restart),
-                    )
+                    MenuIcon(Icons.RestartAlt, stringResource(id = R.string.game_menu_restart))
                 },
                 onConfirmed = {
                     onResult { putExtra(GameMenuContract.RESULT_RESET, true) }
@@ -92,10 +80,7 @@ fun GameMenuHomeScreen(
             LemuroidSettingsSwitch(
                 title = { TextMMD(text = stringResource(id = R.string.game_menu_mute_audio)) },
                 icon = {
-                    Icon(
-                        painterResource(R.drawable.ic_menu_mute),
-                        contentDescription = stringResource(id = R.string.game_menu_mute_audio),
-                    )
+                    MenuIcon(Icons.VolumeOff, stringResource(id = R.string.game_menu_mute_audio))
                 },
                 state = rememberMemoryBooleanSettingState(!gameMenuRequest.audioEnabled),
                 onCheckedChange = {
@@ -108,10 +93,7 @@ fun GameMenuHomeScreen(
                 LemuroidSettingsSwitch(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_fast_forward)) },
                     icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_menu_fast_forward),
-                            contentDescription = stringResource(id = R.string.game_menu_fast_forward),
-                        )
+                        MenuIcon(Icons.FastForward, stringResource(id = R.string.game_menu_fast_forward))
                     },
                     state = rememberMemoryBooleanSettingState(gameMenuRequest.fastForwardEnabled),
                     onCheckedChange = {
@@ -133,10 +115,7 @@ fun GameMenuHomeScreen(
                         },
                     useSelectedValueAsSubtitle = false,
                     icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_menu_disk),
-                            contentDescription = stringResource(id = R.string.game_menu_change_disk_button),
-                        )
+                        MenuIcon(Icons.Album, stringResource(id = R.string.game_menu_change_disk_button))
                     },
                     state = rememberMemoryIntSettingState(gameMenuRequest.currentDisk),
                     onItemSelected = { index, _ ->
@@ -149,10 +128,7 @@ fun GameMenuHomeScreen(
             LemuroidSettingsMenuLink(
                 title = { TextMMD(text = stringResource(id = R.string.game_menu_edit_touch_controls)) },
                 icon = {
-                    Icon(
-                        painterResource(R.drawable.ic_menu_controls),
-                        contentDescription = stringResource(id = R.string.game_menu_edit_touch_controls),
-                    )
+                    MenuIcon(Icons.Gamepad, stringResource(id = R.string.game_menu_edit_touch_controls))
                 },
                 onClick = {
                     onResult { putExtra(GameMenuContract.RESULT_EDIT_TOUCH_CONTROLS, true) }
@@ -164,14 +140,7 @@ fun GameMenuHomeScreen(
                 LemuroidSettingsMenuLink(
                     title = { TextMMD(text = stringResource(id = R.string.game_menu_settings)) },
                     icon = {
-                        // 22 dp, in the 24 dp the other rows' icons take, so the words line up.
-                        Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Settings,
-                                contentDescription = stringResource(id = R.string.game_menu_settings),
-                                modifier = Modifier.size(22.dp),
-                            )
-                        }
+                        MenuIcon(Icons.Settings, stringResource(id = R.string.game_menu_settings))
                     },
                     onClick = { navController.navigateToRoute(GameMenuRoute.OPTIONS) },
                 )
@@ -192,10 +161,7 @@ fun GameMenuHomeScreen(
                     items = tiltConfigurationEntries.map { stringResource(it.descriptionId) },
                     useSelectedValueAsSubtitle = false,
                     icon = {
-                        Icon(
-                            imageVector = Icons.Sensors,
-                            contentDescription = stringResource(id = R.string.game_menu_tilt_sensor),
-                        )
+                        MenuIcon(Icons.Sensors, stringResource(id = R.string.game_menu_tilt_sensor))
                     },
                     state = rememberMemoryIntSettingState(selectedIndex),
                     onItemSelected = { index, _ ->
@@ -209,5 +175,19 @@ fun GameMenuHomeScreen(
                 )
             }
         }
+    }
+}
+
+/**
+ * A menu row's icon: the outlined Material Symbols glyph at 22 dp, centred in the 24 dp every
+ * row gives its icon so the words line up, the same drawing and size the other apps use.
+ */
+@Composable
+private fun MenuIcon(
+    icon: ImageVector,
+    description: String,
+) {
+    Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+        Icon(imageVector = icon, contentDescription = description, modifier = Modifier.size(22.dp))
     }
 }

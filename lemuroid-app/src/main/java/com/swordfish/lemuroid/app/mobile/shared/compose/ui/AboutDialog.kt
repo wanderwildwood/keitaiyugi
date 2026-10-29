@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,11 +46,23 @@ import de.charlex.compose.material3.HtmlText
  * a formality: the Game Boy core is GPL-2.0 with no "or later" clause, which is worth a line
  * to anyone who might redistribute a build.
  */
+private const val MAIN = 0
+private const val PRIVACY = 1
+private const val TERMS = 2
+private const val LICENCES = 3
+
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
+    var page by rememberSaveable { mutableIntStateOf(MAIN) }
     EInkDialog(onDismiss = onDismiss) {
         TextMMD(
-            text = stringResource(R.string.about_title, BuildConfig.VERSION_NAME),
+            text =
+                when (page) {
+                    PRIVACY -> stringResource(R.string.about_privacy_heading)
+                    TERMS -> stringResource(R.string.about_terms_heading)
+                    LICENCES -> stringResource(R.string.licences_title)
+                    else -> stringResource(R.string.about_title, BuildConfig.VERSION_NAME)
+                },
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
         )
@@ -62,90 +77,70 @@ fun AboutDialog(onDismiss: () -> Unit) {
             remember(help) {
                 help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
             }
+        val licenceTexts = if (page == LICENCES) rememberLicenceTexts() else emptyList()
         PagedColumn(
             modifier = Modifier.weight(1f, fill = false).heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            items(questions) { question -> HtmlText(text = question) }
-            // Heading and paragraph are one row, so a page never ends on a heading alone.
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Heading(R.string.about_privacy_heading)
-                    TextMMD(
-                        text = stringResource(R.string.about_privacy),
-                        style = MaterialTheme.typography.labelSmall,
-                    )
+            when (page) {
+                PRIVACY ->
+                    item {
+                        TextMMD(
+                            text = stringResource(R.string.about_privacy),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                TERMS ->
+                    item {
+                        TextMMD(
+                            text = stringResource(R.string.about_terms),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                LICENCES -> licencesItems(licenceTexts)
+                else -> {
+                    items(questions) { question -> HtmlText(text = question) }
+                    item { NavRow(stringResource(R.string.about_privacy_heading)) { page = PRIVACY } }
+                    item { NavRow(stringResource(R.string.about_terms_heading)) { page = TERMS } }
+                    item { NavRow(stringResource(R.string.licences_title)) { page = LICENCES } }
+                    item {
+                        TextMMD(
+                            text = stringResource(R.string.about_built_on),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    item { Llama() }
                 }
             }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Heading(R.string.about_terms_heading)
-                    TextMMD(
-                        text = stringResource(R.string.about_terms),
-                        style = MaterialTheme.typography.labelSmall,
-                    )
-                }
-            }
-            item {
-                TextMMD(
-                    text = stringResource(R.string.about_built_on),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Heading(R.string.about_licences_heading)
-                    TextMMD(
-                        text = stringResource(R.string.about_licences),
-                        style = MaterialTheme.typography.labelSmall,
-                    )
-                }
-            }
-            item { SourceLink() }
-            item { Llama() }
         }
 
         Spacer(Modifier.height(18.dp))
         OutlinedButtonMMD(
-            onClick = onDismiss,
+            onClick = { if (page == MAIN) onDismiss() else page = MAIN },
             modifier = Modifier.fillMaxWidth().height(48.dp),
-        ) { TextMMD(text = stringResource(R.string.close), style = MaterialTheme.typography.bodySmall) }
+        ) {
+            TextMMD(
+                text = stringResource(if (page == MAIN) R.string.close else R.string.back),
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
     }
 }
 
+/** A row that opens a page of its own: 48 dp tall to press, with an arrow at the end. */
 @Composable
-private fun Heading(textId: Int) {
-    TextMMD(
-        text = stringResource(textId),
-        style = MaterialTheme.typography.bodySmall,
-        fontWeight = FontWeight.Bold,
-    )
-}
-
-/**
- * The source code's address, which opens it: the licence promises the source, so it is a link.
- * A phone with no browser says so rather than leaving a press that does nothing.
- */
-@Composable
-private fun SourceLink() {
-    val context = LocalContext.current
-    TextMMD(
-        text = "github.com/wanderwildwood/keitaiyugi",
-        style = MaterialTheme.typography.labelSmall,
-        modifier =
-            Modifier
-                .heightIn(min = 48.dp)
-                .clickable {
-                    runCatching {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wanderwildwood/keitaiyugi")),
-                        )
-                    }.onFailure {
-                        Toast.makeText(context, context.getString(R.string.about_no_browser), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .wrapContentHeight(Alignment.CenterVertically),
-    )
+private fun NavRow(
+    text: String,
+    onPress: () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onPress),
+    ) {
+        TextMMD(text = text, style = MaterialTheme.typography.bodyMedium)
+        TextMMD(text = "\u203A", style = MaterialTheme.typography.bodyMedium)
+    }
 }
 
 /** The blank line between two questions of the help, in every translation of it. */
@@ -165,7 +160,7 @@ private fun Llama() {
     ) {
         TextMMD(
             text = "wanderthe.dev",
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.bodySmall,
             // The site's address opens the site, the way the llama beside it opens its page.
             modifier =
                 Modifier
@@ -216,7 +211,7 @@ private fun Llama() {
                 modifier = Modifier.size(22.dp),
             )
             Spacer(Modifier.width(6.dp))
-            TextMMD(text = stringResource(R.string.about_feed_the_llamas), style = MaterialTheme.typography.labelSmall)
+            TextMMD(text = stringResource(R.string.about_feed_the_llamas), style = MaterialTheme.typography.bodySmall)
         }
     }
 }

@@ -3,6 +3,8 @@
 Handheld Games is a fork, and most of it is other people's work. This file names all
 of it, with the licence each part carries and where its source can be had.
 
+The same list, with the full text of every licence, is in the app under About, Licences.
+
 ## The app
 
 | | |
