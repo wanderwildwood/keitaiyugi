@@ -8,8 +8,8 @@ can be on a quiet afternoon.
 
 | | |
 |---|---|
-| ![All the games](screenshots/1-games.png) | ![2048gb, playing](screenshots/2-playing.png) |
-| ![Settings](screenshots/3-settings.png) | ![About, and why everything is grey](screenshots/4-about.png) |
+| ![First start: choose a directory of Game Boy files](screenshots/1-setup.png) | ![Settings, with the page number in the corner](screenshots/2-settings.png) |
+| ![How to use it, in the About box](screenshots/3-help.png) | ![About: Privacy, Terms and Licences](screenshots/4-about.png) |
 
 Every game shown is freely licensed homebrew from the [Homebrew Hub](https://hh.gbdev.io).
 No commercial game appears in this repository, and none is bundled in the app.
