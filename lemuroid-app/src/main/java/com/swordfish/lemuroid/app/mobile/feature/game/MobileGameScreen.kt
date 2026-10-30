@@ -44,6 +44,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.mudita.mmd.components.cards.CardMMD
 import com.mudita.mmd.components.slider.SliderMMD
 import com.mudita.mmd.components.text.TextMMD
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.HouseButton
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.shared.game.BaseGameScreenViewModel
 import com.swordfish.lemuroid.app.shared.game.viewmodel.GameViewModelTouchControls.Companion.MENU_LOADING_ANIMATION_MILLIS
@@ -321,18 +322,16 @@ private fun MenuEditTouchControls(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    TextButton(
-                        onClick = { viewModel.resetTouchControls() },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        TextMMD(text = stringResource(R.string.touch_customize_button_reset))
-                    }
-                    TextButton(
-                        onClick = { viewModel.showEditControls(false) },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        TextMMD(text = stringResource(R.string.touch_customize_button_done))
-                    }
+                    HouseButton(
+                        stringResource(R.string.touch_customize_button_reset),
+                        { viewModel.resetTouchControls() },
+                        Modifier.padding(8.dp),
+                    )
+                    HouseButton(
+                        stringResource(R.string.touch_customize_button_done),
+                        { viewModel.showEditControls(false) },
+                        Modifier.padding(8.dp),
+                    )
                 }
             }
         }
