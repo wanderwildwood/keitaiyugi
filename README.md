@@ -11,8 +11,9 @@ can be on a quiet afternoon.
 | ![First start: choose a directory of Game Boy files](screenshots/1-setup.png) | ![Settings, with the page number in the corner](screenshots/2-settings.png) |
 | ![How to use it, in the About box](screenshots/3-help.png) | ![About: Privacy, Terms and Licences](screenshots/4-about.png) |
 
-Every game shown is freely licensed homebrew from the [Homebrew Hub](https://hh.gbdev.io).
-No commercial game appears in this repository, and none is bundled in the app.
+No game is bundled in the app and no commercial game appears in this repository. The
+screenshots show the app before a directory of Game Boy files is chosen; freely licensed
+homebrew is at the [Homebrew Hub](https://hh.gbdev.io).
 
 A fork of **[Lemuroid](https://github.com/Swordfish90/Lemuroid)** by Filippo Scognamiglio,
 cut down to one console and reskinned for a screen with two colours. Emulation is
@@ -68,7 +69,7 @@ puzzle and turn-based work that suits this screen better than most commercial re
 
 ## Where this is up to
 
-Version 0.1.0. It plays, on a real Kompakt, and has not been through anybody else's hands yet.
+Version 0.1.24. It plays, on a real Kompakt.
 Forked from Lemuroid at `53752bf2`.
 
 ## Privacy
