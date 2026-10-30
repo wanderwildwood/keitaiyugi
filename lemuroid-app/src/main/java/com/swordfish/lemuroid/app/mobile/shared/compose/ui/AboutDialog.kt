@@ -165,17 +165,7 @@ private fun Llama() {
             modifier =
                 Modifier
                     .clickable {
-                        runCatching {
-                            context.startActivity(
-                                Intent(Intent.ACTION_VIEW, Uri.parse("https://wanderthe.dev")),
-                            )
-                        }.onFailure {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.about_no_browser),
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                        }
+                        openLink(context, "https://wanderthe.dev", context.getString(R.string.about_no_browser_address, "wanderthe.dev"))
                     }
                     .heightIn(min = 48.dp)
                     .wrapContentHeight(Alignment.CenterVertically),
@@ -191,17 +181,7 @@ private fun Llama() {
                         // The short square.link form, not the long checkout.square.site address it
                         // redirects to -- the short one is what the site itself links to, so a
                         // regenerated checkout follows it and a published app does not break.
-                        runCatching {
-                            context.startActivity(
-                                Intent(Intent.ACTION_VIEW, Uri.parse("https://square.link/u/AGu8oT10")),
-                            )
-                        }.onFailure {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.about_no_browser),
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                        }
+                        openLink(context, "https://square.link/u/AGu8oT10", context.getString(R.string.about_no_browser_address, "square.link/u/AGu8oT10"))
                     }
                     .heightIn(min = 48.dp),
         ) {

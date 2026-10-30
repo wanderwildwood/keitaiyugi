@@ -33,6 +33,14 @@
     <!-- No RECORD_AUDIO. Upstream needs it for the Nintendo DS core's microphone;
          this fork ships one core and a Game Boy has no microphone. -->
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
     <application
         android:name="com.swordfish.lemuroid.app.LemuroidApplication"
         android:allowBackup="true"
