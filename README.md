@@ -69,7 +69,7 @@ puzzle and turn-based work that suits this screen better than most commercial re
 
 ## Where this is up to
 
-Version 0.1.25. It plays, on a real Kompakt.
+Version 0.1.24. It plays, on a real Kompakt.
 Forked from Lemuroid at `53752bf2`.
 
 ## Privacy
