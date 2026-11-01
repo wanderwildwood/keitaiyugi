@@ -93,7 +93,6 @@ fun HomeScreen(
 
             permissionsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         },
-        { permissionsLauncher.launch(Manifest.permission.RECORD_AUDIO) },
         { viewModel.changeLocalStorageFolder(context) },
     ) // TODO COMPOSE We need to understand what's going to happen here.
 }
@@ -116,7 +115,6 @@ private fun HomeScreen(
     onGameLongClick: (Game) -> Unit,
     onOpenCoreSelection: () -> Unit,
     onEnableNotificationsClicked: () -> Unit,
-    onEnableMicrophoneClicked: () -> Unit,
     onSetDirectoryClicked: () -> Unit,
 ) {
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
@@ -167,26 +165,6 @@ private fun HomeScreen(
                         onAction = onSetDirectoryClicked,
                     )
                 }
-            }
-        }
-        if (state.showNoMicrophonePermissionCard) {
-            item {
-                HomeNotification(
-                    title = stringResource(R.string.home_microphone_title),
-                    message = stringResource(R.string.home_microphone_message),
-                    actionId = R.string.home_microphone_action,
-                    onAction = onEnableMicrophoneClicked,
-                )
-            }
-        }
-        if (state.showDesmumeDeprecatedCard) {
-            item {
-                HomeNotification(
-                    title = stringResource(R.string.home_notification_desmume_deprecated_title),
-                    message = stringResource(R.string.home_notification_desmume_deprecated_message),
-                    actionId = R.string.home_notification_desmume_deprecated_action,
-                    onAction = onOpenCoreSelection,
-                )
             }
         }
         if (state.recentGames.isNotEmpty()) {

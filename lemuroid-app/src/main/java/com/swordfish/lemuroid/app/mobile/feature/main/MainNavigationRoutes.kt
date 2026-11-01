@@ -72,12 +72,6 @@ enum class MainRoute(
         parent = SETTINGS,
         showBottomNavigation = false,
     ),
-    SETTINGS_BIOS(
-        route = "settings/bios",
-        titleId = R.string.settings_title_display_bios_info,
-        parent = SETTINGS,
-        showBottomNavigation = false,
-    ),
     SETTINGS_CORES_SELECTION(
         route = "settings/cores",
         titleId = R.string.settings_title_open_cores_selection,

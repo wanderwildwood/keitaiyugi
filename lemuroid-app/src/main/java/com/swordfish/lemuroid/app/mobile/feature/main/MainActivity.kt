@@ -36,8 +36,6 @@ import com.swordfish.lemuroid.app.mobile.feature.search.SearchScreen
 import com.swordfish.lemuroid.app.mobile.feature.search.SearchViewModel
 import com.swordfish.lemuroid.app.mobile.feature.settings.advanced.AdvancedSettingsScreen
 import com.swordfish.lemuroid.app.mobile.feature.settings.advanced.AdvancedSettingsViewModel
-import com.swordfish.lemuroid.app.mobile.feature.settings.bios.BiosScreen
-import com.swordfish.lemuroid.app.mobile.feature.settings.bios.BiosSettingsViewModel
 import com.swordfish.lemuroid.app.mobile.feature.settings.coreselection.CoresSelectionScreen
 import com.swordfish.lemuroid.app.mobile.feature.settings.coreselection.CoresSelectionViewModel
 import com.swordfish.lemuroid.app.mobile.feature.settings.general.SettingsScreen
@@ -61,7 +59,6 @@ import com.swordfish.lemuroid.app.shared.settings.SettingsInteractor
 import com.swordfish.lemuroid.common.coroutines.safeLaunch
 import com.swordfish.lemuroid.ext.feature.review.ReviewManager
 import com.swordfish.lemuroid.lib.android.RetrogradeComponentActivity
-import com.swordfish.lemuroid.lib.bios.BiosManager
 import com.swordfish.lemuroid.lib.core.CoresSelection
 import com.swordfish.lemuroid.lib.injection.PerActivity
 import com.swordfish.lemuroid.lib.library.MetaSystemID
@@ -88,9 +85,6 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
 
     @Inject
     lateinit var gameInteractor: GameInteractor
-
-    @Inject
-    lateinit var biosManager: BiosManager
 
     @Inject
     lateinit var coresSelection: CoresSelection
@@ -298,15 +292,6 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                                         ),
                                 ),
                             navController = navController,
-                        )
-                    }
-                    composable(MainRoute.SETTINGS_BIOS) {
-                        BiosScreen(
-                            modifier = Modifier.padding(padding),
-                            viewModel =
-                                viewModel(
-                                    factory = BiosSettingsViewModel.Factory(biosManager),
-                                ),
                         )
                     }
                     composable(MainRoute.SETTINGS_CORES_SELECTION) {

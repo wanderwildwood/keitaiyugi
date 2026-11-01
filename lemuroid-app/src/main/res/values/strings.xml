@@ -57,12 +57,7 @@
 
     <string name="settings_title_open_cores_selection">Change Cores</string>
     <string name="settings_description_open_cores_selection">Select which core is associated to a system</string>
-    <string name="settings_core_selection_ds_info">DeSmuME is deprecated and will be removed in one of the next updates. Save your progress inside the game, then switch to melonDS. In-game saves will load automatically in melonDS, but save states can only be used with the core that created them.</string>
 
-    <string name="settings_title_display_bios_info">BIOS</string>
-    <string name="settings_description_display_bios_info">Display detected and supported BIOS files</string>
-    <string name="settings_bios_category_detected">Detected</string>
-    <string name="settings_bios_category_not_detected">Supported</string>
 
     <string name="settings_title_reset_settings">Factory reset</string>
     <string name="settings_description_reset_settings">Reset Handheld Games to its factory settings</string>
@@ -106,9 +101,6 @@
     <string name="home_notification_message">Handheld Games uses notifications to let you know when a game or operation is running in background.</string>
     <string name="home_notification_action">Enable</string>
 
-    <string name="home_microphone_title">Enable microphone</string>
-    <string name="home_microphone_message">Some games can use the microphone.</string>
-    <string name="home_microphone_action">Enable</string>
 
     <string name="home_empty_title">Choose the folder your games are in</string>
     <string name="home_empty_message">Handheld Games needs a directory of Game Boy files to scan.\nThis might take up to a few minutes.</string>
@@ -118,9 +110,6 @@
     <string name="home_none_found_title">No Game Boy games in %1$s</string>
     <string name="home_none_found_message">Handheld Games looks for .gb and .gbc files, or .zip files holding one, in this folder and the folders inside it. Pick another folder, or add files there and choose Rescan in Settings.</string>
 
-    <string name="home_notification_desmume_deprecated_title">DeSmuME is being retired</string>
-    <string name="home_notification_desmume_deprecated_message">Save in-game, then switch to melonDS to keep your progress. Save states won\’t transfer and will remain usable only in DeSmuME.</string>
-    <string name="home_notification_desmume_deprecated_action">Switch to melonDS</string>
 
     <string name="game_menu_save">Save</string>
     <string name="game_menu_load">Load</string>

@@ -29,23 +29,6 @@ fun CoresSelectionScreen(
     val indexingInProgress = viewModel.indexingInProgress.collectAsState(false).value
 
     LemuroidSettingsPage(modifier = modifier.fillMaxWidth()) {
-        // The tinted container this asked for is black under [monochrome], which would put
-        // black text on it. CardMMD's own face is what a card looks like here: white, flat,
-        // inside a black rim.
-        item {
-            CardMMD(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-            ) {
-                TextMMD(
-                    modifier = Modifier.padding(16.dp),
-                    text = stringResource(R.string.settings_core_selection_ds_info),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        }
         item {
             LemuroidCardSettingsGroup {
                 cores.forEach { (system, core) ->
