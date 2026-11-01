@@ -161,7 +161,7 @@ private fun HomeScreen(
                     HomeNotification(
                         title = stringResource(R.string.home_none_found_title, folderName),
                         message = stringResource(R.string.home_none_found_message),
-                        actionId = R.string.home_empty_action,
+                        actionId = R.string.home_none_found_action,
                         onAction = onSetDirectoryClicked,
                     )
                 }
