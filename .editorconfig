@@ -46,3 +46,11 @@ ktlint_standard = disabled
 # that turns sideways apart from its package line, so it is held to the same bargain.
 [lemuroid-app/src/main/java/com/swordfish/lemuroid/app/shared/TurnWithPhone.kt]
 ktlint_standard = disabled
+
+# The shared house components (list, dialog margins, licences page, house button, link opener, turning
+# with the phone) are one source copied unchanged into every app of the family, so a style rule here must
+# not reformat them and fork the copy. ktlint skips these files; everything else in the app is checked.
+[lemuroid-app/src/**/{shared/compose/ui/{AboutDialog,EInkDialog,HouseButton,Icons,LicencesData,LicencesLogic,LicencesScreen,LinkOpener,PagedColumn,LicencesLogicTest,LicencesTest,LinkOpenerTest,HouseButtonTest},shared/TurnWithPhone,shared/TurnWithPhoneTest}.kt]
+ktlint_standard = disabled
+max_line_length = off
+
