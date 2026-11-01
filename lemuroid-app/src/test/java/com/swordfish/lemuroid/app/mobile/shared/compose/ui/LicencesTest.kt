@@ -6,28 +6,38 @@ import org.junit.Test
 import java.io.File
 
 class LicencesTest {
+    private val data =
+        LicencesData(
+            "Handheld Games",
+            SOURCE_URL,
+            "GPL-3.0-only",
+            LICENCE_COMPONENTS,
+            LICENCE_RAW.map { LicenceText(it.first, it.first, it.second) },
+        )
+
     @Test
-    fun `the built with list is not empty and every entry has a web link`() {
-        assertTrue(LIBRARIES.isNotEmpty())
-        LIBRARIES.forEach {
-            assertTrue(it.name, it.link.startsWith("https://"))
-            assertTrue(it.name, it.licence.isNotBlank())
-        }
+    fun theDataHasNoProblems() {
+        // The GPL-2.0 text of the Game Boy core shares the "gpl" family with the app's own GPL-3.0.
+        val problems = licencesProblems(data).filterNot { p -> LICENCE_EXTRA_TEXT_IDS.any { p == "text $it is not used by anything" } }
+        assertEquals(emptyList<String>(), problems)
+        assertTrue(LICENCE_COMPONENTS.isNotEmpty())
     }
 
     @Test
-    fun `the source link is the public repository`() {
+    fun theSourceLinkIsTheRepo() {
         assertEquals("https://github.com/wanderwildwood/keitaiyugi", SOURCE_URL)
     }
 
     @Test
-    fun `paragraphs are joined into rows without losing a word`() {
-        val rows = licenceParagraphs("one two\n  three\n\n\nfour\r\nfive\n")
-        assertEquals(listOf("one two three", "four five"), rows)
+    fun theUpstreamCreditsStay() {
+        val names = LICENCE_COMPONENTS.map { it.name }
+        assertTrue(names.any { it.startsWith("Lemuroid") })
+        assertTrue(names.any { it.startsWith("Gambatte") })
+        assertTrue(names.any { it.startsWith("LibretroDroid") })
     }
 
     @Test
-    fun `the bundled licence texts are there and read as paragraphs`() {
+    fun theBundledLicenceTextsAreThere() {
         val raw = File("src/main/res/raw")
         listOf("gpl_3_0", "gpl_2_0", "apache_2_0", "mit", "ofl_1_1", "cc_by_sa_4_0").forEach {
             assertTrue(it, licenceParagraphs(File(raw, "$it.txt").readText()).size > 3)

@@ -8,7 +8,7 @@ can be on a quiet afternoon.
 
 | | |
 |---|---|
-| ![First start: choose a directory of Game Boy files](screenshots/1-setup.png) | ![Settings, with the page number in the corner](screenshots/2-settings.png) |
+| ![First start: choose a directory of Game Boy files](screenshots/1-setup.png) | ![The settings list](screenshots/2-settings.png) |
 | ![How to use it, in the About box](screenshots/3-help.png) | ![About: Privacy, Terms and Licences](screenshots/4-about.png) |
 
 No game is bundled in the app and no commercial game appears in this repository. The

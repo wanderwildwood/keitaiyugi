@@ -12,7 +12,7 @@
     <string name="none">None</string>
     <string name="directory">Directory</string>
     <string name="display_filter">Display filter</string>
-    <string name="roms">ROMs</string>
+    <string name="roms">Games</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="settings">Settings</string>
@@ -107,10 +107,10 @@
     <string name="home_notification_action">Enable</string>
 
     <string name="home_microphone_title">Enable microphone</string>
-    <string name="home_microphone_message">Nintendo DS games can use the microphone to provide some functionalities.</string>
+    <string name="home_microphone_message">Some games can use the microphone.</string>
     <string name="home_microphone_action">Enable</string>
 
-    <string name="home_empty_title">Select ROMs directory</string>
+    <string name="home_empty_title">Choose the folder your games are in</string>
     <string name="home_empty_message">Handheld Games needs a directory of Game Boy files to scan.\nThis might take up to a few minutes.</string>
     <string name="home_empty_action">Select Directory</string>
     <string name="home_scanning_title">Looking in %1$s</string>
@@ -154,7 +154,7 @@
     <string name="game_menu_title">Game menu</string>
 
     <string name="notification_channel_name">All notifications</string>
-    <string name="library_index_notification_title">ROMs scanning in progress</string>
+    <string name="library_index_notification_title">Looking for games</string>
     <!-- Said in the top bar while the library is being read. A word, because a bar
          that slides is a smear on this panel and says no more than the word does. -->
     <string name="scanning_games">Reading the games…</string>
@@ -180,15 +180,14 @@
         \n\nIf none of the above works, it might be possible that this Game/Core is not supported by this device.
     </string>
 
-    <string name="game_loader_error_missing_bios">It looks like you\'re missing the required BIOS, put them in your ROMs directory and rescan. Required files: %1$s</string>
+    <string name="game_loader_error_missing_bios">A file this game needs is missing. Put it in your games folder and scan again. Required files: %1$s</string>
 
     <string name="game_shortcut_error">Something bad happened while loading your game. Please make sure this game still exists in your library.</string>
 
-    <string name="dialog_saf_not_found">This device does not support the StorageAccessFramework file picker. Please manually copy uncompressed ROM files into %1$s and hit Rescan.</string>
+    <string name="dialog_saf_not_found">This device does not support the StorageAccessFramework file picker. Please copy uncompressed game files into %1$s by hand and scan again.</string>
 
     <string name="system_grid_details">%1$s games</string>
 
-    <string name="tv_folder_picker_title">Select ROMs Directory</string>
     <string name="tv_folder_picker_action_choose">Select</string>
     <string name="tv_folder_picker_action_cancel">Cancel</string>
     <string name="tv_folder_storage_primary">Primary storage</string>
@@ -272,22 +271,16 @@
 
     <!-- Licences page, reached from About -->
     <string name="licences_title">Licences</string>
-    <string name="licences_source_heading">Source code</string>
-    <string name="licences_source">Source: %1$s</string>
-    <string name="licences_licence_heading">Licence</string>
-    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. The full texts are below.</string>
-    <string name="licences_built_heading">Built with</string>
-    <string name="licences_gpl3">GNU General Public License, version 3</string>
-    <string name="licences_gpl2">GNU General Public License, version 2</string>
-    <string name="licences_apache">Apache License, version 2.0</string>
-    <string name="licences_mit">The MIT License</string>
-    <string name="licences_ofl">SIL Open Font License, version 1.1</string>
-    <string name="licences_ccbysa">Creative Commons Attribution-ShareAlike 4.0 International</string>
-    <string name="licences_no_browser">No browser is installed.</string>
-    <!-- The folio at the foot of a paged list, "2 / 6"; a tap on it asks for a page -->
-    <string name="folio_of">%1$d / %2$d</string>
-    <string name="folio_go_title">Go to page</string>
-    <string name="folio_page">Page %1$d of %2$d</string>
-    <string name="folio_go">Go</string>
-    <string name="folio_cancel">Cancel</string>
+    <string name="licences_back">Back</string>
+    <string name="licences_source_head">Source code</string>
+    <string name="licences_licence_head">Licence</string>
+    <string name="licences_built_head">Built with</string>
+    <string name="licences_full_head">Full texts</string>
+    <string name="licences_full_gpl">GNU General Public License v3 (full text)</string>
+    <string name="licences_full_gpl2">GNU General Public License v2 (full text)</string>
+    <string name="licences_full_apache">Apache License 2.0 (full text)</string>
+    <string name="licences_full_mit">MIT licence (full text)</string>
+    <string name="licences_full_ofl">SIL Open Font Licence 1.1 (full text)</string>
+    <string name="licences_full_ccbysa">Creative Commons Attribution-ShareAlike 4.0 (full text)</string>
+    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. The full texts are at the end.</string>
 </resources>

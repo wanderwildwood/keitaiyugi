@@ -55,12 +55,21 @@ private const val LICENCES = 3
 fun AboutDialog(onDismiss: () -> Unit) {
     var page by rememberSaveable { mutableIntStateOf(MAIN) }
     EInkDialog(onDismiss = onDismiss) {
+        if (page == LICENCES) {
+            // The shared Licences page lays out its own title, paged list and Back.
+            LicencesScreen(
+                rememberLicencesData(),
+                rememberLicencesLabels(),
+                onBack = { page = MAIN },
+                modifier = Modifier.fillMaxWidth().height(480.dp),
+            )
+            return@EInkDialog
+        }
         TextMMD(
             text =
                 when (page) {
                     PRIVACY -> stringResource(R.string.about_privacy_heading)
                     TERMS -> stringResource(R.string.about_terms_heading)
-                    LICENCES -> stringResource(R.string.licences_title)
                     else -> stringResource(R.string.about_title, BuildConfig.VERSION_NAME)
                 },
             style = MaterialTheme.typography.bodyLarge,
@@ -77,7 +86,6 @@ fun AboutDialog(onDismiss: () -> Unit) {
             remember(help) {
                 help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
             }
-        val licenceTexts = if (page == LICENCES) rememberLicenceTexts() else emptyList()
         PagedColumn(
             modifier = Modifier.weight(1f, fill = false).heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -97,7 +105,6 @@ fun AboutDialog(onDismiss: () -> Unit) {
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
-                LICENCES -> licencesItems(licenceTexts)
                 else -> {
                     items(questions) { question -> HtmlText(text = question) }
                     item { NavRow(stringResource(R.string.about_privacy_heading)) { page = PRIVACY } }
