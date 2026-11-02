@@ -263,8 +263,7 @@
     <string name="licences_title">Licences</string>
     <string name="licences_back">Back</string>
     <string name="licences_source_head">Source code</string>
-    <string name="licences_licence_head">Licence</string>
-    <string name="licences_built_head">Built with</string>
+    <string name="licences_no_text">%s needs no licence text here.</string>
     <string name="licences_full_head">Full texts</string>
     <string name="licences_full_gpl">GNU General Public License v3 (full text)</string>
     <string name="licences_full_gpl2">GNU General Public License v2 (full text)</string>
@@ -272,5 +271,5 @@
     <string name="licences_full_mit">MIT licence (full text)</string>
     <string name="licences_full_ofl">SIL Open Font Licence 1.1 (full text)</string>
     <string name="licences_full_ccbysa">Creative Commons Attribution-ShareAlike 4.0 (full text)</string>
-    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. The full texts are at the end.</string>
+    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. What it is built on keeps its own licences, each on its own page.</string>
 </resources>
