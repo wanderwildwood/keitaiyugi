@@ -1,204 +1,49 @@
 package com.swordfish.lemuroid.app.mobile.shared.compose.ui
 
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.mudita.mmd.components.buttons.OutlinedButtonMMD
-import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.BuildConfig
 import com.swordfish.lemuroid.R
-import de.charlex.compose.material3.HtmlText
 
 /**
- * What this is, what it does with what is on the phone, and whose the parts are.
- *
- * The `i` in the top bar used to open the help text and nothing else — no version, no licence,
- * no source, and no way out of it but a tap on the scrim. It is an About now, in the order
- * every other app of this shop uses, and it has a Close button.
+ * This app's About: only the words and the address. The dialog, its one Close button, the
+ * Licences row, the links and the llama are the shared HouseAbout.kt, the same in every app.
  *
  * Most of this app is other people's work, and the licence question is a real one rather than
  * a formality: the Game Boy core is GPL-2.0 with no "or later" clause, which is worth a line
- * to anyone who might redistribute a build.
+ * to anyone who might redistribute a build (it is in the Terms). The help's questions follow
+ * what the app is.
  */
-private const val MAIN = 0
-private const val PRIVACY = 1
-private const val TERMS = 2
-private const val LICENCES = 3
-
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
-    var page by rememberSaveable { mutableIntStateOf(MAIN) }
-    EInkDialog(onDismiss = onDismiss) {
-        if (page == LICENCES) {
-            // The shared Licences page lays out its own title, paged list and Back.
-            LicencesScreen(
-                rememberLicencesData(),
-                rememberLicencesLabels(),
-                onBack = { page = MAIN },
-                modifier = Modifier.fillMaxWidth().height(480.dp),
-            )
-            return@EInkDialog
-        }
-        TextMMD(
-            text =
-                when (page) {
-                    PRIVACY -> stringResource(R.string.about_privacy_heading)
-                    TERMS -> stringResource(R.string.about_terms_heading)
-                    else -> stringResource(R.string.about_title, BuildConfig.VERSION_NAME)
-                },
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium,
-        )
-
-        Spacer(Modifier.height(14.dp))
-        // Paged, not scrolled, on whole paragraphs. The help runs taller than the panel at
-        // 480x800, and it used to run off the bottom with Close underneath it. MMD's list
-        // stepped four items a swipe, which stepped straight past text nobody had read; a
-        // swipe here opens on the paragraph the foot cut off.
-        val help = stringResource(R.string.lemuroid_help_content)
-        val questions =
-            remember(help) {
-                help.split(PARAGRAPH_BREAK).map { it.trim() }.filter { it.isNotEmpty() }
-            }
-        PagedColumn(
-            modifier = Modifier.weight(1f, fill = false).heightIn(max = 400.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-        ) {
-            when (page) {
-                PRIVACY ->
-                    item {
-                        TextMMD(
-                            text = stringResource(R.string.about_privacy),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                TERMS ->
-                    item {
-                        TextMMD(
-                            text = stringResource(R.string.about_terms),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                else -> {
-                    items(questions) { question -> HtmlText(text = question) }
-                    item { NavRow(stringResource(R.string.about_privacy_heading)) { page = PRIVACY } }
-                    item { NavRow(stringResource(R.string.about_terms_heading)) { page = TERMS } }
-                    item { NavRow(stringResource(R.string.licences_title)) { page = LICENCES } }
-                    item {
-                        TextMMD(
-                            text = stringResource(R.string.about_built_on),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                    item { Llama() }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(18.dp))
-        OutlinedButtonMMD(
-            onClick = { if (page == MAIN) onDismiss() else page = MAIN },
-            modifier = Modifier.fillMaxWidth().height(48.dp),
-        ) {
-            TextMMD(
-                text = stringResource(if (page == MAIN) R.string.close else R.string.back),
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
-    }
-}
-
-/** A row that opens a page of its own: 48 dp tall to press, with an arrow at the end. */
-@Composable
-private fun NavRow(
-    text: String,
-    onPress: () -> Unit,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onPress),
-    ) {
-        TextMMD(text = text, style = MaterialTheme.typography.bodyMedium)
-        TextMMD(text = "\u203A", style = MaterialTheme.typography.bodyMedium)
-    }
-}
-
-/** The blank line between two questions of the help, in every translation of it. */
-private val PARAGRAPH_BREAK = Regex("""<br\s*/?>\s*<br\s*/?>""")
-
-/**
- * The site's address, then a llama which opens the page a donation goes to, on one line.
- *
- * The llama and its words open the page; the address beside it opens the site.
- */
-@Composable
-private fun Llama() {
     val context = LocalContext.current
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        TextMMD(
-            text = "wanderthe.dev",
-            style = MaterialTheme.typography.bodySmall,
-            // The site's address opens the site, the way the llama beside it opens its page.
-            modifier =
-                Modifier
-                    .clickable {
-                        openLink(context, "https://wanderthe.dev", context.getString(R.string.about_no_browser_address, "wanderthe.dev"))
-                    }
-                    .heightIn(min = 48.dp)
-                    .wrapContentHeight(Alignment.CenterVertically),
-        )
-        Spacer(Modifier.width(6.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier =
-                Modifier
-                    .clickable {
-                        // Straight to the checkout. The Donate button on the site only leads
-                        // here anyway, so the page in between is a press the reader does not need.
-                        // The short square.link form, not the long checkout.square.site address it
-                        // redirects to -- the short one is what the site itself links to, so a
-                        // regenerated checkout follows it and a published app does not break.
-                        openLink(context, "https://square.link/u/AGu8oT10", context.getString(R.string.about_no_browser_address, "square.link/u/AGu8oT10"))
-                    }
-                    .heightIn(min = 48.dp),
-        ) {
-            Image(
-                painter = painterResource(R.drawable.llama),
-                contentDescription = null,
-                modifier = Modifier.size(22.dp),
+    val help = stringResource(R.string.lemuroid_help_content)
+    val builtOn = stringResource(R.string.about_built_on)
+    val privacyHead = stringResource(R.string.about_privacy_heading)
+    val privacy = stringResource(R.string.about_privacy)
+    val termsHead = stringResource(R.string.about_terms_heading)
+    val terms = stringResource(R.string.about_terms)
+    val title = stringResource(R.string.about_title, BuildConfig.VERSION_NAME)
+    val data =
+        remember(help, builtOn, privacy, terms, title) {
+            AboutData(
+                title = title,
+                sections =
+                    listOf(AboutSection(null, builtOn)) + helpSections(help) +
+                        listOf(AboutSection(privacyHead, privacy), AboutSection(termsHead, terms)),
+                sourceUrl = SOURCE_URL,
             )
-            Spacer(Modifier.width(6.dp))
-            TextMMD(text = stringResource(R.string.about_feed_the_llamas), style = MaterialTheme.typography.bodySmall)
         }
+    val labels =
+        AboutLabels(
+            close = stringResource(R.string.close),
+            licences = stringResource(R.string.licences_title),
+            feedTheLlamas = stringResource(R.string.about_feed_the_llamas),
+            noBrowser = { address -> context.getString(R.string.about_no_browser_address, address) },
+        )
+    HouseAboutDialog(data, labels, R.drawable.llama, onDismiss) { modifier, back ->
+        LicencesScreen(rememberLicencesData(), rememberLicencesLabels(), onBack = back, modifier = modifier)
     }
 }
