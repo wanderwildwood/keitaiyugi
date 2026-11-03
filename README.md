@@ -16,7 +16,7 @@ screenshots show the app before a directory of Game Boy files is chosen; freely 
 homebrew is at the [Homebrew Hub](https://hh.gbdev.io).
 
 A fork of **[Lemuroid](https://github.com/Swordfish90/Lemuroid)** by Filippo Scognamiglio,
-cut down to one console and reskinned for a screen with two colours. Emulation is
+cut down to one console and reskinned for a screen with two colors. Emulation is
 [Gambatte](https://docs.libretro.com/library/gambatte/) through
 [LibretroDroid](https://github.com/Swordfish90/LibretroDroid). None of the hard part is mine.
 
@@ -41,21 +41,21 @@ surprising one. Mario does not.
 
 - **One console.** Twenty bundled cores become one, and four ABIs become one — the Kompakt is
   arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is 6.8 MB.
-- **Grey, not green.** Upstream renders the Game Boy's own green LCD. This panel has no colour
+- **Gray, not green.** Upstream renders the Game Boy's own green LCD. This panel has no color
   to show it in, so the tint arrives only as contrast lost between the four shades that are
-  the whole picture. The palette is a true grey ramp.
+  the whole picture. The palette is a true gray ramp.
 - **Frames are blended.** Which sounds backwards on a screen that already smears, and is the
   opposite of what reasoning suggested — but blending gives the panel a smaller change to
   render between frames, so it has less to smear, and the ghosting is markedly better. Tried
   on the hardware, not argued from first principles.
 - **Mudita's design system.** Every screen goes through [MMD](https://github.com/mudita/MMD),
   so it looks like the apps the phone shipped with: light, flat, high contrast. Upstream
-  defaults to a dark theme with colours taken from the wallpaper, both of which cost more than
+  defaults to a dark theme with colors taken from the wallpaper, both of which cost more than
   they give here.
 - **Paged lists.** Scrolling on E Ink is limited by the panel, not the processor, so the only
   thing that helps is producing fewer frames. The lists use MMD's, which page rather than
   glide.
-- **Grey cover art.** Converted properly rather than left for the panel to do badly.
+- **Gray cover art.** Converted properly rather than left for the panel to do badly.
 - **No system chooser.** There is one system; the tab opens the games.
 
 ## Games
@@ -76,10 +76,10 @@ Forked from Lemuroid at `53752bf2`.
 
 Privacy: what the app stores and what it sends is set out in [PRIVACY.md](PRIVACY.md).
 
-## Licence
+## License
 
 GPL-3.0-only, © wander wildwood, inheriting Lemuroid's GPL-3.0. See [COPYING](COPYING).
 
 Most of this app is other people's work. **[THIRD-PARTY.md](THIRD-PARTY.md)** names all
-of it, with licences and sources — including the one licence question worth knowing about
+of it, with licenses and sources — including the one license question worth knowing about
 before you redistribute: the Game Boy core is GPL-2.0 without an "or later" clause.
