@@ -26,6 +26,23 @@
     <string name="settings_category_general">General</string>
     <string name="settings_category_input">Input</string>
     <string name="settings_category_misc">Miscellaneous</string>
+    <string name="settings_category_saves">Saves</string>
+    <string name="settings_title_save_saves">Save a backup of your saves</string>
+    <string name="settings_description_save_saves">Saves what each game has saved, your save states and their pictures to one file you pick. Not saved: the games themselves and these settings.</string>
+    <string name="settings_title_restore_saves">Restore saves from a backup</string>
+    <string name="settings_description_restore_saves">Each save in the file replaces the same game\'s save here. Saves of other games stay as they are.</string>
+    <string name="settings_restore_saves_armed">Restore — saves of the games in the file are replaced by the file\'s; tap again to choose it</string>
+    <string name="saves_backup_saved">Backup saved.</string>
+    <string name="saves_backup_not_saved">The backup could not be written.</string>
+    <plurals name="saves_restore_done">
+        <item quantity="one">Restored. %1$d file.</item>
+        <item quantity="other">Restored. %1$d files.</item>
+    </plurals>
+    <string name="saves_restore_not_ours">That file is not a backup from this app. Nothing was changed.</string>
+    <string name="saves_restore_newer">That backup was made by a newer version of this app. Update the app and try again. Nothing was changed.</string>
+    <string name="saves_restore_damaged">That backup is damaged, so it was not used. Nothing was changed.</string>
+    <string name="saves_restore_unreadable">That file could not be read. Nothing was changed.</string>
+    <string name="saves_restore_partway">The restore stopped part of the way through. Some saves were replaced and some were not; try the restore again.</string>
     <string name="settings_title_enable_autosave">Autosave state</string>
     <string name="settings_description_enable_autosave">Save state when exiting via game menu</string>
     <string name="settings_title_turn_with_phone">Turn sideways with the phone</string>

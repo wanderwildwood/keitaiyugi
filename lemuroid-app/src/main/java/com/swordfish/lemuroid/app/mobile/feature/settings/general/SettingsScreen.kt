@@ -1,6 +1,17 @@
 package com.swordfish.lemuroid.app.mobile.feature.settings.general
 
 import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import com.swordfish.lemuroid.lib.saves.SavesBackup
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -55,6 +66,7 @@ fun SettingsScreen(
         }
         item { GeneralSettings() }
         item { InputSettings(navController = navController) }
+        item { SavesSettings() }
         item {
             MiscSettings(
                 indexingInProgress = indexingInProgress,
@@ -62,6 +74,95 @@ fun SettingsScreen(
                 navController = navController,
             )
         }
+    }
+}
+
+/**
+ * The saves to and from a file the player picks. Restore is armed: the first press says what a
+ * second will do, and gives up after six seconds.
+ */
+@Composable
+private fun SavesSettings() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var armed by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
+    LaunchedEffect(armed) {
+        if (armed) {
+            delay(6_000)
+            armed = false
+        }
+    }
+    val save =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            if (uri == null) return@rememberLauncherForActivityResult
+            busy = true
+            scope.launch {
+                val ok = SavesBackupFiles.save(context, uri)
+                busy = false
+                Toast.makeText(
+                    context,
+                    context.getString(if (ok) R.string.saves_backup_saved else R.string.saves_backup_not_saved),
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+        }
+    val restore =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri == null) return@rememberLauncherForActivityResult
+            busy = true
+            scope.launch {
+                val message =
+                    when (val r = SavesBackupFiles.restore(context, uri)) {
+                        is SavesBackupFiles.Result.Done ->
+                            context.resources.getQuantityString(R.plurals.saves_restore_done, r.files, r.files)
+                        is SavesBackupFiles.Result.Refused ->
+                            context.getString(
+                                when (r.kind) {
+                                    SavesBackup.BackupException.Kind.NOT_A_BACKUP -> R.string.saves_restore_not_ours
+                                    SavesBackup.BackupException.Kind.NEWER -> R.string.saves_restore_newer
+                                    SavesBackup.BackupException.Kind.DAMAGED -> R.string.saves_restore_damaged
+                                    SavesBackup.BackupException.Kind.TOO_BIG -> R.string.saves_restore_damaged
+                                },
+                            )
+                        SavesBackupFiles.Result.Unreadable -> context.getString(R.string.saves_restore_unreadable)
+                        SavesBackupFiles.Result.StoppedPartway -> context.getString(R.string.saves_restore_partway)
+                    }
+                busy = false
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
+        }
+    LemuroidCardSettingsGroup(
+        title = { TextMMD(text = stringResource(id = R.string.settings_category_saves)) },
+    ) {
+        LemuroidSettingsMenuLink(
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_save_saves)) },
+            subtitle = { TextMMD(text = stringResource(id = R.string.settings_description_save_saves)) },
+            enabled = !busy,
+            onClick = {
+                runCatching { save.launch("handheld-games-saves-${java.time.LocalDate.now()}.zip") }
+            },
+        )
+        LemuroidSettingsMenuLink(
+            title = { TextMMD(text = stringResource(id = R.string.settings_title_restore_saves)) },
+            subtitle = {
+                TextMMD(
+                    text =
+                        stringResource(
+                            if (armed) R.string.settings_restore_saves_armed else R.string.settings_description_restore_saves,
+                        ),
+                )
+            },
+            enabled = !busy,
+            onClick = {
+                if (!armed) {
+                    armed = true
+                } else {
+                    armed = false
+                    runCatching { restore.launch(arrayOf("application/zip", "application/octet-stream", "application/x-zip-compressed")) }
+                }
+            },
+        )
     }
 }
 

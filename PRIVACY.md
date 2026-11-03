@@ -18,6 +18,8 @@ Because no personal data is transmitted to or held by the developer, there is no
 
 On the phone: the library index (the games found in the folder you chose, with their titles), your settings, the save files and save states with their preview pictures, and a cache of cover pictures. No game is bundled, and none is copied off the phone; the app reads game files from the folder you choose in Settings, picked through Android's file picker.
 
+**Save a backup of your saves** (Settings) writes the save files, save states and their preview pictures to one zip file you choose through the phone's own file picker, and only when you ask. **Restore saves from a backup** reads such a file the same way, checks all of it first, and only then puts the saves in place, each over the same game's save; a wrong file changes nothing.
+
 The app allows Android's backup (`allowBackup="true"`) and sets no backup rules of its own, so whatever Android's default backup covers for an app on your phone, including its settings and library index, may be copied into the backup your phone makes, as your phone's backup settings decide. The developer holds no backup and cannot see yours. Uninstalling the app removes what is in its private storage.
 
 ## Permissions, and what each is for
