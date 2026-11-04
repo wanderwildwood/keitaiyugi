@@ -23,16 +23,23 @@ fun AboutDialog(onDismiss: () -> Unit) {
     val builtOn = stringResource(R.string.about_built_on)
     val privacyHead = stringResource(R.string.about_privacy_heading)
     val privacy = stringResource(R.string.about_privacy)
+    val privacyMore =
+        listOf(
+            AboutSection(stringResource(R.string.privacy_who_title), stringResource(R.string.privacy_who)),
+            AboutSection(stringResource(R.string.privacy_contact_title), stringResource(R.string.privacy_contact)),
+            AboutSection(stringResource(R.string.privacy_rights_title), stringResource(R.string.privacy_rights)),
+        )
     val termsHead = stringResource(R.string.about_terms_heading)
     val terms = stringResource(R.string.about_terms)
     val title = stringResource(R.string.about_title, BuildConfig.VERSION_NAME)
     val data =
-        remember(help, builtOn, privacy, terms, title) {
+        remember(help, builtOn, privacy, privacyMore, terms, title) {
             AboutData(
                 title = title,
                 sections =
                     listOf(AboutSection(null, builtOn)) + helpSections(help) +
-                        listOf(AboutSection(privacyHead, privacy), AboutSection(termsHead, terms)),
+                        listOf(AboutSection(privacyHead, privacy)) + privacyMore +
+                        listOf(AboutSection(termsHead, terms)),
                 sourceUrl = SOURCE_URL,
             )
         }
@@ -42,6 +49,8 @@ fun AboutDialog(onDismiss: () -> Unit) {
             licences = stringResource(R.string.licences_title),
             feedTheLlamas = stringResource(R.string.about_feed_the_llamas),
             noBrowser = { address -> context.getString(R.string.about_no_browser_address, address) },
+            writeTo = { address -> context.getString(R.string.about_write_to, address) },
+            noMailApp = { address -> context.getString(R.string.about_no_mail_app, address) },
         )
     HouseAboutDialog(data, labels, R.drawable.llama, onDismiss) { modifier, back ->
         LicencesScreen(rememberLicencesData(), rememberLicencesLabels(), onBack = back, modifier = modifier)
