@@ -1,0 +1,14 @@
+{
+  "uniqueId": "gambatte-libretro",
+  "name": "Gambatte core (Game Boy), inside the app",
+  "description": "The Game Boy emulator itself, carried as native code (libgambatte_libretro_android.so from LemuroidCores) and loaded at run time through the libretro interface. GPL-2.0 only.",
+  "developers": [
+    {
+      "name": "Sindre Aamås and libretro contributors"
+    }
+  ],
+  "website": "https://github.com/libretro/gambatte-libretro",
+  "licenses": [
+    "gambatte-gpl2"
+  ]
+}

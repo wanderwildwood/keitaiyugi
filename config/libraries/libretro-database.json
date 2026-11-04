@@ -1,0 +1,14 @@
+{
+  "uniqueId": "libretro-database",
+  "name": "libretro database (game titles and developers)",
+  "description": "The game titles and developers the library shows, cut down to Game Boy and Game Boy Color rows (tools/trim-metadata.py).",
+  "developers": [
+    {
+      "name": "libretro contributors"
+    }
+  ],
+  "website": "https://github.com/libretro/libretro-database",
+  "licenses": [
+    "CC-BY-SA-4.0"
+  ]
+}

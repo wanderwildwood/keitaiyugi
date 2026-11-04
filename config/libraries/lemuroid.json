@@ -1,0 +1,14 @@
+{
+  "uniqueId": "lemuroid",
+  "name": "Lemuroid, the app this is forked from",
+  "description": "The emulator frontend this app is a fork of: the library scanner, the touch controls and the shape of the whole app.",
+  "developers": [
+    {
+      "name": "Filippo Scognamiglio"
+    }
+  ],
+  "website": "https://github.com/Swordfish90/Lemuroid",
+  "licenses": [
+    "GPL-3.0-only"
+  ]
+}

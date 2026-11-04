@@ -22,6 +22,9 @@ plugins {
     id("androidx.baselineprofile") version "1.2.4" apply false
     id("com.android.application") version "8.4.0" apply false
     id("org.jetbrains.kotlin.plugin.compose") version deps.versions.kotlin apply false
+    // 14.2.1, not the 15.3.0 the other apps use: 15.x registers no tasks under AGP older than
+    // 8.13, and this fork still builds on AGP 8.7 / Gradle 8.10. Same DSL and the same JSON.
+    id("com.mikepenz.aboutlibraries.plugin.android") version "14.2.1" apply false
 }
 
 allprojects {
