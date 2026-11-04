@@ -56,7 +56,7 @@ The app is suitable for all ages and does not knowingly collect anything from an
 <!-- shared-about privacy section -->
 ## Who we are
 
-Handheld Games is made by wander wildwood, an independent developer: one person, not a company. wander wildwood is the data controller for anything the app itself handles, and that is very little. Handheld Games keeps what you put in it on your phone, apart from what it sends to libretro's cover-picture servers (thumbnails.libretro.com) as described above, and sends nothing to the developer, so the developer holds no data about you.
+Handheld Games is made by wander wildwood, an independent developer: one person, not a company. wander wildwood is the data controller for anything the app itself handles, and that is very little. What you put in Handheld Games stays on your phone. The only things that go out are the requests for cover pictures to libretro's cover-picture servers (thumbnails.libretro.com) described above, each carrying a game's title and the name of the system (Game Boy). The developer receives nothing and holds no data about you.
 
 ## How to contact us
 
