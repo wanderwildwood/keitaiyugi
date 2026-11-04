@@ -31,6 +31,6 @@ fun AppTheme(
     // A text cursor that blinks redraws the field twice a second for as long as it has focus,
     // and on e-ink every redraw is visible. A steady one costs nothing while idle.
     CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
-        ThemeMMD(colorScheme = monochrome, content = content)
+        ThemeMMD(colorScheme = monochrome) { ArmedScope(content = content) }
     }
 }

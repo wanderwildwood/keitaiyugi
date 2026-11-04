@@ -16,10 +16,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +27,7 @@ import com.alorma.compose.settings.ui.SettingsSlider
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
-import kotlinx.coroutines.delay
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.rememberArmedFlag
 import kotlin.math.roundToInt
 
 /**
@@ -184,13 +181,10 @@ private fun lemuroidSettingsColor(
     @Suppress("UNUSED_PARAMETER") enabled: Boolean,
 ): ListItemColors = ListItemDefaults.colors()
 
-/** How long an armed row waits for its second tap before it disarms itself. */
-const val ARMED_ROW_MILLIS = 6_000L
-
 /**
  * A row that asks before it acts. The first tap arms it and it says "<label> — tap again"; a
- * second tap within six seconds does it, and after six it goes back to what it was. Six, not
- * fewer: the panel needs a second or two just to show the prompt.
+ * second tap does it. It stays armed, with no timer, until the next other touch, Back or
+ * leaving the screen; any of those puts it back to what it was (shared Armed.kt).
  */
 @Composable
 fun LemuroidArmedSettingsLink(
@@ -200,13 +194,7 @@ fun LemuroidArmedSettingsLink(
     subtitle: (@Composable () -> Unit)? = null,
     onConfirmed: () -> Unit,
 ) {
-    var armed by remember { mutableStateOf(false) }
-    LaunchedEffect(armed) {
-        if (armed) {
-            delay(ARMED_ROW_MILLIS)
-            armed = false
-        }
-    }
+    var armed by rememberArmedFlag()
     LemuroidSettingsMenuLink(
         icon = icon,
         title = { TextMMD(text = if (armed) armedTitle else title) },
