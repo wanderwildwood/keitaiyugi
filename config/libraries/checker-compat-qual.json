@@ -1,6 +1,7 @@
 {
   "uniqueId": "org.checkerframework:checker-compat-qual",
   "licenses": [
-    "checker-framework"
+    "checker-framework",
+    "da5e524a4235731b9b96281090f5f82d"
   ]
 }
