@@ -267,6 +267,8 @@
     <string name="about_privacy">Your games, saves and settings stay on this phone, and the app reads only the folder you choose. It goes online only to fetch a cover picture for a game from libretro\'s thumbnail server; that request carries the game\'s title and the console, and nothing else. There are no ads, no analytics and no tracking, and nothing is collected about you. It shows a notification while the library is scanned or a game is running. If Android\'s backup is switched on, your phone may copy this app\'s saves and settings into its own backup; the developer never sees it.</string>
     <string name="about_terms_heading">Terms</string>
     <string name="about_terms">This app is free software under the GNU General Public License v3 only, inheriting Lemuroid\'s; the Game Boy core is GPL-2.0 with no \"or later\" clause. It comes with no warranty: use it at your own risk.</string>
+    <!-- The short description, first under the heading: what the app is -->
+    <string name="about_what">Game Boy games, drawn in four grays for a screen that has no color, at exactly three times size so nothing is resampled.</string>
     <string name="about_built_on">A fork of Lemuroid by Filippo Scognamiglio, playing Game Boy through the Gambatte core via LibretroDroid. None of the hard part is mine.</string>
     <!-- The donation link, beside a drawing of a llama. A fixed phrase: a verb and an
          object, so the reader knows what pressing it does -->
@@ -286,10 +288,16 @@
     <string name="licences_full_apache">Apache License 2.0 (full text)</string>
     <string name="licences_full_ofl">SIL Open Font License 1.1 (full text)</string>
     <string name="licences_full_ccbysa">Creative Commons Attribution-ShareAlike 4.0 (full text)</string>
-    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. What it is built on keeps its own licenses, each on its own page.</string>
+    <string name="licences_licence">Handheld Games is free software under the GNU General Public License, version 3 only. Copyright wander wildwood, on top of Lemuroid by Filippo Scognamiglio. The Game Boy core it loads is GPL-2.0 only. What it is built on keeps its own licenses, listed below.</string>
     <!-- shared-about: contact row + privacy section (edit in /opt/projects/shared-about) -->
     <string name="about_write_to">Write to %1$s</string>
     <string name="about_no_mail_app">No email app is installed. The address is %1$s.</string>
+    <!-- A drawer's name read aloud by a screen reader; %1$s is the drawer's heading, e.g. Privacy -->
+    <string name="about_open_drawer">Open %1$s</string>
+    <string name="about_close_drawer">Close %1$s</string>
+    <!-- Drawer headings the dialog makes itself -->
+    <string name="about_contact_head">Contact</string>
+    <string name="about_links_head">Links</string>
     <string name="privacy_who_title">Who we are</string>
     <string name="privacy_who">This app is made by wander wildwood, an independent developer: one person, not a company. That makes wander wildwood the data controller for anything the app itself handles, and that is very little: what you put in stays on this phone. The only things that go out are the requests for cover pictures to libretro\'s cover-picture servers (thumbnails.libretro.com) described above, each carrying a game\'s title and the name of the system (Game Boy). The developer receives nothing.</string>
     <string name="privacy_contact_title">How to contact us</string>
