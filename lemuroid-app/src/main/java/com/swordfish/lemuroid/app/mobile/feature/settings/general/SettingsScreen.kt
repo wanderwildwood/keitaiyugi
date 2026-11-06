@@ -3,7 +3,6 @@ package com.swordfish.lemuroid.app.mobile.feature.settings.general
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,6 +22,8 @@ import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.main.MainRoute
 import com.swordfish.lemuroid.app.mobile.feature.main.navigateToRoute
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.rememberArmedFlag
+import com.swordfish.lemuroid.app.shared.FilesCreateDocument
+import com.swordfish.lemuroid.app.shared.FilesOpenDocument
 import com.swordfish.lemuroid.app.shared.library.LibraryIndexScheduler
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
@@ -87,7 +88,7 @@ private fun SavesSettings() {
     var armed by rememberArmedFlag()
     var busy by remember { mutableStateOf(false) }
     val save =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        rememberLauncherForActivityResult(FilesCreateDocument("application/zip")) { uri ->
             if (uri == null) return@rememberLauncherForActivityResult
             busy = true
             scope.launch {
@@ -101,7 +102,7 @@ private fun SavesSettings() {
             }
         }
     val restore =
-        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        rememberLauncherForActivityResult(FilesOpenDocument(writable = false)) { uri ->
             if (uri == null) return@rememberLauncherForActivityResult
             busy = true
             scope.launch {
