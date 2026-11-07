@@ -39,7 +39,7 @@ fun GamesScreen(
     // producing fewer frames -- which is why e-ink readers page instead of scrolling.
     Column(modifier.fillMaxSize()) {
         LongPressHint()
-        PagedColumn(Modifier.weight(1f).fillMaxWidth(), state = state) {
+        PagedColumn(Modifier.weight(1f).fillMaxWidth(), state = state, showCutRow = true) {
             items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
                 val game = games[index] ?: return@items
 

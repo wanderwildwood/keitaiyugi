@@ -83,7 +83,7 @@ private fun SearchResultsView(
 ) {
     Column(modifier) {
         LongPressHint()
-        PagedColumn(Modifier.weight(1f).fillMaxWidth()) {
+        PagedColumn(Modifier.weight(1f).fillMaxWidth(), showCutRow = true) {
             items(games.itemCount, key = { games[it]?.id ?: it }) { index ->
                 val game = games[index] ?: return@items
 

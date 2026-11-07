@@ -128,6 +128,7 @@ private fun HomeScreen(
             modifier
                 .padding(top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        showCutRow = true,
     ) {
         if (state.showNoNotificationPermissionCard) {
             item {
