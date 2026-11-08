@@ -3,6 +3,7 @@ package com.swordfish.lemuroid.app.mobile.shared.compose.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,42 +34,45 @@ fun LemuroidGameListRow(
                     onLongClick = onLongClick,
                 ),
     ) {
-        Row(
-            modifier =
-                Modifier.padding(
-                    start = 16.dp,
-                    top = 8.dp,
-                    bottom = 8.dp,
-                    end = 16.dp,
-                ),
-        ) {
-            LemuroidSmallGameImage(
+        Column {
+            Row(
                 modifier =
-                    Modifier
-                        .width(40.dp)
-                        .height(40.dp)
-                        .align(Alignment.CenterVertically),
-                game = game,
-            )
-            LemuroidGameTexts(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp),
-                game = game,
-            )
-            Box(
-                modifier =
-                    Modifier
-                        .width(48.dp)
-                        .height(48.dp)
-                        .align(Alignment.CenterVertically),
+                    Modifier.padding(
+                        start = 16.dp,
+                        top = 8.dp,
+                        bottom = 8.dp,
+                        end = 16.dp,
+                    ),
             ) {
-                FavoriteToggle(
-                    isToggled = game.isFavorite,
-                    onFavoriteToggle = onFavoriteToggle,
+                LemuroidSmallGameImage(
+                    modifier =
+                        Modifier
+                            .width(40.dp)
+                            .height(40.dp)
+                            .align(Alignment.CenterVertically),
+                    game = game,
                 )
+                LemuroidGameTexts(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp),
+                    game = game,
+                )
+                Box(
+                    modifier =
+                        Modifier
+                            .width(48.dp)
+                            .height(48.dp)
+                            .align(Alignment.CenterVertically),
+                ) {
+                    FavoriteToggle(
+                        isToggled = game.isFavorite,
+                        onFavoriteToggle = onFavoriteToggle,
+                    )
+                }
             }
+            DottedRule(start = 16.dp, end = 16.dp)
         }
     }
 }
