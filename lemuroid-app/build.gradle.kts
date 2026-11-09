@@ -223,7 +223,7 @@ dependencies {
     implementation(deps.libs.composeSettings.diskStorage)
     implementation(deps.libs.composeSettings.memoryStorage)
 
-    implementation(deps.libs.libretrodroid)
+    implementation(project(":libretrodroid"))
 
     testImplementation("junit:junit:4.13.2")
 

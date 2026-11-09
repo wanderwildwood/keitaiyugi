@@ -22,6 +22,11 @@ whole thing are theirs. Its git history is preserved in this repository.
 | **[LibretroDroid](https://github.com/Swordfish90/LibretroDroid)** | GPL-3.0 — Filippo Scognamiglio |
 | **[Gambatte](https://github.com/libretro/gambatte-libretro)** | **GPL-2.0-only** — Sindre Aamås and libretro contributors |
 
+LibretroDroid 0.13.2 is carried in the source under `libretrodroid/`: its Kotlin and Java
+from the upstream tag, with one change (games keep time by the clock rather than the screen),
+and its native library unchanged from the 0.13.2 release. Its README there says which file is
+which.
+
 Gambatte is the Game Boy emulator itself. It ships inside the APK as a prebuilt
 `libgambatte_libretro_android.so`, taken from
 [LemuroidCores](https://github.com/Swordfish90/LemuroidCores), and is loaded at runtime

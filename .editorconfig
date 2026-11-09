@@ -54,3 +54,9 @@ ktlint_standard = disabled
 ktlint_standard = disabled
 max_line_length = off
 
+
+# libretrodroid/ is LibretroDroid 0.13.2 carried as upstream wrote it (see its README.md); restyling
+# it would bury the one change made to it, so ktlint leaves it alone.
+[libretrodroid/**.{kt,kts}]
+ktlint_standard = disabled
+max_line_length = off

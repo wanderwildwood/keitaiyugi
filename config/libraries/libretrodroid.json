@@ -1,0 +1,14 @@
+{
+  "uniqueId": "libretrodroid",
+  "name": "LibretroDroid, inside the app",
+  "description": "Runs the Game Boy core: loads it, draws its frames and plays its sound. Version 0.13.2, carried in the app's source with one change: games keep time by the clock rather than the screen.",
+  "developers": [
+    {
+      "name": "Filippo Scognamiglio"
+    }
+  ],
+  "website": "https://github.com/Swordfish90/LibretroDroid",
+  "licenses": [
+    "GPL-3.0-or-later"
+  ]
+}
