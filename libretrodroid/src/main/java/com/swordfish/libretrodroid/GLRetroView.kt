@@ -117,9 +117,16 @@ class GLRetroView(
 
     private fun getDeviceLanguage() = Locale.getDefault().language
 
-    private fun getDefaultRefreshRate(): Float {
-        return (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.refreshRate
-    }
+    // Changed for the Kompakt: pace the game by the clock, not by the screen.
+    //
+    // The native side compares this rate with the game's (59.73 for a Game Boy). Within 5 of
+    // it, it runs one game frame per screen refresh, so every refresh the screen misses costs
+    // a game frame: on the Kompakt, whose e-ink panel reports 60 but misses some, games ran
+    // about 5% slow (56.5 frames a second measured) and the sound was stretched to match.
+    // Reporting no rate makes it keep time by the clock instead, running a skipped frame on
+    // the next draw, so the game keeps its own speed. A smooth 60 is nothing this panel can
+    // show anyway.
+    private fun getDefaultRefreshRate(): Float = 0f
 
     fun sendKeyEvent(action: Int, keyCode: Int, port: Int = 0) {
         queueEvent { LibretroDroid.onKeyEvent(port, action, keyCode) }
