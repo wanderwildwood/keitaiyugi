@@ -72,6 +72,17 @@ puzzle and turn-based work that suits this screen better than most commercial re
 Version 0.1.24. It plays, on a real Kompakt.
 Forked from Lemuroid at `53752bf2`.
 
+## Getting it, and keeping it
+
+Download <https://github.com/wanderwildwood/keitaiyugi/releases/latest/download/keitaiyugi.apk>
+and sideload it. That address always points at the newest release, and every release
+publishes a `.sha256` beside the APK if you would rather check than trust.
+
+For updates without doing this by hand, add this repository to
+[Obtainium](https://github.com/ImranR98/Obtainium):
+
+    https://github.com/wanderwildwood/keitaiyugi
+
 ## Privacy
 
 Privacy: what the app stores and what it sends is set out in [PRIVACY.md](PRIVACY.md).
