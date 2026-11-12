@@ -34,7 +34,7 @@ class LicencesTest {
         "libretro database (game titles and developers)",
         "Material Symbols icons",
         "Lato typeface",
-        "com.github.Swordfish90:LibretroDroid",
+        "LibretroDroid, inside the app",
         "io.github.swordfish90:padkit-android",
         "com.mudita:MMD-android",
         "com.google.guava:guava",
