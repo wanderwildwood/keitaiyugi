@@ -19,7 +19,6 @@ import java.util.zip.ZipOutputStream
  * the backup replaces the same file here; saves of games the backup does not have are left alone.
  */
 object SavesBackup {
-
     const val FORMAT = "keitaiyugi-saves"
     const val VERSION = 1
     const val MANIFEST = "keitaiyugi-saves.txt"
@@ -34,23 +33,33 @@ object SavesBackup {
     }
 
     /** Writes every save in [folders] to [out]; returns how many files went in. */
-    fun write(out: OutputStream, folders: Folders, written: Instant = Instant.now()): Int {
-        val files = folders.byName().flatMap { (name, dir) ->
-            dir.walkTopDown()
-                // A name with a tab or a line break could not be listed; no game names a save so.
-                .filter { it.isFile && it.length() > 0 && !isScratch(it.name) && '\n' !in it.name && '\t' !in it.name }
-                .map { "$name/${it.relativeTo(dir).invariantSeparatorsPath}" to it }
-                .sortedBy { it.first }
-                .toList()
-        }
+    fun write(
+        out: OutputStream,
+        folders: Folders,
+        written: Instant = Instant.now(),
+    ): Int {
+        val files =
+            folders.byName().flatMap { (name, dir) ->
+                dir.walkTopDown()
+                    // A name with a tab or a line break could not be listed; no game names a save so.
+                    .filter {
+                        it.isFile && it.length() > 0 && !isScratch(it.name) && '\n' !in it.name && '\t' !in it.name
+                    }
+                    .map { "$name/${it.relativeTo(dir).invariantSeparatorsPath}" to it }
+                    .sortedBy { it.first }
+                    .toList()
+            }
         ZipOutputStream(out).use { zip ->
             zip.putNextEntry(ZipEntry(MANIFEST))
-            val manifest = buildString {
-                append("format=").append(FORMAT).append('\n')
-                append("version=").append(VERSION).append('\n')
-                append("written=").append(written).append('\n')
-                for ((path, file) in files) append("file=").append(file.length()).append('\t').append(path).append('\n')
-            }
+            val manifest =
+                buildString {
+                    append("format=").append(FORMAT).append('\n')
+                    append("version=").append(VERSION).append('\n')
+                    append("written=").append(written).append('\n')
+                    for ((path, file) in files) {
+                        append("file=").append(file.length()).append('\t').append(path).append('\n')
+                    }
+                }
             zip.write(manifest.toByteArray(Charsets.UTF_8))
             zip.closeEntry()
             for ((path, file) in files) {
@@ -67,7 +76,11 @@ object SavesBackup {
      * [BackupException] for anything it cannot use, with [staging] emptied again; nothing outside
      * [staging] is touched. Returns the paths staged, as they are named in the zip.
      */
-    fun stage(input: InputStream, staging: File, maxBytes: Long = 1L shl 30): List<String> {
+    fun stage(
+        input: InputStream,
+        staging: File,
+        maxBytes: Long = 1L shl 30,
+    ): List<String> {
         staging.deleteRecursively()
         staging.mkdirs()
         try {
@@ -81,34 +94,44 @@ object SavesBackup {
         }
     }
 
-    private fun stageInto(input: InputStream, staging: File, maxBytes: Long): List<String> {
+    private fun stageInto(
+        input: InputStream,
+        staging: File,
+        maxBytes: Long,
+    ): List<String> {
         val zip = ZipInputStream(input)
-        val first = try {
-            zip.nextEntry
-        } catch (e: Exception) {
-            null
-        }
+        val first =
+            try {
+                zip.nextEntry
+            } catch (e: Exception) {
+                null
+            }
         if (first == null || first.name != MANIFEST) throw BackupException(BackupException.Kind.NOT_A_BACKUP)
         val lines = zip.readBytes().toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
-        val fields = lines.filter { !it.startsWith("file=") }.associate { it.substringBefore('=') to it.substringAfter('=') }
+        val fields =
+            lines.filter { !it.startsWith("file=") }.associate { it.substringBefore('=') to it.substringAfter('=') }
         if (fields["format"] != FORMAT) throw BackupException(BackupException.Kind.NOT_A_BACKUP)
         val version = fields["version"]?.toIntOrNull() ?: throw BackupException(BackupException.Kind.DAMAGED)
         if (version > VERSION) throw BackupException(BackupException.Kind.NEWER)
         if (version < 1) throw BackupException(BackupException.Kind.DAMAGED)
-        val expected = lines.filter { it.startsWith("file=") }.associate { line ->
-            val rest = line.removePrefix("file=")
-            val size = rest.substringBefore('\t').toLongOrNull() ?: throw BackupException(BackupException.Kind.DAMAGED)
-            val path = rest.substringAfter('\t')
-            if (!safe(path)) throw BackupException(BackupException.Kind.DAMAGED)
-            path to size
-        }
+        val expected =
+            lines.filter { it.startsWith("file=") }.associate { line ->
+                val rest = line.removePrefix("file=")
+                val size =
+                    rest.substringBefore('\t').toLongOrNull() ?: throw BackupException(BackupException.Kind.DAMAGED)
+                val path = rest.substringAfter('\t')
+                if (!safe(path)) throw BackupException(BackupException.Kind.DAMAGED)
+                path to size
+            }
         if (expected.values.sum() > maxBytes) throw BackupException(BackupException.Kind.TOO_BIG)
 
         val seen = LinkedHashSet<String>()
         while (true) {
             val entry = zip.nextEntry ?: break
             val size = expected[entry.name]
-            if (size == null || entry.isDirectory || !seen.add(entry.name)) throw BackupException(BackupException.Kind.DAMAGED)
+            if (size == null || entry.isDirectory || !seen.add(entry.name)) {
+                throw BackupException(BackupException.Kind.DAMAGED)
+            }
             val target = File(staging, entry.name)
             target.parentFile?.mkdirs()
             var written = 0L
@@ -133,7 +156,10 @@ object SavesBackup {
      * Moves what [stage] left in [staging] into [folders], each file over the one of the same name,
      * and empties [staging]. Returns how many files were put in place.
      */
-    fun apply(staging: File, folders: Folders): Int {
+    fun apply(
+        staging: File,
+        folders: Folders,
+    ): Int {
         var count = 0
         try {
             for ((name, dir) in folders.byName()) {

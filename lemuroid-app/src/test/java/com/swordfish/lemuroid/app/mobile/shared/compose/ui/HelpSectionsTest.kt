@@ -5,13 +5,14 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class HelpSectionsTest {
-    private val help = """
+    private val help =
+        """
         <b>&#8226;How do I start?</b><br/>
         Choose a folder in Settings.<br/><br/>
         <b>&#8226;Why &amp; how?</b><br/>
         Because <i>it is so</i>.<br/><br/>
         A closing note without a question.
-    """.trimIndent()
+        """.trimIndent()
 
     @Test fun questionBecomesHeadingAndAnswerBody() {
         val s = helpSections(help)

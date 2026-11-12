@@ -272,7 +272,8 @@ listOf("debug", "release").forEach { v ->
     android.sourceSets.getByName(v).res.srcDir(layout.buildDirectory.dir("generated/aboutLibraries/$v/res"))
 }
 tasks.matching { it.name.matches(Regex("(merge|package|generate)(Debug|Release)Resources")) }.configureEach {
-    dependsOn("prepareLibraryDefinitions" + name.removePrefix("merge").removePrefix("package").removePrefix("generate").removeSuffix("Resources"))
+    val variant = name.removePrefix("merge").removePrefix("package").removePrefix("generate").removeSuffix("Resources")
+    dependsOn("prepareLibraryDefinitions" + variant)
 }
 
 // The build fails when a bundled library has no license, or a license with no full text to show
@@ -285,10 +286,16 @@ tasks.matching { it.name.startsWith("prepareLibraryDefinitions") }.configureEach
         fun family(n: String): String? {
             val l = n.lowercase()
             return when {
-                "classpath" in l -> "classpath"; "lgpl" in l || "lesser general" in l -> "lgpl"
-                "gpl" in l || "general public licen" in l -> "gpl"; "unicode" in l -> "unicode"; "apache" in l -> "apache"
-                "mpl" in l || "mozilla" in l -> "mpl"; "mit" in l.split(Regex("[^a-z]+")) -> "mit"; "bsd" in l -> "bsd"
-                "ofl" in l || "open font" in l -> "ofl"; "cc-by" in l || "cc by" in l || "cc0" in l || "public domain" in l -> "none"
+                "classpath" in l -> "classpath"
+                "lgpl" in l || "lesser general" in l -> "lgpl"
+                "gpl" in l || "general public licen" in l -> "gpl"
+                "unicode" in l -> "unicode"
+                "apache" in l -> "apache"
+                "mpl" in l || "mozilla" in l -> "mpl"
+                "mit" in l.split(Regex("[^a-z]+")) -> "mit"
+                "bsd" in l -> "bsd"
+                "ofl" in l || "open font" in l -> "ofl"
+                "cc-by" in l || "cc by" in l || "cc0" in l || "public domain" in l -> "none"
                 else -> null
             }
         }
@@ -303,11 +310,16 @@ tasks.matching { it.name.startsWith("prepareLibraryDefinitions") }.configureEach
             var changed = false
             (root["libraries"] as? List<MutableMap<String, Any?>>).orEmpty().forEach { lib ->
                 val keys = (lib["licenses"] as? List<String>).orEmpty()
+
                 fun fam(k: String) = family((lics[k]?.get("spdxId") ?: lics[k]?.get("name") ?: k).toString())
+
                 fun hasText(k: String) = !(lics[k]?.get("content") as? String).isNullOrBlank()
                 val own = keys.filter { hasText(it) }.mapNotNull { fam(it) }.toSet()
                 val kept = keys.filterNot { !hasText(it) && fam(it) in own }
-                if (kept != keys) { lib["licenses"] = kept; changed = true }
+                if (kept != keys) {
+                    lib["licenses"] = kept
+                    changed = true
+                }
             }
             if (changed) f.writeText(groovy.json.JsonOutput.toJson(root))
             (root["libraries"] as? List<Map<String, Any?>>).orEmpty().forEach { lib ->
@@ -317,12 +329,17 @@ tasks.matching { it.name.startsWith("prepareLibraryDefinitions") }.configureEach
                     val e = lics[k].orEmpty()
                     if ((e["content"] as? String).isNullOrBlank()) {
                         val fam = family((e["spdxId"] ?: e["name"] ?: k).toString())
-                        if (fam == null || (fam != "none" && raw.none { fam in it }))
+                        if (fam == null || (fam != "none" && raw.none { fam in it })) {
                             bad += "${lib["uniqueId"]}: no text for ${e["name"] ?: k}"
+                        }
                     }
                 }
             }
         }
-        if (bad.isNotEmpty()) throw GradleException("Licenses page: add the text in config/licenses or res/raw: " + bad.distinct().joinToString("; "))
+        if (bad.isNotEmpty()) {
+            throw GradleException(
+                "Licenses page: add the text in config/licenses or res/raw: " + bad.distinct().joinToString("; "),
+            )
+        }
     }
 }

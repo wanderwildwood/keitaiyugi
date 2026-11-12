@@ -3,15 +3,13 @@ package com.swordfish.lemuroid.app.mobile.feature.settings.general
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import com.swordfish.lemuroid.lib.saves.SavesBackup
-import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -33,6 +31,8 @@ import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
 import com.swordfish.lemuroid.app.utils.android.settings.booleanPreferenceState
 import com.swordfish.lemuroid.app.utils.android.settings.indexPreferenceState
 import com.swordfish.lemuroid.app.utils.android.stringListResource
+import com.swordfish.lemuroid.lib.saves.SavesBackup
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -143,7 +143,11 @@ private fun SavesSettings() {
                 TextMMD(
                     text =
                         stringResource(
-                            if (armed) R.string.settings_restore_saves_armed else R.string.settings_description_restore_saves,
+                            if (armed) {
+                                R.string.settings_restore_saves_armed
+                            } else {
+                                R.string.settings_description_restore_saves
+                            },
                         ),
                 )
             },
@@ -153,7 +157,11 @@ private fun SavesSettings() {
                     armed = true
                 } else {
                     armed = false
-                    runCatching { restore.launch(arrayOf("application/zip", "application/octet-stream", "application/x-zip-compressed")) }
+                    runCatching {
+                        restore.launch(
+                            arrayOf("application/zip", "application/octet-stream", "application/x-zip-compressed"),
+                        )
+                    }
                 }
             },
         )

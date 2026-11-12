@@ -44,7 +44,8 @@ class SavesBackupTest {
         return f
     }
 
-    private fun backupOf(f: SavesBackup.Folders) = ByteArrayOutputStream().also { SavesBackup.write(it, f) }.toByteArray()
+    private fun backupOf(f: SavesBackup.Folders) =
+        ByteArrayOutputStream().also { SavesBackup.write(it, f) }.toByteArray()
 
     private fun refused(
         kind: BackupException.Kind,
@@ -137,7 +138,11 @@ class SavesBackupTest {
 
     @Test
     fun anEntryOutsideTheSaveFoldersIsRefused() {
-        val zip = zipWith("format=keitaiyugi-saves\nversion=1\nfile=2\tsaves/../../evil\n", "saves/../../evil" to byteArrayOf(1, 2))
+        val zip =
+            zipWith(
+                "format=keitaiyugi-saves\nversion=1\nfile=2\tsaves/../../evil\n",
+                "saves/../../evil" to byteArrayOf(1, 2),
+            )
         val staging = tmp.newFolder("staging")
         refused(BackupException.Kind.DAMAGED, staging) { SavesBackup.stage(ByteArrayInputStream(zip), staging) }
         assertFalse(File(staging.parentFile, "evil").exists())
