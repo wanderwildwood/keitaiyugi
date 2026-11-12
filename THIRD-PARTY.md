@@ -1,9 +1,9 @@
 # What this app is built from
 
 Handheld Games is a fork, and most of it is other people's work. This file names all
-of it, with the licence each part carries and where its source can be had.
+of it, with the license each part carries and where its source can be had.
 
-The same list, with the full text of every licence, is in the app under About, Licences.
+The same list, with the full text of every license, is in the app under About, Licenses.
 
 ## The app
 
@@ -33,7 +33,7 @@ Gambatte is the Game Boy emulator itself. It ships inside the APK as a prebuilt
 through the libretro interface. Its complete corresponding source is at the link above.
 
 ⚠ **Gambatte is GPL-2.0 without an "or any later version" clause, and this app is
-GPL-3.0.** Those two licences are not compatible for combining into a single work. The
+GPL-3.0.** Those two licenses are not compatible for combining into a single work. The
 position relied on here is the same one Lemuroid, RetroArch and every other libretro
 frontend rely on: the core is a separate program, distributed alongside rather than
 linked into the application, communicating across a defined C interface. That reading is
