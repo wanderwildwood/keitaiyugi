@@ -137,6 +137,10 @@ abstract class BaseGameActivity : ImmersiveActivity() {
             }
         }
 
+        // The game screen keeps its own look in dark mode: the pad is already dark with light
+        // buttons, and the game's picture is the game's. Only the menus turn.
+        com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkMode.keep(findViewById(android.R.id.content))
+
         lifecycleScope.launch {
             baseGameScreenViewModel.loadGame(
                 applicationContext,
