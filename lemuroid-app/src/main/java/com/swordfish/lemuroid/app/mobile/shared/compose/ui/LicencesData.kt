@@ -29,7 +29,7 @@ val LICENCE_EXTRA_TEXT_IDS: Set<String> = setOf("gpl2")
 @Composable
 fun rememberLicencesData(): LicencesData =
     LicencesData(
-        appName = "Handheld Games",
+        appName = stringResource(R.string.lemuroid_name),
         sourceUrl = SOURCE_URL,
         licenceLine = stringResource(R.string.licences_licence),
         // One row per artifact in the APK, listed by the build; config/libraries adds what Gradle
