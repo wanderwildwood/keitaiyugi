@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.mudita.mmd.components.cards.CardMMD
 import com.mudita.mmd.components.slider.SliderMMD
 import com.mudita.mmd.components.text.TextMMD
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkWindow
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.HouseButton
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.Icons
 import com.swordfish.lemuroid.app.shared.game.BaseGameScreenViewModel
@@ -261,6 +262,7 @@ private fun MenuEditTouchControls(
     if (!showEditControls.value) return
 
     Dialog(onDismissRequest = { viewModel.showEditControls(false) }) {
+        DarkWindow()
         CardMMD(
             modifier =
                 Modifier

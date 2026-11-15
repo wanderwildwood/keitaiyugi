@@ -1,7 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- The launcher theme is split in two so values-v31 can add the splash attributes to
          LemuroidMaterialTheme without restating all of this. -->
-    <style name="LemuroidMaterialTheme" parent="Base.LemuroidMaterialTheme" />
+    <style name="LemuroidMaterialTheme" parent="Base.LemuroidMaterialTheme">
+        <!-- No start-up window: in dark mode it would flash white before the first frame. -->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 
     <style name="Base.LemuroidMaterialTheme" parent="Theme.Material3.Dark.NoActionBar">
         <!-- No scrollbars: a list moves a page to a swipe, and nothing else needs one. -->

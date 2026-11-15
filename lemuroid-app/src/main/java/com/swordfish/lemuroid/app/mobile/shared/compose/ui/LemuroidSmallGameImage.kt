@@ -39,7 +39,8 @@ fun LemuroidSmallGameImage(
             modifier
                 .fillMaxWidth()
                 .aspectRatio(1.0f)
-                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)),
+                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+                .keepColors(),
         fallback = fallbackPainter,
         error = fallbackPainter,
         contentScale = ContentScale.Crop,

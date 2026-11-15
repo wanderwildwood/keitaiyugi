@@ -19,6 +19,7 @@ import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.main.MainRoute
 import com.swordfish.lemuroid.app.mobile.feature.main.navigateToRoute
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkMode
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.rememberArmedFlag
 import com.swordfish.lemuroid.app.shared.FilesCreateDocument
 import com.swordfish.lemuroid.app.shared.FilesOpenDocument
@@ -32,6 +33,7 @@ import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
 import com.swordfish.lemuroid.app.utils.android.settings.booleanPreferenceState
 import com.swordfish.lemuroid.app.utils.android.settings.indexPreferenceState
 import com.swordfish.lemuroid.app.utils.android.stringListResource
+import com.alorma.compose.settings.storage.base.SettingValueState
 import com.swordfish.lemuroid.lib.box.BoxLink
 import com.swordfish.lemuroid.lib.saves.SavesBackup
 import kotlinx.coroutines.launch
@@ -262,6 +264,20 @@ private fun GeneralSettings() {
                 ),
             title = { TextMMD(text = stringResource(id = R.string.display_filter)) },
             items = stringListResource(R.array.pref_key_shader_filter_display_names),
+        )
+        val context = LocalContext.current
+        LemuroidSettingsSwitch(
+            // Dark mode is held by DarkMode, not by a preference key.
+            state =
+                object : SettingValueState<Boolean> {
+                    override var value: Boolean
+                        get() = DarkMode.on
+                        set(value) = DarkMode.set(context, value)
+
+                    override fun reset() = DarkMode.set(context, false)
+                },
+            title = { TextMMD(text = stringResource(id = R.string.settings_dark)) },
+            subtitle = { TextMMD(text = stringResource(id = R.string.settings_dark_note)) },
         )
     }
 }
