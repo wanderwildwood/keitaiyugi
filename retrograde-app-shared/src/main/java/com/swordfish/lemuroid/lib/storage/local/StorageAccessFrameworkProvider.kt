@@ -50,6 +50,12 @@ class StorageAccessFrameworkProvider(private val context: Context) : StorageProv
 
     private fun traverseDirectoryEntries(rootUri: Uri): Flow<List<BaseStorageFile>> =
         flow {
+            // A folder that no longer answers (deleted, its card out, the permission gone) is not
+            // an empty one: listing it as empty would take every game, favorite and play date
+            // out of the library. Stop the scan instead; Home says to choose the folder again.
+            if (!ChosenFolder.isReadable(context, rootUri)) {
+                throw FolderUnreadableException("The chosen folder cannot be read: $rootUri")
+            }
             val directoryDocumentIds = mutableListOf<String>()
             DocumentsContract.getTreeDocumentId(rootUri)?.let { directoryDocumentIds.add(it) }
 

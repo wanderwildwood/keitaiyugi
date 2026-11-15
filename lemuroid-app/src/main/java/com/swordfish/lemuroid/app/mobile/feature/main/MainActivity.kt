@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,6 +52,9 @@ import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsViewModel
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AboutDialog
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
 import com.swordfish.lemuroid.app.shared.GameInteractor
+import com.swordfish.lemuroid.app.shared.Notice
+import com.swordfish.lemuroid.app.shared.NoticeStrip
+import com.swordfish.lemuroid.app.shared.onEachPress
 import com.swordfish.lemuroid.app.shared.box.BoxSyncRunner
 import com.swordfish.lemuroid.app.shared.game.BaseGameActivity
 import com.swordfish.lemuroid.app.shared.game.GameLauncher
@@ -178,6 +183,8 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                     .value
 
             Scaffold(
+                // A notice along the foot goes with the next press (see Notice).
+                modifier = Modifier.onEachPress { Notice.clear() },
                 topBar = {
                     MainTopBar(
                         currentRoute = currentRoute,
@@ -187,7 +194,12 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                         onUpdateQueryString = { mainViewModel.changeQueryString(it) },
                     )
                 },
-                bottomBar = { MainNavigationBar(currentRoute, navController) },
+                bottomBar = {
+                    Column {
+                        NoticeStrip()
+                        MainNavigationBar(currentRoute, navController)
+                    }
+                },
             ) { padding ->
                 NavHost(
                     modifier = Modifier.fillMaxSize(),
@@ -368,6 +380,11 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                 AboutDialog(onDismiss = { infoDialogDisplayed.value = false })
             }
         }
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        Notice.pressed(event)
+        return super.dispatchKeyEvent(event)
     }
 
     override fun activity(): Activity = this

@@ -10,7 +10,11 @@ import android.view.MotionEvent
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.swordfish.lemuroid.R
@@ -20,6 +24,8 @@ import com.swordfish.lemuroid.app.mobile.feature.settings.SettingsManager
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
 import com.swordfish.lemuroid.app.shared.GameMenuContract
 import com.swordfish.lemuroid.app.shared.ImmersiveActivity
+import com.swordfish.lemuroid.app.shared.Notice
+import com.swordfish.lemuroid.app.shared.NoticeStrip
 import com.swordfish.lemuroid.app.shared.TurnWithPhone
 import com.swordfish.lemuroid.app.shared.coreoptions.CoreOption
 import com.swordfish.lemuroid.app.shared.coreoptions.LemuroidCoreOption
@@ -29,7 +35,6 @@ import com.swordfish.lemuroid.app.shared.rumble.RumbleManager
 import com.swordfish.lemuroid.app.shared.settings.ControllerConfigsManager
 import com.swordfish.lemuroid.common.animationDuration
 import com.swordfish.lemuroid.common.coroutines.launchOnState
-import com.swordfish.lemuroid.common.displayToast
 import com.swordfish.lemuroid.common.dump
 import com.swordfish.lemuroid.common.kotlin.serializable
 import com.swordfish.lemuroid.lib.box.BoxLink
@@ -141,8 +146,13 @@ abstract class BaseGameActivity : ImmersiveActivity() {
 
         setContent {
             AppTheme {
-                BaseGameScreen(viewModel = baseGameScreenViewModel) {
-                    GameScreen(viewModel)
+                // A quick save saved or loaded, or one that failed, is said over the top of the
+                // game until the next press, where a toast went by on its own.
+                Box(Modifier.fillMaxSize()) {
+                    BaseGameScreen(viewModel = baseGameScreenViewModel) {
+                        GameScreen(viewModel)
+                    }
+                    NoticeStrip(Modifier.align(Alignment.TopCenter))
                 }
             }
         }
@@ -282,7 +292,7 @@ abstract class BaseGameActivity : ImmersiveActivity() {
                             it.currentTiltConfiguration,
                             it.tiltConfigurations,
                         )
-                    is GameViewModelSideEffects.UiEffect.ShowToast -> displayToast(it.message)
+                    is GameViewModelSideEffects.UiEffect.ShowToast -> Notice.say(it.message)
                     is GameViewModelSideEffects.UiEffect.SuccessfulFinish -> performSuccessfulActivityFinish()
                     is GameViewModelSideEffects.UiEffect.FailureFinish -> performErrorFinish(it.message)
                     is GameViewModelSideEffects.UiEffect.SaveQuickSave -> performSaveQuickSave()
@@ -302,6 +312,16 @@ abstract class BaseGameActivity : ImmersiveActivity() {
 
     private fun performToggleFastForward() {
         baseGameScreenViewModel.toggleFastForward()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        Notice.pressed(ev)
+        return super.dispatchTouchEvent(ev)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        Notice.pressed(event)
+        return super.dispatchKeyEvent(event)
     }
 
     override fun onGenericMotionEvent(event: MotionEvent): Boolean {

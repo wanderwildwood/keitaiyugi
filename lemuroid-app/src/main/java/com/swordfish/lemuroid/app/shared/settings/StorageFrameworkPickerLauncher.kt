@@ -60,9 +60,12 @@ class StorageFrameworkPickerLauncher : RetrogradeActivity() {
             val currentValue: String? = sharedPreferences.getString(preferenceKey, null)
             val newValue = resultData?.data
 
-            if (newValue != null && newValue.toString() != currentValue) {
+            // The permission is taken again even for the folder already chosen: choosing it again
+            // is how a folder whose permission went (Home says so) is given back.
+            if (newValue != null) {
                 updatePersistableUris(newValue)
-
+            }
+            if (newValue != null && newValue.toString() != currentValue) {
                 sharedPreferences.edit().apply {
                     this.putString(preferenceKey, newValue.toString())
                     this.apply()

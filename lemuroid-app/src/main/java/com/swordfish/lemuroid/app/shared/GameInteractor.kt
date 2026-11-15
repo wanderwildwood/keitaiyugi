@@ -8,7 +8,6 @@ import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.shortcuts.ShortcutsGenerator
 import com.swordfish.lemuroid.app.shared.game.GameLauncher
 import com.swordfish.lemuroid.app.shared.main.BusyActivity
-import com.swordfish.lemuroid.common.displayToast
 import com.swordfish.lemuroid.lib.library.db.RetrogradeDatabase
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import kotlinx.coroutines.GlobalScope
@@ -27,7 +26,7 @@ class GameInteractor(
         if (!ensureNotificationsPermissionAvailable()) {
             return
         }
-        gameLauncher.launchGameAsync(activity.activity(), game, true)
+        launch(game, true)
     }
 
     fun onGameRestart(game: Game) {
@@ -37,7 +36,16 @@ class GameInteractor(
         if (!ensureNotificationsPermissionAvailable()) {
             return
         }
-        gameLauncher.launchGameAsync(activity.activity(), game, false)
+        launch(game, false)
+    }
+
+    private fun launch(
+        game: Game,
+        loadSave: Boolean,
+    ) {
+        if (!gameLauncher.launchGameAsync(activity.activity(), game, loadSave)) {
+            Notice.say(activity.activity().getString(R.string.game_process_another_game_running))
+        }
     }
 
     fun onFavoriteToggle(
@@ -74,13 +82,13 @@ class GameInteractor(
             return true
         }
 
-        activity.activity().displayToast(R.string.game_interactor_notification_permission_required)
+        Notice.say(activity.activity().getString(R.string.game_interactor_notification_permission_required))
         return false
     }
 
     private fun ensureNotBusy(): Boolean {
         if (activity.isBusy()) {
-            activity.activity().displayToast(R.string.game_interactory_busy)
+            Notice.say(activity.activity().getString(R.string.game_interactory_busy))
             return false
         }
         return true

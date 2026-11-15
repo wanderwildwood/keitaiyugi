@@ -61,12 +61,17 @@ class LemuroidLibrary(
         runCatching { splitSharedSaveKeys() }
             .onFailure { Timber.w(it, "Could not split saves that games share") }
 
+        var folderUnreadable = false
         try {
             indexProviders(startedAtMs)
+        } catch (e: com.swordfish.lemuroid.lib.storage.local.FolderUnreadableException) {
+            // Nothing was seen, so nothing is gone: the games stay until the folder is chosen again.
+            folderUnreadable = true
+            Timber.w(e, "Library indexing skipped: the chosen folder cannot be read")
         } catch (e: Throwable) {
             Timber.e("Library indexing stopped due to exception", e)
         } finally {
-            cleanUp(startedAtMs)
+            if (!folderUnreadable) cleanUp(startedAtMs)
         }
 
         val executionTime = System.currentTimeMillis() - startedAtMs

@@ -42,6 +42,7 @@ import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
 import com.swordfish.lemuroid.app.utils.android.ComposableLifecycle
 import com.swordfish.lemuroid.common.displayDetailsSettingsScreen
 import com.swordfish.lemuroid.lib.library.db.entity.Game
+import com.swordfish.lemuroid.lib.storage.local.ChosenFolder
 import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
 
 @Composable
@@ -58,12 +59,15 @@ fun HomeScreen(
     // The folder the games are read from, once one has been chosen: with it, an empty library is
     // "nothing found in that folder", not a request to pick one.
     var folderName by remember { mutableStateOf(chosenFolderName(applicationContext)) }
+    // The chosen folder, when the phone can no longer read it: looked at again on each return.
+    var goneFolder by remember { mutableStateOf(chosenFolderGone(applicationContext)) }
 
     ComposableLifecycle { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
                 viewModel.updatePermissions(applicationContext)
                 folderName = chosenFolderName(applicationContext)
+                goneFolder = chosenFolderGone(applicationContext)
             }
             else -> { }
         }
@@ -83,6 +87,7 @@ fun HomeScreen(
         modifier,
         state.value,
         folderName,
+        goneFolder,
         onGameClick,
         onGameLongClick,
         onOpenCoreSelection,
@@ -106,11 +111,27 @@ private fun chosenFolderName(context: Context): String? {
     return runCatching { DocumentFile.fromTreeUri(context, Uri.parse(uri))?.name }.getOrNull()
 }
 
+/**
+ * The name of the chosen folder when the phone can no longer read it (deleted, renamed, its card
+ * out, the permission gone), or null when it reads, or none was chosen.
+ */
+@Suppress("DEPRECATION")
+private fun chosenFolderGone(context: Context): String? {
+    val uri =
+        SharedPreferencesHelper.getLegacySharedPreferences(context)
+            .getString(context.getString(com.swordfish.lemuroid.lib.R.string.pref_key_extenral_folder), null)
+    if (uri.isNullOrEmpty()) return null
+    val tree = Uri.parse(uri)
+    if (ChosenFolder.isReadable(context, tree)) return null
+    return ChosenFolder.nameFromTree(tree) ?: uri
+}
+
 @Composable
 private fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeViewModel.UIState,
     folderName: String?,
+    goneFolder: String?,
     onGameClicked: (Game) -> Unit,
     onGameLongClick: (Game) -> Unit,
     onOpenCoreSelection: () -> Unit,
@@ -140,7 +161,19 @@ private fun HomeScreen(
                 )
             }
         }
-        if (state.showNoGamesCard) {
+        if (goneFolder != null) {
+            // The games stay listed (and their saves and favorites kept) until the folder is
+            // chosen again; one of them pressed now would find nothing to open.
+            item {
+                HomeNotification(
+                    title = stringResource(R.string.home_folder_gone_title, goneFolder),
+                    message = stringResource(R.string.home_folder_gone_message),
+                    actionId = R.string.home_folder_gone_action,
+                    onAction = onSetDirectoryClicked,
+                    enabled = !state.indexInProgress,
+                )
+            }
+        } else if (state.showNoGamesCard) {
             item {
                 if (folderName == null) {
                     HomeNotification(

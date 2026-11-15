@@ -97,7 +97,8 @@ class ExternalGameLauncherActivity : ImmersiveActivity() {
             )
 
         if (!gameLaunchSuccessful) {
-            finish()
+            // Another game is still open in its own process: say so, where a toast went by.
+            displayErrorDialog(R.string.game_process_another_game_running, R.string.ok) { finish() }
         }
     }
 

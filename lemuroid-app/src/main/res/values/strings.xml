@@ -141,6 +141,10 @@
     <string name="home_none_found_title">No Game Boy games in %1$s</string>
     <string name="home_none_found_action">Choose another folder</string>
     <string name="home_none_found_message">Handheld Games looks for .gb and .gbc files, or .zip files holding one, in this folder and the folders inside it. Pick another folder, or add files there and choose Rescan in Settings.</string>
+    <string name="home_folder_gone_title">The folder %1$s can\'t be found</string>
+    <string name="home_folder_gone_message">The folder your games are in was moved, renamed or deleted, its card is out, or the permission to read it has gone. Your games, saves and favorites are kept. Choose the folder again.</string>
+    <string name="home_folder_gone_action">Choose the folder again</string>
+    <string name="settings_directory_gone">%1$s (can\'t be found: choose it again)</string>
 
 
     <string name="game_menu_save">Save</string>

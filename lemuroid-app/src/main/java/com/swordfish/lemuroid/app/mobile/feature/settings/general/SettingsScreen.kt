@@ -1,7 +1,8 @@
 package com.swordfish.lemuroid.app.mobile.feature.settings.general
 
 import android.net.Uri
-import android.widget.Toast
+import com.swordfish.lemuroid.app.shared.Notice
+import com.swordfish.lemuroid.lib.storage.local.ChosenFolder
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -101,11 +102,8 @@ private fun SavesSettings() {
             scope.launch {
                 val ok = SavesBackupFiles.save(context, uri)
                 busy = false
-                Toast.makeText(
-                    context,
-                    context.getString(if (ok) R.string.saves_backup_saved else R.string.saves_backup_not_saved),
-                    Toast.LENGTH_LONG,
-                ).show()
+                // Said along the foot until the next press, not in a toast that goes by itself.
+                Notice.say(context.getString(if (ok) R.string.saves_backup_saved else R.string.saves_backup_not_saved))
             }
         }
     val restore =
@@ -130,7 +128,7 @@ private fun SavesSettings() {
                         SavesBackupFiles.Result.StoppedPartway -> context.getString(R.string.saves_restore_partway)
                     }
                 busy = false
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                Notice.say(message)
             }
         }
     LemuroidCardSettingsGroup(
@@ -294,11 +292,18 @@ private fun RomsSettings(
     val currentDirectory = state.currentDirectory
     val emptyDirectory = stringResource(R.string.none)
 
+    val goneDirectory = stringResource(R.string.settings_directory_gone)
     val currentDirectoryName =
         remember(state.currentDirectory) {
-            runCatching {
-                DocumentFile.fromTreeUri(context, Uri.parse(currentDirectory))?.name
-            }.getOrNull() ?: emptyDirectory
+            val tree = runCatching { Uri.parse(currentDirectory) }.getOrNull()
+            when {
+                currentDirectory.isNullOrEmpty() || tree == null -> emptyDirectory
+                // A folder the phone can no longer read says so, by the name it had.
+                !ChosenFolder.isReadable(context, tree) ->
+                    String.format(goneDirectory, ChosenFolder.nameFromTree(tree) ?: currentDirectory)
+                else ->
+                    runCatching { DocumentFile.fromTreeUri(context, tree)?.name }.getOrNull() ?: emptyDirectory
+            }
         }
 
     LemuroidCardSettingsGroup(title = { TextMMD(text = stringResource(id = R.string.roms)) }) {
