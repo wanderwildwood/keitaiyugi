@@ -25,6 +25,15 @@ import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLin
 import com.swordfish.lemuroid.lib.box.BoxLink
 import java.text.DateFormat
 import java.util.Date
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 
 /**
  * The game box: a Batocera box on the home network whose Game Boy games, saves and cheats this
@@ -63,27 +72,40 @@ fun BoxSettings(
     }
 
     if (editing) {
-        var draft by remember { mutableStateOf(address) }
+        var draft by remember { mutableStateOf(TextFieldValue(address, TextRange(address.length))) }
+        val field = remember { FocusRequester() }
+        val save = {
+            link.setAddress(draft.text)
+            address = link.address()
+            editing = false
+        }
         EInkDialog(onDismiss = { editing = false }) {
+            // The field is what the dialog is for: it takes the focus as it opens and the keyboard
+            // comes up. Asked from inside the dialog, a frame after it is drawn: the field lives in
+            // the dialog's own window, which a request from the screen beneath does not reach.
+            val keyboardNow = LocalSoftwareKeyboardController.current
+            LaunchedEffect(Unit) {
+                withFrameNanos { }
+                runCatching { field.requestFocus() }
+                keyboardNow?.show()
+            }
             TextMMD(text = stringResource(id = R.string.settings_box_address_prompt))
             Spacer(Modifier.height(12.dp))
             TextFieldMMD(
                 value = draft,
-                onValueChange = { draft = it.trim() },
-                modifier = Modifier.fillMaxWidth(),
+                onValueChange = { draft = it.copy(text = it.text.trim()) },
+                modifier = Modifier.fillMaxWidth().focusRequester(field),
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                // Done on the keyboard is OK.
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { save() }),
             )
             Spacer(Modifier.height(16.dp))
             DialogButtons(
                 cancel = stringResource(id = R.string.cancel),
                 confirm = stringResource(id = R.string.ok),
                 onCancel = { editing = false },
-                onConfirm = {
-                    link.setAddress(draft)
-                    address = link.address()
-                    editing = false
-                },
+                onConfirm = { save() },
             )
         }
     }
