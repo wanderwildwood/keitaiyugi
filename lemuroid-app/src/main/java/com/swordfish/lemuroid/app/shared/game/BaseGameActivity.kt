@@ -147,10 +147,6 @@ abstract class BaseGameActivity : ImmersiveActivity() {
             }
         }
 
-        // The game screen keeps its own look in dark mode: the pad is already dark with light
-        // buttons, and the game's picture is the game's. Only the menus turn.
-        com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkMode.keep(findViewById(android.R.id.content))
-
         lifecycleScope.launch {
             baseGameScreenViewModel.loadGame(
                 applicationContext,
@@ -386,6 +382,13 @@ abstract class BaseGameActivity : ImmersiveActivity() {
 
     override fun onResume() {
         super.onResume()
+        // The game screen keeps its own look in dark mode: the pad is already dark with light
+        // buttons, and the game's picture is the game's. Only the menus turn. Dark mode draws a
+        // window through a filter layer, and the game's picture is a surface of its own that
+        // comes out black under one (turning it twice does not bring it back), so the layer is
+        // taken off this window again. Dark mode put it on while this activity was starting and
+        // does not put it back while the switch stays as it is.
+        window.decorView.setLayerType(android.view.View.LAYER_TYPE_NONE, null)
         // Back from the game menu, which may have turned while it was up: come up the way it
         // left the screen (the turn is kept for the process), not the way this was started.
         turner.set(turnWithPhone(sharedPreferences.get()))

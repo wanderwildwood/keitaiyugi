@@ -26,6 +26,11 @@ class LemuroidApplication : DaggerApplication(), HasWorkerInjector, ImageLoaderF
     override fun onCreate() {
         super.onCreate()
 
+        // Dark mode is started by a provider, and Android starts a provider only in the app's
+        // main process. The game and its menu run in one of their own (":game"), where the
+        // game menu stayed light; so it is started here as well. Starting it twice does nothing.
+        com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkMode.init(this)
+
         val initializeComponent =
             if (isMainProcess()) {
                 MainProcessInitializer::class.java
