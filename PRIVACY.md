@@ -1,10 +1,10 @@
 # Handheld Games — Privacy Policy
 
-Version 0.1.17. Last reviewed 4 November 2026.
+Version 0.1.39. Last reviewed 15 November 2026.
 
 ## The short version
 
-The developer collects nothing about you. There is no account, no sign-up, no analytics, no advertising and no crash reporting, and no server belonging to the developer that the app talks to. The games and what you do in them stay on your phone. The one thing the app fetches is a cover picture for a game, from libretro's public thumbnail server, and the request carries the game's title.
+The developer collects nothing about you. There is no account, no sign-up, no analytics, no advertising and no crash reporting, and no server belonging to the developer that the app talks to. The games and what you do in them stay on your phone. The one thing the app fetches from the internet is a cover picture for a game, from libretro's public thumbnail server, and the request carries the game's title. If you give it the address of a game box of your own, it also shares games, saves and cheats with that box, over your own network.
 
 ## Where it comes from
 
@@ -14,6 +14,8 @@ Handheld Games is a fork of Lemuroid by Filippo Scognamiglio (GPL-3.0), cut down
 
 On the phone: the library index (the games found in the folder you chose, with their titles), your settings, the save files and save states with their preview pictures, and a cache of cover pictures. No game is bundled, and none is copied off the phone; the app reads game files from the folder you choose in Settings, picked through Android's file picker.
 
+**Game box** (Settings) is off until you give it an address. With one set, the app keeps in its own storage the Game Boy games and cheat files it copied from that box, and a copy of any save that a sync replaced (`saves-replaced`), so nothing is lost when a newer save comes in.
+
 **Save a backup of your saves** (Settings) writes the save files, save states and their preview pictures to one zip file you choose through the phone's own file picker, and only when you ask. **Restore saves from a backup** reads such a file the same way, checks all of it first, and only then puts the saves in place, each over the same game's save; a wrong file changes nothing.
 
 Nothing of the app goes into Android's backup or a phone-to-phone transfer (`allowBackup="false"`, and data-extraction rules that leave out everything); Save a backup of your saves is the way to move them. The developer holds no backup and cannot see yours. Uninstalling the app removes what is in its private storage.
@@ -22,8 +24,8 @@ Nothing of the app goes into Android's backup or a phone-to-phone transfer (`all
 
 From `lemuroid-app/src/main/AndroidManifest.xml`:
 
-- `INTERNET`: for the cover pictures described below.
-- `ACCESS_NETWORK_STATE`: so background work knows whether a network is there.
+- `INTERNET`: for the cover pictures described below, and to reach a game box on your own network if you have set one.
+- `ACCESS_NETWORK_STATE`: so background work knows whether a network is there, and so the game box is only tried on Wi-Fi.
 - `POST_NOTIFICATIONS`: the notification shown while the library is scanned or a game is running.
 - `READ_EXTERNAL_STORAGE`: to read game files from the folder you point the app at (inherited from Lemuroid).
 - `VIBRATE`: haptic feedback from the on-screen controls, and game rumble.
@@ -38,6 +40,8 @@ There is no microphone, camera, location or contacts permission. Plain http is n
 ## Who else receives anything
 
 One host: **thumbnails.libretro.com**, libretro's public cover-art server, over https. When a game's cover is shown in the library, the app asks for its picture. The address asked for contains the game's title and the name of the system (Game Boy); the server also sees your IP address, as any web request does. Nothing else is sent: no identifier, no account. Pictures are kept in a cache on the phone; a cover the server does not have is shown as a plain tile.
+
+**A game box, only if you set one.** In Settings you can give the address of a Batocera box on your own network. The app then reads that box's shared folder (the file share Batocera offers on the home network, as a guest): it copies the Game Boy and Game Boy Color games and their cheat files to the phone, and keeps each game's battery save in step in both directions, when the app opens, when a game opens or closes, and when you press Sync now. When it sends a save it moves the box's older save, and the box's own resume point for that game, into the box's `saves-sync-backup` folder rather than deleting them. All of this goes between the phone and the address you typed and nowhere else; it is not encrypted, as is usual for a file share on a home network. The developer has no part in it.
 
 The Gambatte core is inside the app. The code that can download a core from GitHub exists in the source, from Lemuroid, but it looks for a bundled core first and finds it, so it does not run in this build.
 
@@ -56,7 +60,7 @@ The app is suitable for all ages and does not knowingly collect anything from an
 <!-- shared-about privacy section -->
 ## Who we are
 
-Handheld Games is made by wander wildwood, an independent developer: one person, not a company. wander wildwood is the data controller for anything the app itself handles, and that is very little. What you put in Handheld Games stays on your phone. The only things that go out are the requests for cover pictures to libretro's cover-picture servers (thumbnails.libretro.com) described above, each carrying a game's title and the name of the system (Game Boy). The developer receives nothing and holds no data about you.
+Handheld Games is made by wander wildwood, an independent developer: one person, not a company. wander wildwood is the data controller for anything the app itself handles, and that is very little. What you put in Handheld Games stays on your phone, or goes to a game box of your own if you have set one. The only things that go out to anyone else are the requests for cover pictures to libretro's cover-picture servers (thumbnails.libretro.com) described above, each carrying a game's title and the name of the system (Game Boy). The developer receives nothing and holds no data about you.
 
 ## How to contact us
 

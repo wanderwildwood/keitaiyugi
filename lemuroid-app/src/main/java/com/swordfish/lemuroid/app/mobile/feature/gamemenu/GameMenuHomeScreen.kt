@@ -29,6 +29,7 @@ import kotlin.reflect.KFunction1
 fun GameMenuHomeScreen(
     navController: NavController,
     gameMenuRequest: GameMenuActivity.GameMenuRequest,
+    hasCheats: Boolean,
     onResult: KFunction1<Intent.() -> Unit, Unit>,
 ) {
     // Paged, not scrolled: MMD's list steps four rows to a swipe and stops, with no
@@ -143,6 +144,18 @@ fun GameMenuHomeScreen(
                         MenuIcon(Icons.Settings, stringResource(id = R.string.game_menu_settings))
                     },
                     onClick = { navController.navigateToRoute(GameMenuRoute.OPTIONS) },
+                )
+            }
+        }
+        item {
+            // Only for a game the game box has cheats for.
+            if (hasCheats) {
+                LemuroidSettingsMenuLink(
+                    title = { TextMMD(text = stringResource(id = R.string.game_menu_cheats)) },
+                    icon = {
+                        MenuIcon(Icons.VideogameAsset, stringResource(id = R.string.game_menu_cheats))
+                    },
+                    onClick = { navController.navigateToRoute(GameMenuRoute.CHEATS) },
                 )
             }
         }

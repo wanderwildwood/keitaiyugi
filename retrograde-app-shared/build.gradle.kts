@@ -56,6 +56,12 @@ dependencies {
     implementation(deps.libs.kotlinxCoroutinesAndroid)
     implementation(deps.libs.flowPreferences)
 
+    // The game box shares its games, saves and cheats as a Samba share. smbj speaks SMB 2 and 3
+    // in plain Java (Apache-2.0); its own Bouncy Castle is named, because Android carries a
+    // stripped copy of that library under the same name and the two must not meet.
+    implementation(deps.libs.smbj)
+    implementation(deps.libs.bouncyCastle)
+
     kapt(deps.libs.androidx.room.compiler)
 
     testImplementation("junit:junit:4.13.2")

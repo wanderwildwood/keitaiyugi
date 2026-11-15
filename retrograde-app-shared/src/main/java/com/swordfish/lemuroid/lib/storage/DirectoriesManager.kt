@@ -35,6 +35,24 @@ class DirectoriesManager(private val appContext: Context) {
             mkdirs()
         }
 
+    /** The cheat files copied from the game box. */
+    fun getCheatsDirectory(): File =
+        File(appContext.getExternalFilesDir(null), "cheats").apply {
+            mkdirs()
+        }
+
+    /** Battery saves that a sync with the game box replaced, a folder for each time. */
+    fun getReplacedSavesDirectory(): File =
+        File(appContext.getExternalFilesDir(null), "saves-replaced").apply {
+            mkdirs()
+        }
+
+    /** The games copied from the game box. It sits inside the app's own games folder. */
+    fun getBoxRomsDirectory(): File =
+        File(getInternalRomsDirectory(), "box").apply {
+            mkdirs()
+        }
+
     fun getInternalRomsDirectory(): File =
         File(appContext.getExternalFilesDir(null), "roms").apply {
             mkdirs()

@@ -85,3 +85,16 @@
 
 ## LibretroDroid
 -keep class com.swordfish.libretrodroid.** { *; }
+
+## The game box's share (smbj)
+# smbj routes its own events through mbassador, which finds the handlers by reflection
+# (@Handler methods on smbj's classes). R8 cannot see that, so smbj is kept whole.
+-keep class com.hierynomus.** { *; }
+-keep class net.engio.mbassy.** { *; }
+# Bouncy Castle is called directly by smbj's security provider, which R8 follows, so it is
+# shrunk like anything else. What it and smbj refer to below is not on Android and is not reached.
+-dontwarn javax.naming.**
+-dontwarn javax.el.**
+-dontwarn org.slf4j.**
+-dontwarn org.ietf.jgss.**
+-dontwarn javax.security.auth.**

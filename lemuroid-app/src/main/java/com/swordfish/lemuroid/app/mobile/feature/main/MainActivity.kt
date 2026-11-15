@@ -50,6 +50,7 @@ import com.swordfish.lemuroid.app.mobile.feature.systems.MetaSystemsViewModel
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AboutDialog
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.AppTheme
 import com.swordfish.lemuroid.app.shared.GameInteractor
+import com.swordfish.lemuroid.app.shared.box.BoxSyncRunner
 import com.swordfish.lemuroid.app.shared.game.BaseGameActivity
 import com.swordfish.lemuroid.app.shared.game.GameLauncher
 import com.swordfish.lemuroid.app.shared.input.InputDeviceManager
@@ -59,6 +60,7 @@ import com.swordfish.lemuroid.app.shared.settings.SettingsInteractor
 import com.swordfish.lemuroid.common.coroutines.safeLaunch
 import com.swordfish.lemuroid.ext.feature.review.ReviewManager
 import com.swordfish.lemuroid.lib.android.RetrogradeComponentActivity
+import com.swordfish.lemuroid.lib.box.BoxLink
 import com.swordfish.lemuroid.lib.core.CoresSelection
 import com.swordfish.lemuroid.lib.injection.PerActivity
 import com.swordfish.lemuroid.lib.library.MetaSystemID
@@ -79,6 +81,12 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
 
     @Inject
     lateinit var saveSyncManager: SaveSyncManager
+
+    @Inject
+    lateinit var boxLink: BoxLink
+
+    @Inject
+    lateinit var boxSyncRunner: BoxSyncRunner
 
     @Inject
     lateinit var retrogradeDb: RetrogradeDatabase
@@ -113,6 +121,9 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
         GlobalScope.safeLaunch {
             reviewManager.initialize(applicationContext)
         }
+
+        // On opening the app, at home: new games, cheats and saves from the game box.
+        if (savedInstanceState == null) boxSyncRunner.syncNow(byHand = false)
 
         setContent {
             val navController = rememberNavController()
@@ -277,6 +288,8 @@ class MainActivity : RetrogradeComponentActivity(), BusyActivity {
                                             ),
                                         ),
                                 ),
+                            boxLink = boxLink,
+                            boxSyncRunner = boxSyncRunner,
                             navController = navController,
                         )
                     }

@@ -53,6 +53,8 @@ import com.swordfish.lemuroid.app.shared.game.turnWithPhone
 import com.swordfish.lemuroid.app.shared.input.InputDeviceManager
 import com.swordfish.lemuroid.common.kotlin.serializable
 import com.swordfish.lemuroid.lib.android.RetrogradeComponentActivity
+import com.swordfish.lemuroid.lib.box.BoxLink
+import com.swordfish.lemuroid.lib.box.CheatStore
 import com.swordfish.lemuroid.lib.library.SystemCoreConfig
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
@@ -71,6 +73,12 @@ class GameMenuActivity : RetrogradeComponentActivity() {
 
     @Inject
     lateinit var statesPreviewManager: StatesPreviewManager
+
+    @Inject
+    lateinit var boxLink: BoxLink
+
+    @Inject
+    lateinit var cheatStore: CheatStore
 
     data class GameMenuRequest(
         val coreOptions: List<LemuroidCoreOption>,
@@ -157,6 +165,8 @@ class GameMenuActivity : RetrogradeComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun GameMenuScreen(gameMenuRequest: GameMenuRequest) {
+        val cheatsKey = remember { boxLink.sync.keyFor(gameMenuRequest.game) }
+        val cheats = remember { cheatStore.cheatsFor(cheatsKey) }
         AppTheme {
             val navController = rememberNavController()
             val navBackStackEntry = navController.currentBackStackEntryAsState()
@@ -205,7 +215,10 @@ class GameMenuActivity : RetrogradeComponentActivity() {
                     exitTransition = { ExitTransition.None },
                 ) {
                     composable(GameMenuRoute.HOME) {
-                        GameMenuHomeScreen(navController, gameMenuRequest, ::onResult)
+                        GameMenuHomeScreen(navController, gameMenuRequest, cheats.isNotEmpty(), ::onResult)
+                    }
+                    composable(GameMenuRoute.CHEATS) {
+                        if (cheatsKey != null) GameMenuCheatsScreen(cheatsKey, cheats, cheatStore)
                     }
                     composable(GameMenuRoute.SAVE) {
                         GameMenuStatesScreen(

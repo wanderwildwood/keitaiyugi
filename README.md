@@ -63,6 +63,13 @@ surprising one. Mario does not.
 **No games are included and none ever will be.** The app reads Game Boy files you provide:
 point it at a directory in Settings.
 
+**A game box.** If there is a [Batocera](https://batocera.org) box on your home network, give
+its address in Settings. The app copies its Game Boy and Game Boy Color games and their
+cheats, and keeps battery saves in step both ways: before a game opens, after it closes, and
+on Sync now. It uses the file share Batocera offers out of the box, so nothing is set up on the
+box. Cheats appear in the game menu. Save states are not shared, only in-game saves, and
+whatever a sync replaces is kept (on the box, under `saves-sync-backup`).
+
 If you have none, the [Homebrew Hub](https://hh.gbdev.io) is an archive of Game Boy games
 written in the last few years and given away by the people who wrote them. Plenty of it is
 puzzle and turn-based work that suits this screen better than most commercial releases do.

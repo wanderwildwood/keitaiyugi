@@ -22,6 +22,7 @@ import com.swordfish.lemuroid.app.mobile.feature.main.navigateToRoute
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.rememberArmedFlag
 import com.swordfish.lemuroid.app.shared.FilesCreateDocument
 import com.swordfish.lemuroid.app.shared.FilesOpenDocument
+import com.swordfish.lemuroid.app.shared.box.BoxSyncRunner
 import com.swordfish.lemuroid.app.shared.library.LibraryIndexScheduler
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidCardSettingsGroup
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsList
@@ -31,6 +32,7 @@ import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsSwitch
 import com.swordfish.lemuroid.app.utils.android.settings.booleanPreferenceState
 import com.swordfish.lemuroid.app.utils.android.settings.indexPreferenceState
 import com.swordfish.lemuroid.app.utils.android.stringListResource
+import com.swordfish.lemuroid.lib.box.BoxLink
 import com.swordfish.lemuroid.lib.saves.SavesBackup
 import kotlinx.coroutines.launch
 
@@ -38,6 +40,8 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
+    boxLink: BoxLink,
+    boxSyncRunner: BoxSyncRunner,
     navController: NavController,
 ) {
     val state =
@@ -64,6 +68,7 @@ fun SettingsScreen(
                 scanInProgress = scanInProgress,
             )
         }
+        item { BoxSettings(link = boxLink, runner = boxSyncRunner) }
         item { GeneralSettings() }
         item { InputSettings(navController = navController) }
         item { SavesSettings() }

@@ -22,6 +22,7 @@ package com.swordfish.lemuroid.lib.game
 import android.content.Context
 import android.os.Build
 import com.swordfish.lemuroid.lib.bios.BiosManager
+import com.swordfish.lemuroid.lib.box.BoxLink
 import com.swordfish.lemuroid.lib.core.CoreVariable
 import com.swordfish.lemuroid.lib.core.CoreVariablesManager
 import com.swordfish.lemuroid.lib.library.CoreID
@@ -52,6 +53,7 @@ class GameLoader(
     private val directoriesManager: DirectoriesManager,
     private val biosManager: BiosManager,
     private val desmumeMigrationHandler: DesmumeMigrationHandler,
+    private val boxLink: BoxLink,
 ) {
     sealed class LoadingState {
         object LoadingCore : LoadingState()
@@ -96,6 +98,10 @@ class GameLoader(
                         val dataFiles = retrogradeDatabase.dataFileDao().selectDataFilesForGame(game.id)
                         lemuroidLibrary.getGameFiles(game, dataFiles, useVFS)
                     }.getOrElse { throw it }
+
+                // A newer save on the game box comes in first, so the game opens on it. Away from
+                // home this gives up within a few seconds and the phone's own save is used.
+                boxLink.syncSaveQuietly(game)
 
                 val saveRAM =
                     runCatching {

@@ -146,6 +146,8 @@ object deps {
         const val material                 = "com.google.android.material:material:1.6.1"
         const val guava                    = "com.google.guava:guava:30.1.1-android"
         const val harmony                  = "com.frybits.harmony:harmony:1.1.9"
+        const val smbj                     = "com.hierynomus:smbj:0.15.0"
+        const val bouncyCastle             = "org.bouncycastle:bcprov-jdk18on:1.79"
         const val startup                  = "androidx.startup:startup-runtime:1.1.1"
         const val composeHtmlText          = "de.charlex.compose.material3:material3-html-text:2.0.0-beta01"
         const val collectionsImmutable     = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"

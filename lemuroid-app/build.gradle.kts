@@ -16,8 +16,8 @@ android {
         // This fork's own version, not upstream's. The Lemuroid release it is based on
         // is recorded in the README instead, where it can be read without git.
         // versionCode is major*10000 + minor*100 + patch, as the other apps here.
-        versionCode = 138
-        versionName = "0.1.38"
+        versionCode = 139
+        versionName = "0.1.39"
         // Its own id, so it installs alongside anything upstream rather than colliding
         // with it. The code package stays com.swordfish.lemuroid: that is shared
         // code and its attribution, and renaming it would be a rename for its own sake.
@@ -76,7 +76,13 @@ android {
                 )
         }
         resources {
-            excludes += setOf("META-INF/DEPENDENCIES", "META-INF/library_release.kotlin_module")
+            // Bouncy Castle and smbj each ship the same OSGi manifest.
+            excludes +=
+                setOf(
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/library_release.kotlin_module",
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                )
         }
     }
 

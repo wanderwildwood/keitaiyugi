@@ -34,6 +34,7 @@ import com.swordfish.lemuroid.lib.storage.RomFiles
 import com.swordfish.lemuroid.lib.storage.StorageFile
 import com.swordfish.lemuroid.lib.storage.StorageProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import java.io.File
 import java.io.InputStream
@@ -52,7 +53,13 @@ class LocalStorageProvider(
     override val enabledByDefault = true
 
     override fun listBaseStorageFiles(): Flow<List<BaseStorageFile>> =
-        walkDirectory(getExternalFolder() ?: directoriesManager.getInternalRomsDirectory())
+        flow {
+            val external = getExternalFolder()
+            emitAll(walkDirectory(external ?: directoriesManager.getInternalRomsDirectory()))
+            // The games copied from the game box live in the app's own folder, so they are
+            // listed there even when an outside folder has been chosen in its place.
+            if (external != null) emitAll(walkDirectory(directoriesManager.getBoxRomsDirectory()))
+        }
 
     override fun getStorageFile(baseStorageFile: BaseStorageFile): StorageFile? {
         return DocumentFileParser.parseDocumentFile(context, baseStorageFile)

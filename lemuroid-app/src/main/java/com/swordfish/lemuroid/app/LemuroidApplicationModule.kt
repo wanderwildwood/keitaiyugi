@@ -30,6 +30,7 @@ import com.swordfish.lemuroid.app.mobile.feature.input.GamePadShortcutBindingAct
 import com.swordfish.lemuroid.app.mobile.feature.main.MainActivity
 import com.swordfish.lemuroid.app.mobile.feature.settings.SettingsManager
 import com.swordfish.lemuroid.app.mobile.feature.shortcuts.ShortcutsGenerator
+import com.swordfish.lemuroid.app.shared.box.BoxSyncRunner
 import com.swordfish.lemuroid.app.shared.game.ExternalGameLauncherActivity
 import com.swordfish.lemuroid.app.shared.game.GameLauncher
 import com.swordfish.lemuroid.app.shared.input.InputDeviceManager
@@ -41,6 +42,9 @@ import com.swordfish.lemuroid.ext.feature.core.CoreUpdaterImpl
 import com.swordfish.lemuroid.ext.feature.review.ReviewManager
 import com.swordfish.lemuroid.ext.feature.savesync.SaveSyncManagerImpl
 import com.swordfish.lemuroid.lib.bios.BiosManager
+import com.swordfish.lemuroid.lib.box.BoxLink
+import com.swordfish.lemuroid.lib.box.BoxSync
+import com.swordfish.lemuroid.lib.box.CheatStore
 import com.swordfish.lemuroid.lib.core.CoreUpdater
 import com.swordfish.lemuroid.lib.core.CoreVariablesManager
 import com.swordfish.lemuroid.lib.core.CoresSelection
@@ -76,6 +80,7 @@ import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
+import java.io.File
 import java.io.InputStream
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
@@ -261,6 +266,7 @@ abstract class LemuroidApplicationModule {
             directoriesManager: DirectoriesManager,
             biosManager: BiosManager,
             desmumeMigrationHandler: DesmumeMigrationHandler,
+            boxLink: BoxLink,
         ) = GameLoader(
             lemuroidLibrary,
             statesManager,
@@ -271,7 +277,48 @@ abstract class LemuroidApplicationModule {
             directoriesManager,
             biosManager,
             desmumeMigrationHandler,
+            boxLink,
         )
+
+        @Provides
+        @PerApp
+        @JvmStatic
+        fun boxSync(
+            context: Context,
+            directoriesManager: DirectoriesManager,
+        ) = BoxSync(
+            stateDir = File(context.filesDir, "box"),
+            romsDir = directoriesManager.getBoxRomsDirectory(),
+            savesDir = directoriesManager.getSavesDirectory(),
+            statesDir = directoriesManager.getStatesDirectory(),
+            cheatsDir = directoriesManager.getCheatsDirectory(),
+            replacedDir = directoriesManager.getReplacedSavesDirectory(),
+        )
+
+        @Provides
+        @PerApp
+        @JvmStatic
+        fun boxLink(
+            context: Context,
+            boxSync: BoxSync,
+        ) = BoxLink(context, boxSync)
+
+        @Provides
+        @PerApp
+        @JvmStatic
+        fun cheatStore(
+            context: Context,
+            directoriesManager: DirectoriesManager,
+        ) = CheatStore(directoriesManager.getCheatsDirectory(), SharedPreferencesHelper.getSharedPreferences(context))
+
+        @Provides
+        @PerApp
+        @JvmStatic
+        fun boxSyncRunner(
+            context: Context,
+            boxLink: BoxLink,
+            retrogradeDatabase: RetrogradeDatabase,
+        ) = BoxSyncRunner(context, boxLink, retrogradeDatabase)
 
         @Provides
         @PerApp
@@ -319,8 +366,10 @@ abstract class LemuroidApplicationModule {
         @Provides
         @PerApp
         @JvmStatic
-        fun postGameHandler(retrogradeDatabase: RetrogradeDatabase) =
-            GameLaunchTaskHandler(ReviewManager(), retrogradeDatabase)
+        fun postGameHandler(
+            retrogradeDatabase: RetrogradeDatabase,
+            boxSyncRunner: BoxSyncRunner,
+        ) = GameLaunchTaskHandler(ReviewManager(), retrogradeDatabase, boxSyncRunner)
 
         @Provides
         @PerApp

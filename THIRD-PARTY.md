@@ -23,7 +23,8 @@ whole thing are theirs. Its git history is preserved in this repository.
 | **[Gambatte](https://github.com/libretro/gambatte-libretro)** | **GPL-2.0-only** — Sindre Aamås and libretro contributors |
 
 LibretroDroid 0.13.2 is carried in the source under `libretrodroid/`: its Kotlin and Java
-from the upstream tag, with one change (games keep time by the clock rather than the screen),
+from the upstream tag, with two changes (games keep time by the clock rather than the screen,
+and the view can clear the core's cheats),
 and its native library unchanged from the 0.13.2 release. Its README there says which file is
 which.
 
@@ -39,6 +40,17 @@ frontend rely on: the core is a separate program, distributed alongside rather t
 linked into the application, communicating across a defined C interface. That reading is
 widely used and not universally agreed. It is recorded here rather than left implicit,
 because anyone redistributing this should know it is the arrangement they are inheriting.
+
+## Libraries
+
+| | |
+|---|---|
+| **[smbj](https://github.com/hierynomus/smbj)** | Apache-2.0 — Jeroen van Erp |
+| **[Bouncy Castle](https://www.bouncycastle.org)** | Bouncy Castle Licence (MIT style) |
+| **[MBassador](https://github.com/bennidi/mbassador)** | MIT — Benjamin Diedrichsen |
+| **[SLF4J](https://www.slf4j.org)** | MIT — QOS.ch |
+
+smbj reads and writes the game box's shared folder; the other three come with it.
 
 ## Data and design
 

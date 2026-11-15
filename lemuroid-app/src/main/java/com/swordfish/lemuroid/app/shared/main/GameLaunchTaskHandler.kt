@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.swordfish.lemuroid.R
+import com.swordfish.lemuroid.app.shared.box.BoxSyncRunner
 import com.swordfish.lemuroid.app.shared.game.BaseGameActivity
 import com.swordfish.lemuroid.app.shared.gamecrash.GameCrashActivity
 import com.swordfish.lemuroid.app.shared.savesync.SaveSyncWork
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 class GameLaunchTaskHandler(
     private val reviewManager: ReviewManager,
     private val retrogradeDb: RetrogradeDatabase,
+    private val boxSyncRunner: BoxSyncRunner,
 ) {
     fun handleGameStart(context: Context) {
         cancelBackgroundWork(context)
@@ -76,6 +78,8 @@ class GameLaunchTaskHandler(
         val game = data?.extras?.getSerializable(BaseGameActivity.PLAY_GAME_RESULT_GAME) as Game
 
         updateGamePlayedTimestamp(game)
+        // The save the game just wrote goes to the game box, if the box is in reach.
+        boxSyncRunner.afterGame(game)
         if (enableRatingFlow) {
             displayReviewRequest(activity, duration)
         }

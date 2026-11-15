@@ -32,6 +32,8 @@ import com.swordfish.lemuroid.common.coroutines.launchOnState
 import com.swordfish.lemuroid.common.displayToast
 import com.swordfish.lemuroid.common.dump
 import com.swordfish.lemuroid.common.kotlin.serializable
+import com.swordfish.lemuroid.lib.box.BoxLink
+import com.swordfish.lemuroid.lib.box.CheatStore
 import com.swordfish.lemuroid.lib.core.CoreVariablesManager
 import com.swordfish.lemuroid.lib.game.GameLoader
 import com.swordfish.lemuroid.lib.library.ExposedSetting
@@ -44,9 +46,11 @@ import com.swordfish.lemuroid.lib.saves.StatesPreviewManager
 import com.swordfish.touchinput.radial.sensors.TiltConfiguration
 import dagger.Lazy
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -76,6 +80,12 @@ abstract class BaseGameActivity : ImmersiveActivity() {
 
     @Inject
     lateinit var gameLoader: GameLoader
+
+    @Inject
+    lateinit var boxLink: BoxLink
+
+    @Inject
+    lateinit var cheatStore: CheatStore
 
     @Inject
     lateinit var controllerConfigsManager: ControllerConfigsManager
@@ -157,7 +167,25 @@ abstract class BaseGameActivity : ImmersiveActivity() {
         )
 
         initialiseFlows()
+
+        lifecycleScope.launch { applyCheats() }
     }
+
+    /**
+     * Hands the core the cheats that are switched on for this game, in place of whatever it
+     * had. It waits for the game to be running; called again when the menu closes, it takes up
+     * any switch changed there.
+     */
+    private suspend fun applyCheats() {
+        val codes = withContext(Dispatchers.IO) { cheatStore.codesToApply(boxLink.sync.keyFor(game)) }
+        val view = baseGameScreenViewModel.retroGameView.retroGameViewFlow()
+        if (codes.isEmpty() && !cheatsApplied) return
+        view.resetCheat()
+        codes.forEachIndexed { index, code -> view.setCheat(index, true, code) }
+        cheatsApplied = codes.isNotEmpty()
+    }
+
+    private var cheatsApplied = false
 
     @Composable
     abstract fun GameScreen(viewModel: BaseGameScreenViewModel)
@@ -387,6 +415,7 @@ abstract class BaseGameActivity : ImmersiveActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == DIALOG_REQUEST) {
             Timber.i("Game menu dialog response: ${data?.extras.dump()}")
+            lifecycleScope.launch { applyCheats() }
             if (data?.getBooleanExtra(GameMenuContract.RESULT_RESET, false) == true) {
                 GlobalScope.launch {
                     baseGameScreenViewModel.reset()

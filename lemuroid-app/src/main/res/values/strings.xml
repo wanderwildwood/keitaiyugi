@@ -27,6 +27,20 @@
     <string name="settings_category_input">Input</string>
     <string name="settings_category_misc">Miscellaneous</string>
     <string name="settings_category_saves">Saves</string>
+    <string name="settings_category_box">Game box</string>
+    <string name="settings_title_box_address">Address</string>
+    <string name="settings_description_box_address">Not set</string>
+    <string name="settings_box_address_prompt">The address of your Batocera box, such as 192.168.1.50. The box shows it under Network Settings. Leave it empty to stop sharing.</string>
+    <string name="settings_title_box_sync">Sync now</string>
+    <string name="settings_box_sync_never">Games, saves and cheats from the box</string>
+    <string name="settings_box_sync_last">Last synced %1$s</string>
+    <string name="settings_box_sync_connecting">Looking for the game box</string>
+    <string name="settings_box_sync_games">Copying games: %1$d of %2$d</string>
+    <string name="settings_box_sync_cheats">Copying cheats</string>
+    <string name="settings_box_sync_library">Adding the new games to the library</string>
+    <string name="settings_box_sync_saves">Checking saves</string>
+    <string name="settings_box_sync_done">Games copied: %1$d. Saves received: %2$d, sent: %3$d.</string>
+    <string name="settings_box_sync_unreachable">The box did not answer. Check the address and the Wi-Fi.</string>
     <string name="settings_title_save_saves">Save a backup of your saves</string>
     <string name="settings_description_save_saves">Saves what each game has saved, your save states and their pictures to one file you pick. Not saved: the games themselves and these settings.</string>
     <string name="settings_title_restore_saves">Restore saves from a backup</string>
@@ -135,6 +149,9 @@
     <string name="game_menu_restart_armed">Restart — tap again</string>
     <string name="game_menu_quit">Quit</string>
     <string name="game_menu_settings">Settings</string>
+    <string name="game_menu_cheats">Cheats</string>
+    <string name="cheat_kind_game_genie">Game Genie %1$s</string>
+    <string name="cheat_kind_gameshark">GameShark %1$s</string>
     <string name="game_menu_state">State %1$s</string>
     <string name="game_menu_change_disk_button">Change Disk</string>
     <string name="game_menu_edit_touch_controls">Edit Controls</string>
@@ -228,6 +245,8 @@
         Put your Game Boy files in a directory on the phone or its card, then choose that directory in Settings. Subdirectories are fine. When the scan finishes your games appear.<br/><br/>
         <b>&#8226;Why aren\'t my games detected?</b><br/>
         This app plays Game Boy games and nothing else, so only <i>.gb</i> files are picked up. Zipped files are read as they are and do not need unpacking.<br/><br/>
+        <b>&#8226;What is the game box?</b><br/>
+        A Batocera box on your home network, if you have one. Give its address in Settings and the app copies its Game Boy games and cheats, and keeps saves in step both ways: before a game opens, after it closes, and when you press Sync now. Cheats are in the game menu, for games the box has cheats for. Only in-game saves are shared, not save states. Whatever a sync replaces is kept, on the box in <i>saves-sync-backup</i>.<br/><br/>
         <b>&#8226;Why is everything gray?</b><br/>
         Because the screen is. Games are drawn in four grays rather than the Game Boy\'s green, which is the whole of what E Ink can show and keeps the four shades apart. The palette can be changed per game from the menu during play.
     ]]></string>
@@ -264,7 +283,7 @@
     <!-- Heading. %1$s is the version number, e.g. 0.1.2 -->
     <string name="about_title">Handheld Games %1$s</string>
     <string name="about_privacy_heading">Privacy</string>
-    <string name="about_privacy">Your games, saves and settings stay on this phone, and the app reads only the folder you choose. It goes online only to fetch a cover picture for a game from libretro\'s thumbnail server; that request carries the game\'s title and the console, and nothing else. There are no ads, no analytics and no tracking, and nothing is collected about you. It shows a notification while the library is scanned or a game is running. If Android\'s backup is switched on, your phone may copy this app\'s saves and settings into its own backup; the developer never sees it.</string>
+    <string name="about_privacy">Your games, saves and settings stay on this phone, and the app reads only the folder you choose. It goes online only to fetch a cover picture for a game from libretro\'s thumbnail server; that request carries the game\'s title and the console, and nothing else. If you set a game box in Settings, games, saves and cheats are shared with that box over your own network. There are no ads, no analytics and no tracking, and nothing is collected about you. It shows a notification while the library is scanned or a game is running. If Android\'s backup is switched on, your phone may copy this app\'s saves and settings into its own backup; the developer never sees it.</string>
     <string name="about_terms_heading">Terms</string>
     <string name="about_terms">This app is free software under the GNU General Public License v3 only, inheriting Lemuroid\'s; the Game Boy core is GPL-2.0 with no \"or later\" clause. It comes with no warranty: use it at your own risk.</string>
     <!-- The short description, first under the heading: what the app is -->
