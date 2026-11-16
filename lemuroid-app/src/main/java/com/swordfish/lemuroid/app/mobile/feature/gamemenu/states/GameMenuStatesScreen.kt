@@ -10,6 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.mudita.mmd.components.text.TextMMD
 import com.swordfish.lemuroid.app.mobile.shared.compose.ui.PagedColumn
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.keepColors
 import com.swordfish.lemuroid.app.utils.android.settings.LemuroidSettingsMenuLink
 
 @Composable
@@ -31,7 +32,8 @@ fun GameMenuStatesScreen(
                     icon = {
                         if (entry.preview != null) {
                             Image(
-                                modifier = Modifier.size(48.dp),
+                                // The game's own picture: real colors in dark mode, as the game is.
+                                modifier = Modifier.size(48.dp).keepColors(),
                                 bitmap = entry.preview.asImageBitmap(),
                                 contentScale = ContentScale.Crop,
                                 contentDescription = null,
