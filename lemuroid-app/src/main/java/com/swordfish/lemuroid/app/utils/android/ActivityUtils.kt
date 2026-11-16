@@ -2,6 +2,7 @@ package com.swordfish.lemuroid.app.utils.android
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
+import com.swordfish.lemuroid.app.mobile.shared.compose.ui.DarkMode
 
 // TODO COMPOSE... How do they look in the post compose world?
 fun Activity.displayErrorDialog(
@@ -22,4 +23,5 @@ fun Activity.displayErrorDialog(
         .setPositiveButton(actionLabel) { _, _ -> action() }
         .setCancelable(false)
         .show()
+        .also { dialog -> dialog.window?.let { DarkMode.window(it.decorView) } }
 }
