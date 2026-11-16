@@ -275,7 +275,6 @@ private fun GeneralSettings() {
                     override fun reset() = DarkMode.set(context, false)
                 },
             title = { TextMMD(text = stringResource(id = R.string.settings_dark)) },
-            subtitle = { TextMMD(text = stringResource(id = R.string.settings_dark_note)) },
         )
     }
 }
