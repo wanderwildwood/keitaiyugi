@@ -107,7 +107,7 @@ object SavesBackup {
                 null
             }
         if (first == null || first.name != MANIFEST) throw BackupException(BackupException.Kind.NOT_A_BACKUP)
-        val lines = zip.readBytes().toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
+        val lines = readManifest(zip).toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
         val fields =
             lines.filter { !it.startsWith("file=") }.associate { it.substringBefore('=') to it.substringAfter('=') }
         if (fields["format"] != FORMAT) throw BackupException(BackupException.Kind.NOT_A_BACKUP)
@@ -186,6 +186,20 @@ object SavesBackup {
     }
 
     /** Leftovers of an interrupted write, which are not saves. */
+    // The manifest is a line per save file; one past this is not this app's backup.
+    private const val MAX_MANIFEST = 4 shl 20
+
+    private fun readManifest(zip: ZipInputStream): ByteArray {
+        val out = java.io.ByteArrayOutputStream()
+        val buffer = ByteArray(8192)
+        while (true) {
+            val n = zip.read(buffer)
+            if (n < 0) return out.toByteArray()
+            if (out.size() + n > MAX_MANIFEST) throw BackupException(BackupException.Kind.DAMAGED)
+            out.write(buffer, 0, n)
+        }
+    }
+
     private fun isScratch(name: String) = name.endsWith(".bak") || name.endsWith(".new") || name.endsWith(".tmp")
 
     /** A path inside one of the three folders, and nowhere else. */

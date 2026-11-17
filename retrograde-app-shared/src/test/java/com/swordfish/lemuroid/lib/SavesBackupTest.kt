@@ -113,6 +113,21 @@ class SavesBackupTest {
     }
 
     @Test
+    fun anOversizedManifestIsRefused() {
+        val zip =
+            ByteArrayOutputStream().also { out ->
+                ZipOutputStream(out).use { z ->
+                    z.putNextEntry(ZipEntry(SavesBackup.MANIFEST))
+                    z.write("format=${SavesBackup.FORMAT}\n".toByteArray())
+                    z.write(ByteArray(5 shl 20) { 'x'.code.toByte() })
+                    z.closeEntry()
+                }
+            }.toByteArray()
+        val staging = tmp.newFolder("staging")
+        refused(BackupException.Kind.DAMAGED, staging) { SavesBackup.stage(ByteArrayInputStream(zip), staging) }
+    }
+
+    @Test
     fun anotherZipIsNotABackup() {
         val other =
             ByteArrayOutputStream().also { out ->
