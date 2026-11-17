@@ -54,7 +54,13 @@ class ExternalGameLauncherActivity : ImmersiveActivity() {
 
         setContentView(R.layout.activity_loading)
         if (savedInstanceState == null) {
-            val gameId = intent.data?.pathSegments?.let { it[it.size - 1].toInt() }!!
+            // A link with no game number at its end is answered with the same "could not load"
+            // dialog as a game that fails to load, not a crash.
+            val gameId = intent.data?.pathSegments?.lastOrNull()?.toIntOrNull()
+            if (gameId == null) {
+                displayErrorMessage()
+                return
+            }
 
             lifecycleScope.launch {
                 loadingState.value = true
