@@ -1,6 +1,6 @@
 # Handheld Games — Privacy Policy
 
-Version 0.1.39. Last reviewed 15 November 2026.
+Version 0.1.40. Last reviewed 17 November 2026.
 
 ## The short version
 
@@ -25,9 +25,8 @@ Nothing of the app goes into Android's backup or a phone-to-phone transfer (`all
 From `lemuroid-app/src/main/AndroidManifest.xml`:
 
 - `INTERNET`: for the cover pictures described below, and to reach a game box on your own network if you have set one.
-- `ACCESS_NETWORK_STATE`: so background work knows whether a network is there, and so the game box is only tried on Wi-Fi.
+- `ACCESS_NETWORK_STATE`: so background work knows whether a network is there, and so the game box is tried on its own only on Wi-Fi or a wired network; Sync now tries it on whatever network the phone is on.
 - `POST_NOTIFICATIONS`: the notification shown while the library is scanned or a game is running.
-- `READ_EXTERNAL_STORAGE`: to read game files from the folder you point the app at (inherited from Lemuroid).
 - `VIBRATE`: haptic feedback from the on-screen controls, and game rumble.
 - `FOREGROUND_SERVICE_DATA_SYNC`: the kind of service the library scan and the game service are.
 

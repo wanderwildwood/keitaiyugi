@@ -49,9 +49,9 @@ surprising one. Mario does not.
   render between frames, so it has less to smear, and the ghosting is markedly better. Tried
   on the hardware, not argued from first principles.
 - **Mudita's design system.** Every screen goes through [MMD](https://github.com/mudita/MMD),
-  so it looks like the apps the phone shipped with: light, flat, high contrast. Upstream
-  defaults to a dark theme with colors taken from the wallpaper, both of which cost more than
-  they give here.
+  so it looks like the apps the phone shipped with: flat and high contrast, light unless Dark
+  mode is on in Settings. Upstream's colors taken from the wallpaper are gone; they cost more
+  than they give here.
 - **Paged lists.** Scrolling on E Ink is limited by the panel, not the processor, so the only
   thing that helps is producing fewer frames. The lists use MMD's, which page rather than
   glide.
@@ -76,7 +76,7 @@ puzzle and turn-based work that suits this screen better than most commercial re
 
 ## Where this is up to
 
-Version 0.1.24. It plays, on a real Kompakt.
+It plays, on a real Kompakt.
 Forked from Lemuroid at `53752bf2`.
 
 ## Getting it, and keeping it
