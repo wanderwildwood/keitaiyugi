@@ -61,17 +61,18 @@ class LemuroidLibrary(
         runCatching { splitSharedSaveKeys() }
             .onFailure { Timber.w(it, "Could not split saves that games share") }
 
-        var folderUnreadable = false
+        // Games not seen by this scan are removed only when the scan read everything: one that
+        // was stopped (cancelled) or failed part-way has not seen the games it did not reach.
         try {
             indexProviders(startedAtMs)
+            cleanUp(startedAtMs)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: com.swordfish.lemuroid.lib.storage.local.FolderUnreadableException) {
             // Nothing was seen, so nothing is gone: the games stay until the folder is chosen again.
-            folderUnreadable = true
             Timber.w(e, "Library indexing skipped: the chosen folder cannot be read")
         } catch (e: Throwable) {
-            Timber.e("Library indexing stopped due to exception", e)
-        } finally {
-            if (!folderUnreadable) cleanUp(startedAtMs)
+            Timber.e(e, "Library indexing stopped part-way; nothing removed")
         }
 
         val executionTime = System.currentTimeMillis() - startedAtMs

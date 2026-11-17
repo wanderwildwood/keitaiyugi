@@ -60,6 +60,16 @@ class GameService : DaggerService() {
         NotificationManagerCompat.from(this).cancel(NotificationsManager.GAME_RUNNING_NOTIFICATION_ID)
     }
 
+    // Android 15 and later give a data-sync service six hours, then call this; one that does
+    // not stop is ended with an error. The game was saved when it left the screen.
+    override fun onTimeout(
+        startId: Int,
+        fgsType: Int,
+    ) {
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
+
     override fun onDestroy() {
         serviceScope.cancel()
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)

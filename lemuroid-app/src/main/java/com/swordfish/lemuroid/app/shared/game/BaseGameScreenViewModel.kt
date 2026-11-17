@@ -146,8 +146,11 @@ class BaseGameScreenViewModel(
 
     private inline fun withLoading(block: () -> Unit) {
         loadingState.value = true
-        block()
-        loadingState.value = false
+        try {
+            block()
+        } finally {
+            loadingState.value = false
+        }
     }
 
     fun getGameState(): Flow<GameViewModelRetroGameView.GameState> {
@@ -288,8 +291,10 @@ class BaseGameScreenViewModel(
         if (loadingState.value) return
         viewModelScope.launch {
             withLoading {
-                val snapshot = saves.captureSaveSnapshot(true) ?: return@launch
-                saves.writeSaveSnapshot(snapshot)
+                // No snapshot means the game has not started yet (Back while it loads): there
+                // is nothing to save, and the game closes rather than staying stuck open.
+                val snapshot = saves.captureSaveSnapshot(true)
+                if (snapshot != null) saves.writeSaveSnapshot(snapshot)
                 sideEffects.requestSuccessfulFinish()
             }
         }
