@@ -83,14 +83,18 @@ class BoxState(private val folder: File) {
         }
     }
 
-    private fun <T> locked(block: () -> T): T {
-        folder.mkdirs()
-        RandomAccessFile(File(folder, "lock"), "rw").use { file ->
-            file.channel.lock().use { return block() }
+    // The file lock keeps other processes out; two threads of this one would instead collide on
+    // it (OverlappingFileLockException), so they take turns here first.
+    private fun <T> locked(block: () -> T): T =
+        synchronized(IN_PROCESS) {
+            folder.mkdirs()
+            RandomAccessFile(File(folder, "lock"), "rw").use { file ->
+                file.channel.lock().use { block() }
+            }
         }
-    }
 
     private companion object {
+        val IN_PROCESS = Any()
         const val SAVES = "saves.tsv"
         const val ROMS = "roms.tsv"
         const val TWINS = "twins.tsv"

@@ -83,8 +83,10 @@ class BoxSync(
                 target.parentFile?.mkdirs()
                 val part = File(target.parentFile, ".${entry.name}.part")
                 share.download("${BoxNames.romsFolder(system)}/${entry.name}", part)
-                if (target.exists()) target.delete()
-                if (!part.renameTo(target)) throw BoxUnreachableException("could not keep ${entry.name}")
+                if (!part.renameTo(target)) {
+                    part.delete()
+                    throw BoxUnreachableException("could not keep ${entry.name}")
+                }
                 copied++
             }
             records[key] = BoxState.RomRecord(entry.name, entry.size, entry.modified)
@@ -251,12 +253,13 @@ class BoxSync(
         file: File,
         data: ByteArray,
     ) {
+        // rename replaces the old file in one step on the phone's own storage; when it cannot,
+        // the old file stays as it was and the sync says the box could not be finished.
         val temp = File(file.parentFile, ".${file.name}.tmp")
         temp.writeBytes(data)
-        if (file.exists()) file.delete()
         if (!temp.renameTo(file)) {
-            file.writeBytes(data)
             temp.delete()
+            throw BoxUnreachableException("could not keep ${file.name}")
         }
     }
 }

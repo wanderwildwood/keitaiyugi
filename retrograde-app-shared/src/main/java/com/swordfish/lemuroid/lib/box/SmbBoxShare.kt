@@ -39,7 +39,8 @@ class SmbBoxShare private constructor(
         guarded {
             try {
                 disk.list(smb(folder))
-                    .filter { it.fileName != "." && it.fileName != ".." }
+                    // A name that could reach outside the folder it is copied into is passed over.
+                    .filter { BoxNames.isPlainName(it.fileName) }
                     .map { info ->
                         val isFolder =
                             (info.fileAttributes and FileAttributes.FILE_ATTRIBUTE_DIRECTORY.value) != 0L
@@ -57,7 +58,7 @@ class SmbBoxShare private constructor(
 
     override fun read(path: String): ByteArray =
         guarded {
-            openForRead(path).use { file -> file.inputStream.use { it.readBytes() } }
+            openForRead(path).use { file -> file.inputStream.use { readCapped(it, MAX_READ) } }
         }
 
     override fun download(
@@ -65,7 +66,7 @@ class SmbBoxShare private constructor(
         to: File,
     ) = guarded {
         openForRead(path).use { file ->
-            file.inputStream.use { input -> to.outputStream().use { input.copyTo(it, 1 shl 16) } }
+            file.inputStream.use { input -> to.outputStream().use { copyCapped(input, it, MAX_DOWNLOAD) } }
         }
         Unit
     }
@@ -138,6 +139,29 @@ class SmbBoxShare private constructor(
 
     companion object {
         const val SHARE_NAME = "share"
+
+        // Saves and cheat files are kilobytes and a handheld game a few megabytes; anything
+        // past these is not one, and is refused rather than read into memory or onto the card.
+        const val MAX_READ = 8L shl 20
+        const val MAX_DOWNLOAD = 128L shl 20
+
+        fun readCapped(input: java.io.InputStream, max: Long): ByteArray {
+            val out = java.io.ByteArrayOutputStream()
+            copyCapped(input, out, max)
+            return out.toByteArray()
+        }
+
+        fun copyCapped(input: java.io.InputStream, output: java.io.OutputStream, max: Long) {
+            val buffer = ByteArray(1 shl 16)
+            var total = 0L
+            while (true) {
+                val n = input.read(buffer)
+                if (n < 0) return
+                total += n
+                if (total > max) throw IOException("file on the box is larger than $max bytes")
+                output.write(buffer, 0, n)
+            }
+        }
 
         private val MISSING =
             setOf(

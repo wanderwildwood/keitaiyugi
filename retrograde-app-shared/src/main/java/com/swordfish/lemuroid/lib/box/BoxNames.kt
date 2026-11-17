@@ -36,6 +36,11 @@ object BoxNames {
 
     fun stem(name: String): String = name.substringBeforeLast('.')
 
+    /** A file name that stays inside the folder it is joined to: no separator, no NUL, not "." or "..". */
+    fun isPlainName(name: String): Boolean =
+        name.isNotEmpty() && name != "." && name != ".." &&
+            name.none { it == '/' || it == '\\' || it == '\u0000' }
+
     fun isRom(name: String): Boolean =
         !name.startsWith(".") && name.substringAfterLast('.', "").lowercase() in ROM_ENDINGS
 
