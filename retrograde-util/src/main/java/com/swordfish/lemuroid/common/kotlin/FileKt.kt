@@ -132,12 +132,16 @@ private fun readBytesUncompressedStream(inputStream: InputStream): ByteArray =
         return os.toByteArray()
     }
 
+// finishWrite is handed the stream still open: it flushes the file to storage, then closes it and
+// renames it into place. A stream closed before that cannot be flushed, and the rename could reach
+// the storage ahead of the data.
+
 /** Write bytes to file using AtomicFile to prevent corruption. */
 fun File.writeBytesAtomic(data: ByteArray) {
     val atomicFile = AtomicFile(this)
     val outputStream = atomicFile.startWrite()
     try {
-        outputStream.use { it.write(data) }
+        outputStream.write(data)
         atomicFile.finishWrite(outputStream)
     } catch (e: Throwable) {
         atomicFile.failWrite(outputStream)
@@ -156,7 +160,9 @@ fun File.writeTextAtomic(text: String) {
     val atomicFile = AtomicFile(this)
     val outputStream = atomicFile.startWrite()
     try {
-        outputStream.writer().use { it.write(text) }
+        val writer = outputStream.writer()
+        writer.write(text)
+        writer.flush()
         atomicFile.finishWrite(outputStream)
     } catch (e: Throwable) {
         atomicFile.failWrite(outputStream)
@@ -169,11 +175,10 @@ fun File.writeBytesCompressedAtomic(array: ByteArray) {
     val atomicFile = AtomicFile(this)
     val outputStream = atomicFile.startWrite()
     try {
-        ByteArrayInputStream(array).use { input ->
-            GZIPOutputStream(outputStream).use { usedOutput ->
-                input.copyTo(usedOutput)
-            }
-        }
+        val gzip = GZIPOutputStream(outputStream)
+        ByteArrayInputStream(array).use { input -> input.copyTo(gzip) }
+        gzip.finish()
+        gzip.flush()
         atomicFile.finishWrite(outputStream)
     } catch (e: Throwable) {
         atomicFile.failWrite(outputStream)

@@ -3,6 +3,7 @@ package com.swordfish.lemuroid.lib.box
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.saves.SaveKeys
 import java.io.File
+import java.io.FileOutputStream
 import java.net.URI
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
@@ -280,7 +281,11 @@ class BoxSync(
         // rename replaces the old file in one step on the phone's own storage; when it cannot,
         // the old file stays as it was and the sync says the box could not be finished.
         val temp = File(file.parentFile, ".${file.name}.tmp")
-        temp.writeBytes(data)
+        // On the storage before the rename, so the name never points at data not yet written.
+        FileOutputStream(temp).use { out ->
+            out.write(data)
+            out.fd.sync()
+        }
         if (!temp.renameTo(file)) {
             temp.delete()
             throw BoxUnreachableException("could not keep ${file.name}")
