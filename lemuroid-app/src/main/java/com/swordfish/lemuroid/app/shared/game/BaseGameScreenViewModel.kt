@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.swordfish.lemuroid.R
 import com.swordfish.lemuroid.app.mobile.feature.game.GameService
 import com.swordfish.lemuroid.app.mobile.feature.settings.SettingsManager
 import com.swordfish.lemuroid.app.shared.game.viewmodel.GameViewModelInput
@@ -287,6 +288,9 @@ class BaseGameScreenViewModel(
             }
         }
 
+    /** Set when leaving could not write the save; the next leave goes without it. */
+    private var saveFailedOnLeaving = false
+
     fun requestFinish() {
         if (loadingState.value) return
         viewModelScope.launch {
@@ -294,7 +298,13 @@ class BaseGameScreenViewModel(
                 // No snapshot means the game has not started yet (Back while it loads): there
                 // is nothing to save, and the game closes rather than staying stuck open.
                 val snapshot = saves.captureSaveSnapshot(true)
-                if (snapshot != null) saves.writeSaveSnapshot(snapshot)
+                val written = snapshot == null || saves.writeSaveSnapshot(snapshot)
+                if (!written && !saveFailedOnLeaving) {
+                    // The game stays open, so nothing is lost yet; leaving again goes without it.
+                    saveFailedOnLeaving = true
+                    sideEffects.showToast(appContext.getString(R.string.game_toast_save_failed))
+                    return@withLoading
+                }
                 sideEffects.requestSuccessfulFinish()
             }
         }

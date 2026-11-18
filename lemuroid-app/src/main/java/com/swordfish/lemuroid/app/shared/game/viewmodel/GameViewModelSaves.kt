@@ -77,8 +77,9 @@ class GameViewModelSaves(
         return SaveSnapshot(sramState, autoSaveState)
     }
 
-    suspend fun writeSaveSnapshot(snapshot: SaveSnapshot?) {
-        if (snapshot == null) return
+    /** False when the battery save could not be written; the state beside it is best effort. */
+    suspend fun writeSaveSnapshot(snapshot: SaveSnapshot?): Boolean {
+        if (snapshot == null) return true
         Timber.i(
             "GameViewModelSaves.write game=%s core=%s writingSram=%s writingAutoSave=%s",
             game.id,
@@ -86,8 +87,10 @@ class GameViewModelSaves(
             true,
             snapshot.autoSave != null,
         )
-        savesManager.setSaveRAM(game, snapshot.sram)
+        val written = savesManager.setSaveRAM(game, snapshot.sram)
+        if (!written) Timber.e("GameViewModelSaves.write game=%s: the battery save could not be written", game.id)
         snapshot.autoSave?.let { statesManager.setAutoSave(game, systemCoreConfig.coreID, it) }
+        return written
     }
 
     // On some cores unserialize fails with no reason. So we need to try multiple times.

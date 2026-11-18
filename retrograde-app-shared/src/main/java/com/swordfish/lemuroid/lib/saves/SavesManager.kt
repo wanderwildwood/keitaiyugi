@@ -36,11 +36,12 @@ class SavesManager(private val directoriesManager: DirectoriesManager) {
         }
     }
 
+    /** Writes the battery save. False when it could not be written, after a few tries. */
     suspend fun setSaveRAM(
         game: Game,
         data: ByteArray,
-    ) {
-        withContext(Dispatchers.IO) {
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
             val result =
                 runCatchingWithRetry(FILE_ACCESS_RETRIES) {
                     if (data.isEmpty()) {
@@ -50,7 +51,7 @@ class SavesManager(private val directoriesManager: DirectoriesManager) {
                     val saveFile = getSaveFile(getSaveRAMFileName(game))
                     saveFile.writeBytesAtomic(data)
                 }
-            result.getOrNull()
+            result.isSuccess
         }
     }
 
