@@ -3,6 +3,7 @@ package com.swordfish.lemuroid.lib.storage.local
 import android.content.Context
 import com.swordfish.lemuroid.common.kotlin.calculateCrc32
 import com.swordfish.lemuroid.common.kotlin.toStringCRC32
+import com.swordfish.lemuroid.lib.box.BoxNames
 import com.swordfish.lemuroid.lib.storage.BaseStorageFile
 import com.swordfish.lemuroid.lib.storage.StorageFile
 import com.swordfish.lemuroid.lib.storage.scanner.SerialScanner
@@ -114,6 +115,9 @@ object DocumentFileParser {
         fileSize: Long,
     ): Boolean {
         if (fileSize <= 0 || entry.compressedSize <= 0) return false
+        // The entry's name becomes the name of the game's file in the cache, and of its saves: a
+        // name with a folder in it, or one that climbs out with "..", is not taken for a game.
+        if (!BoxNames.isPlainName(entry.name)) return false
         return (entry.compressedSize.toFloat() / fileSize.toFloat()) > SINGLE_ARCHIVE_THRESHOLD
     }
 }

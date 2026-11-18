@@ -5,6 +5,7 @@ import com.swordfish.lemuroid.lib.library.db.entity.DataFile
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.saves.SaveKeys
 import java.io.File
+import java.io.IOException
 
 object GameCacheUtils {
     fun getDataFileForGame(
@@ -14,7 +15,7 @@ object GameCacheUtils {
         dataFile: DataFile,
     ): File {
         val gamesCacheDir = getCacheDirForGame(folderName, game, context)
-        return File(gamesCacheDir, dataFile.fileName)
+        return inside(gamesCacheDir, dataFile.fileName)
     }
 
     fun getCacheFileForGame(
@@ -23,7 +24,19 @@ object GameCacheUtils {
         game: Game,
     ): File {
         val gamesCacheDir = getCacheDirForGame(folderName, game, context)
-        return File(gamesCacheDir, game.fileName)
+        return inside(gamesCacheDir, game.fileName)
+    }
+
+    /** [name] joined to [dir], refused when it would land anywhere but directly inside it. */
+    private fun inside(
+        dir: File,
+        name: String,
+    ): File {
+        val file = File(dir, name)
+        if (file.canonicalFile.parentFile != dir.canonicalFile) {
+            throw IOException("$name is not a plain file name")
+        }
+        return file
     }
 
     private fun getCacheDirForGame(

@@ -24,6 +24,7 @@ import androidx.documentfile.provider.DocumentFile
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.io.PushbackInputStream
 import java.security.MessageDigest
@@ -63,16 +64,40 @@ fun InputStream.writeToFile(file: File) {
     }
 }
 
+/** Far more than any game this app plays; a zip entry past it is refused, not unpacked. */
+const val MAX_EXTRACTED_BYTES = 128L shl 20
+
+/**
+ * Unpacks [entryName] to [gameFile], at most [maxBytes] of it. It is written beside the file and
+ * moved into place only when whole, so a copy cut short is never taken for the game later.
+ */
 fun ZipInputStream.extractEntryToFile(
     entryName: String,
     gameFile: File,
+    maxBytes: Long = MAX_EXTRACTED_BYTES,
 ) {
     this.use { inputStream ->
         while (true) {
-            val entry = inputStream.nextEntry
+            val entry = inputStream.nextEntry ?: throw IOException("$entryName is not in the archive")
             if (entry.name == entryName) break
         }
-        inputStream.writeToFile(gameFile)
+        val part = File(gameFile.parentFile, ".${gameFile.name}.part")
+        try {
+            part.outputStream().use { output ->
+                val buffer = ByteArray(1 shl 16)
+                var total = 0L
+                while (true) {
+                    val n = inputStream.read(buffer)
+                    if (n < 0) break
+                    total += n
+                    if (total > maxBytes) throw IOException("$entryName is larger than $maxBytes bytes")
+                    output.write(buffer, 0, n)
+                }
+            }
+            if (!part.renameTo(gameFile)) throw IOException("could not keep $entryName")
+        } finally {
+            part.delete()
+        }
     }
 }
 
