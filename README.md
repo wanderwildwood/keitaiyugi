@@ -9,7 +9,7 @@ can be on a quiet afternoon.
 | | |
 |---|---|
 | ![First start: choose a directory of Game Boy files](screenshots/1-setup.png) | ![The settings list](screenshots/2-settings.png) |
-| ![How to use it, in the About box](screenshots/3-help.png) | ![About: Privacy, Terms and Licenses](screenshots/4-about.png) |
+| ![About: Privacy, Terms and Licenses](screenshots/4-about.png) | |
 
 No game is bundled in the app and no commercial game appears in this repository. The
 screenshots show the app before a directory of Game Boy files is chosen; freely licensed
@@ -40,7 +40,7 @@ surprising one. Mario does not.
 ## What is different from Lemuroid
 
 - **One console.** Twenty bundled cores become one, and four ABIs become one — the Kompakt is
-  arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is 6.8 MB.
+  arm64-v8a. Upstream's debug APK is 212 MB; the signed release here is about 8 MB.
 - **Gray, not green.** Upstream renders the Game Boy's own green LCD. This panel has no color
   to show it in, so the tint arrives only as contrast lost between the four shades that are
   the whole picture. The palette is a true gray ramp.
@@ -55,7 +55,10 @@ surprising one. Mario does not.
 - **Paged lists.** Scrolling on E Ink is limited by the panel, not the processor, so the only
   thing that helps is producing fewer frames. The lists use MMD's, which page rather than
   glide.
-- **Gray cover art.** Converted properly rather than left for the panel to do badly.
+- **Gray cover art.** Converted properly rather than left for the panel to do badly. From the
+  internet the app fetches only a game's cover picture, from libretro's public thumbnail server
+  (thumbnails.libretro.com, over https); the request carries the game's title and the console,
+  and nothing else.
 - **No system chooser.** There is one system; the tab opens the games.
 
 ## Games
