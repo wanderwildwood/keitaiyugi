@@ -165,11 +165,9 @@ class GameLoader(
         context: Context,
         coreID: CoreID,
     ): File? {
-        val files =
-            sequenceOf(
-                File(context.applicationInfo.nativeLibraryDir),
-                context.filesDir,
-            )
+        // Only the cores built into the APK; never a file in the app's own storage, which an
+        // older version may have downloaded unchecked.
+        val files = sequenceOf(File(context.applicationInfo.nativeLibraryDir))
 
         return files
             .flatMap { it.walkBottomUp() }

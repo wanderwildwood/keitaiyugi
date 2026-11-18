@@ -42,7 +42,7 @@ One host: **thumbnails.libretro.com**, libretro's public cover-art server, over 
 
 **A game box, only if you set one.** In Settings you can give the address of a Batocera box on your own network. The app then reads that box's shared folder (the file share Batocera offers on the home network, as a guest): it copies the Game Boy and Game Boy Color games and their cheat files to the phone, and keeps each game's battery save in step in both directions, when the app opens, when a game opens or closes, and when you press Sync now. When it sends a save it moves the box's older save, and the box's own resume point for that game, into the box's `saves-sync-backup` folder rather than deleting them. All of this goes between the phone and the address you typed and nowhere else; it is not encrypted, as is usual for a file share on a home network. The developer has no part in it.
 
-The Gambatte core is inside the app. The code that can download a core from GitHub exists in the source, from Lemuroid, but it looks for a bundled core first and finds it, so it does not run in this build.
+The Gambatte core is inside the app, and it is the only core the app will load. Lemuroid's code that downloaded a missing core from GitHub has been taken out: a core that is not in the app fails to load instead.
 
 In About, "feed the llamas" opens a donation page (square.link) and wanderthe.dev opens the author's website, in your browser and only when you press them. The app does not fetch either page and learns nothing about whether you went.
 

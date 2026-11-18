@@ -21,10 +21,6 @@ package com.swordfish.lemuroid.ext.feature.core
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
-import android.os.Build
-import com.swordfish.lemuroid.common.files.safeDelete
-import com.swordfish.lemuroid.common.kotlin.writeToFile
 import com.swordfish.lemuroid.lib.core.CoreUpdater
 import com.swordfish.lemuroid.lib.library.CoreID
 import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
@@ -35,20 +31,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
-import timber.log.Timber
 import java.io.File
 
 class CoreUpdaterImpl(
     private val directoriesManager: DirectoriesManager,
     retrofit: Retrofit,
 ) : CoreUpdater {
-    // This is the last tagged versions of cores.
-    companion object {
-        private const val CORES_VERSION = "1.17.0"
-    }
-
-    private val baseUri = Uri.parse("https://github.com/Swordfish90/LemuroidCores/")
-
     private val api = retrofit.create(CoreUpdater.CoreManagerApi::class.java)
 
     override suspend fun downloadCores(
@@ -62,11 +50,20 @@ class CoreUpdaterImpl(
             .collect()
     }
 
+    /**
+     * The core must be the one built into the APK. Upstream fell back to downloading a missing
+     * core from GitHub and loading it unchecked; that fallback is gone, so a missing core fails
+     * here, and any core an older version downloaded is deleted rather than ever loaded.
+     */
     private suspend fun retrieveFile(
         context: Context,
         coreID: CoreID,
     ) {
-        findBundledLibrary(context, coreID) ?: downloadCoreFromGithub(coreID)
+        withContext(Dispatchers.IO) {
+            directoriesManager.getCoresDirectory().listFiles()?.forEach { runCatching { it.deleteRecursively() } }
+        }
+        findBundledLibrary(context, coreID)
+            ?: throw IllegalStateException("The core ${coreID.coreName} is not in the app")
     }
 
     private suspend fun retrieveAssets(
@@ -75,56 +72,6 @@ class CoreUpdaterImpl(
     ) {
         CoreID.getAssetManager(coreID)
             .retrieveAssetsIfNeeded(api, directoriesManager, sharedPreferences)
-    }
-
-    private suspend fun downloadCoreFromGithub(coreID: CoreID): File {
-        Timber.i("Downloading core $coreID from github")
-
-        val mainCoresDirectory = directoriesManager.getCoresDirectory()
-        val coresDirectory =
-            File(mainCoresDirectory, CORES_VERSION).apply {
-                mkdirs()
-            }
-
-        val libFileName = coreID.libretroFileName
-        val destFile = File(coresDirectory, libFileName)
-
-        if (destFile.exists()) {
-            return destFile
-        }
-
-        runCatching {
-            deleteOutdatedCores(mainCoresDirectory, CORES_VERSION)
-        }
-
-        val uri =
-            baseUri.buildUpon()
-                .appendEncodedPath("raw/$CORES_VERSION/lemuroid_core_${coreID.coreName}/src/main/jniLibs/")
-                .appendPath(Build.SUPPORTED_ABIS.first())
-                .appendPath(libFileName)
-                .build()
-
-        try {
-            downloadFile(uri, destFile)
-            return destFile
-        } catch (e: Throwable) {
-            destFile.safeDelete()
-            throw e
-        }
-    }
-
-    private suspend fun downloadFile(
-        uri: Uri,
-        destFile: File,
-    ) {
-        val response = api.downloadFile(uri.toString())
-
-        if (!response.isSuccessful) {
-            Timber.e("Download core response was unsuccessful")
-            throw Exception(response.errorBody()?.string() ?: "Download error")
-        }
-
-        response.body()?.writeToFile(destFile)
     }
 
     private suspend fun findBundledLibrary(
@@ -136,13 +83,4 @@ class CoreUpdaterImpl(
                 .walkBottomUp()
                 .firstOrNull { it.name == coreID.libretroFileName }
         }
-
-    private fun deleteOutdatedCores(
-        mainCoresDirectory: File,
-        applicationVersion: String,
-    ) {
-        mainCoresDirectory.listFiles()
-            ?.filter { it.name != applicationVersion }
-            ?.forEach { it.deleteRecursively() }
-    }
 }
