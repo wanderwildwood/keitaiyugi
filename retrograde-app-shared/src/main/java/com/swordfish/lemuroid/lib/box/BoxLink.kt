@@ -39,8 +39,9 @@ class BoxLink(
     }
 
     /**
-     * @throws BoxUnreachableException when the box does not answer in time, or when what answers
-     * at its address is not the box the first sync found there (see [BoxIdentity]).
+     * @throws BoxUnreachableException when the box does not answer in time, and
+     * [BoxNotTheBoxException] when what answers at its address is not the box the first sync
+     * found there (see [BoxIdentity]).
      */
     fun open(patient: Boolean): BoxShare {
         val share = SmbBoxShare.connect(address(), if (patient) PATIENT_SECONDS else QUICK_SECONDS)
@@ -50,7 +51,7 @@ class BoxLink(
             BoxIdentity.Verdict.REMEMBER -> prefs.edit().putString(PREF_GUID, share.serverGuid).apply()
             BoxIdentity.Verdict.DIFFERENT -> {
                 share.close()
-                throw BoxUnreachableException("another machine answers at the box's address")
+                throw BoxNotTheBoxException("another machine answers at the box's address")
             }
         }
         return share

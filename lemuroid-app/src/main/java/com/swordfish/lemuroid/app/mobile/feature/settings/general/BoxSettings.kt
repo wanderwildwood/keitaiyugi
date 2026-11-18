@@ -50,7 +50,7 @@ fun BoxSettings(
     val status by runner.status.collectAsState()
     val working =
         status !is BoxSyncRunner.Status.Idle && status !is BoxSyncRunner.Status.Done &&
-            status !is BoxSyncRunner.Status.Unreachable
+            status !is BoxSyncRunner.Status.Unreachable && status !is BoxSyncRunner.Status.NotTheBox
 
     LemuroidCardSettingsGroup(
         title = { TextMMD(text = stringResource(id = R.string.settings_category_box)) },
@@ -135,4 +135,5 @@ private fun statusText(
         is BoxSyncRunner.Status.Done ->
             stringResource(id = R.string.settings_box_sync_done, status.games, status.savesIn, status.savesOut)
         BoxSyncRunner.Status.Unreachable -> stringResource(id = R.string.settings_box_sync_unreachable)
+        BoxSyncRunner.Status.NotTheBox -> stringResource(id = R.string.settings_box_sync_not_the_box)
     }

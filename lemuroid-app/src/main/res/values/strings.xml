@@ -41,6 +41,7 @@
     <string name="settings_box_sync_saves">Checking saves</string>
     <string name="settings_box_sync_done">Games copied: %1$d. Saves received: %2$d, sent: %3$d.</string>
     <string name="settings_box_sync_unreachable">The box did not answer. Check the address and the Wi-Fi.</string>
+    <string name="settings_box_sync_not_the_box">A different machine answers at this address. If you replaced or reinstalled the box, save its address again.</string>
     <string name="settings_title_save_saves">Save a backup of your saves</string>
     <string name="settings_description_save_saves">Saves what each game has saved, your save states and their pictures to one file you pick. Not saved: the games themselves and these settings.</string>
     <string name="settings_title_restore_saves">Restore saves from a backup</string>
@@ -251,7 +252,7 @@
         <b>&#8226;Why aren\'t my games detected?</b><br/>
         This app plays Game Boy games and nothing else, so only <i>.gb</i> files are picked up. Zipped files are read as they are and do not need unpacking.<br/><br/>
         <b>&#8226;What is the game box?</b><br/>
-        A Batocera box on your home network, if you have one. Give its address in Settings and the app copies its Game Boy games and cheats, and keeps saves in step both ways: before a game opens, after it closes, and when you press Sync now. Cheats are in the game menu, for games the box has cheats for. Only in-game saves are shared, not save states. Whatever a sync replaces is kept, on the box in <i>saves-sync-backup</i>.<br/><br/>
+        A Batocera box on your home network, if you have one. Give its address in Settings and the app copies its Game Boy games and cheats, and keeps saves in step both ways: before a game opens, after it closes, and when you press Sync now. Cheats are in the game menu, for games the box has cheats for. Only in-game saves are shared, not save states. Whatever a sync replaces is kept, on the box in <i>saves-sync-backup</i>. If you replace or reinstall the box, save its address again in Settings.<br/><br/>
         <b>&#8226;Why is everything gray?</b><br/>
         Because the screen is. Games are drawn in four grays rather than the Game Boy\'s green, which is the whole of what E Ink can show and keeps the four shades apart. The palette can be changed per game from the menu during play.
     ]]></string>

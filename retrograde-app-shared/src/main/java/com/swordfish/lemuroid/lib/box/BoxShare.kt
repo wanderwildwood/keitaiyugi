@@ -13,7 +13,10 @@ data class BoxEntry(
 )
 
 /** The box did not answer, or stopped answering partway. */
-class BoxUnreachableException(message: String, cause: Throwable? = null) : IOException(message, cause)
+open class BoxUnreachableException(message: String, cause: Throwable? = null) : IOException(message, cause)
+
+/** What answers at the box's address is not the box the first sync found there (see [BoxIdentity]). */
+class BoxNotTheBoxException(message: String) : BoxUnreachableException(message)
 
 /**
  * The game box's shared drive: the folder a Batocera box shares on the home network, with

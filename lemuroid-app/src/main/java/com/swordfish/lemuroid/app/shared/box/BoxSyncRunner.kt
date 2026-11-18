@@ -4,6 +4,7 @@ import android.content.Context
 import com.swordfish.lemuroid.app.shared.library.LibraryIndexScheduler
 import com.swordfish.lemuroid.app.shared.library.PendingOperationsMonitor
 import com.swordfish.lemuroid.lib.box.BoxLink
+import com.swordfish.lemuroid.lib.box.BoxNotTheBoxException
 import com.swordfish.lemuroid.lib.library.db.RetrogradeDatabase
 import com.swordfish.lemuroid.lib.library.db.entity.Game
 import com.swordfish.lemuroid.lib.preferences.SharedPreferencesHelper
@@ -45,6 +46,9 @@ class BoxSyncRunner(
         data class Done(val games: Int, val savesIn: Int, val savesOut: Int) : Status
 
         data object Unreachable : Status
+
+        /** Something answers at the address, but not the box the first sync found there. */
+        data object NotTheBox : Status
     }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -96,7 +100,12 @@ class BoxSyncRunner(
                 state.value = Status.Done(games.copied, saves.pulled, saves.pushed)
             } catch (e: Exception) {
                 Timber.i(e, "Game box: sync stopped")
-                state.value = if (byHand) Status.Unreachable else Status.Idle
+                state.value =
+                    when {
+                        !byHand -> Status.Idle
+                        e is BoxNotTheBoxException -> Status.NotTheBox
+                        else -> Status.Unreachable
+                    }
             } finally {
                 running.set(false)
             }
