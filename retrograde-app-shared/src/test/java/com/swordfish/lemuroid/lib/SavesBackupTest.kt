@@ -69,7 +69,7 @@ class SavesBackupTest {
         val staging = tmp.newFolder("staging")
         val staged = SavesBackup.stage(ByteArrayInputStream(zip), staging)
         assertEquals(4, staged.size)
-        assertEquals(4, SavesBackup.apply(staging, other))
+        assertEquals(4, SavesBackup.apply(staging, other, tmp.newFolder("aside")))
         assertArrayEquals(srm, File(other.saves, "Lighthouse Quest.srm").readBytes())
         assertArrayEquals(state, File(other.states, "gambatte/Lighthouse Quest.gb.state").readBytes())
         assertTrue(File(other.previews, "Tides.gb.slot1.jpg").exists())
@@ -87,9 +87,53 @@ class SavesBackupTest {
         File(other.saves, "Lighthouse Quest.srm.bak").writeBytes(byteArrayOf(0))
         val staging = tmp.newFolder("staging")
         SavesBackup.stage(ByteArrayInputStream(zip), staging)
-        SavesBackup.apply(staging, other)
+        SavesBackup.apply(staging, other, tmp.newFolder("aside"))
         assertArrayEquals(srm, File(other.saves, "Lighthouse Quest.srm").readBytes())
         assertFalse(File(other.saves, "Lighthouse Quest.srm.bak").exists())
+    }
+
+    @Test
+    fun anAutoStateTheBackupLacksIsSetAsideSoTheRestoredSaveOpens() {
+        val backedUp = folders(tmp.newFolder())
+        File(backedUp.saves, "Lighthouse Quest.srm").writeBytes(srm)
+        val zip = backupOf(backedUp)
+
+        val other = folders(tmp.newFolder())
+        File(other.states, "gambatte").mkdirs()
+        File(other.states, "gambatte/Lighthouse Quest.gb.state").writeBytes(state)
+        File(other.states, "gambatte/Lighthouse Quest.gb.state.metadata").writeText("{}")
+        File(other.states, "gambatte/Lighthouse Quest.gb.slot1").writeBytes(state)
+        File(other.states, "gambatte/Tides.gb.state").writeBytes(state)
+        val aside = tmp.newFolder("aside")
+        val staging = tmp.newFolder("staging")
+        SavesBackup.stage(ByteArrayInputStream(zip), staging)
+        SavesBackup.apply(staging, other, aside, java.time.Instant.parse("2026-11-18T20:00:00Z"))
+
+        assertArrayEquals(srm, File(other.saves, "Lighthouse Quest.srm").readBytes())
+        assertFalse(File(other.states, "gambatte/Lighthouse Quest.gb.state").exists())
+        assertFalse(File(other.states, "gambatte/Lighthouse Quest.gb.state.metadata").exists())
+        val kept = aside.listFiles()!!.single()
+        assertTrue(kept.name.endsWith("-restore"))
+        assertArrayEquals(state, File(kept, "gambatte/Lighthouse Quest.gb.state").readBytes())
+        assertTrue(File(kept, "gambatte/Lighthouse Quest.gb.state.metadata").exists())
+        // A slot, and another game's auto state, stay where they are.
+        assertTrue(File(other.states, "gambatte/Lighthouse Quest.gb.slot1").exists())
+        assertTrue(File(other.states, "gambatte/Tides.gb.state").exists())
+    }
+
+    @Test
+    fun anAutoStateTheBackupBringsReplacesTheOneHere() {
+        val zip = backupOf(phone())
+        val other = folders(tmp.newFolder())
+        File(other.states, "gambatte").mkdirs()
+        File(other.states, "gambatte/Lighthouse Quest.gb.state").writeBytes(byteArrayOf(7))
+        val aside = tmp.newFolder("aside")
+        val staging = tmp.newFolder("staging")
+        SavesBackup.stage(ByteArrayInputStream(zip), staging)
+        SavesBackup.apply(staging, other, aside)
+
+        assertArrayEquals(state, File(other.states, "gambatte/Lighthouse Quest.gb.state").readBytes())
+        assertTrue(aside.listFiles().isNullOrEmpty())
     }
 
     @Test

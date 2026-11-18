@@ -155,13 +155,22 @@ object SavesBackup {
     /**
      * Moves what [stage] left in [staging] into [folders], each file over the one of the same name,
      * and empties [staging]. Returns how many files were put in place.
+     *
+     * A game resumes from its auto state, which carries its battery save inside it, unless the
+     * battery save is clearly the newer of the two. A restored battery save is as old as the backup,
+     * so an auto state here that the backup does not replace would be opened instead and would
+     * write its own save back over the restored one. Such a state is moved into a folder of its
+     * own under [asideDir], not deleted.
      */
     fun apply(
         staging: File,
         folders: Folders,
+        asideDir: File,
+        now: Instant = Instant.now(),
     ): Int {
         var count = 0
         try {
+            setStaleAutoStatesAside(staging, folders, File(asideDir, "${stamp(now)}-restore"))
             for ((name, dir) in folders.byName()) {
                 val from = File(staging, name)
                 if (!from.isDirectory) continue
@@ -185,7 +194,45 @@ object SavesBackup {
         return count
     }
 
-    /** Leftovers of an interrupted write, which are not saves. */
+    private fun setStaleAutoStatesAside(
+        staging: File,
+        folders: Folders,
+        to: File,
+    ) {
+        val restoredSaves =
+            File(staging, "saves").listFiles { file -> file.isFile && file.name.endsWith(".srm") }
+                .orEmpty()
+                .mapTo(HashSet()) { it.name.removeSuffix(".srm") }
+        if (restoredSaves.isEmpty()) return
+        val restoredStates = File(staging, "states")
+        for (core in folders.states.listFiles { file -> file.isDirectory }.orEmpty()) {
+            for (file in core.listFiles { file -> file.isFile }.orEmpty()) {
+                val key = autoStateKey(file.name) ?: continue
+                if (SaveKeys.stem(key) !in restoredSaves) continue
+                // The backup brings its own auto state for this game: that one is meant.
+                if (File(File(restoredStates, core.name), file.name).isFile) continue
+                val kept = File(to, core.name)
+                kept.mkdirs()
+                val target = File(kept, file.name)
+                if (!file.renameTo(target)) {
+                    file.copyTo(target, overwrite = true)
+                    file.delete()
+                }
+            }
+        }
+    }
+
+    /** The save key of an auto state (`<key>.state`) or its notes (`<key>.state.metadata`). */
+    private fun autoStateKey(name: String): String? =
+        when {
+            name.endsWith(".state") -> name.removeSuffix(".state")
+            name.endsWith(".state.metadata") -> name.removeSuffix(".state.metadata")
+            else -> null
+        }?.takeIf { it.isNotEmpty() }
+
+    private fun stamp(now: Instant): String =
+        java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.US).format(java.util.Date.from(now))
+
     // The manifest is a line per save file; one past this is not this app's backup.
     private const val MAX_MANIFEST = 4 shl 20
 
@@ -200,6 +247,7 @@ object SavesBackup {
         }
     }
 
+    /** Leftovers of an interrupted write, which are not saves. */
     private fun isScratch(name: String) = name.endsWith(".bak") || name.endsWith(".new") || name.endsWith(".tmp")
 
     /** A path inside one of the three folders, and nowhere else. */

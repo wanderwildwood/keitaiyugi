@@ -67,7 +67,8 @@ object SavesBackupFiles {
                 staging.deleteRecursively()
                 return@withContext Result.Unreadable
             }
-            runCatching { Result.Done(SavesBackup.apply(staging, folders(context))) }
+            val aside = DirectoriesManager(context.applicationContext).getReplacedSavesDirectory()
+            runCatching { Result.Done(SavesBackup.apply(staging, folders(context), aside)) }
                 .getOrElse { Result.StoppedPartway }
         }
 }
