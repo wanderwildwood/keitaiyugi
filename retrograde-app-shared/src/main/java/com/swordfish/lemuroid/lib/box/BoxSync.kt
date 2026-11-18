@@ -84,12 +84,17 @@ class BoxSync(
                 target.isFile && target.length() == entry.size &&
                     (record == null || record.modified == entry.modified)
             if (!upToDate) {
+                // A file larger than any handheld game is passed over, and the sync goes on.
+                if (entry.size > SmbBoxShare.MAX_DOWNLOAD) return@forEachIndexed
                 target.parentFile?.mkdirs()
                 val part = File(target.parentFile, ".${entry.name}.part")
-                share.download("${BoxNames.romsFolder(system)}/${entry.name}", part)
-                if (!part.renameTo(target)) {
+                try {
+                    share.download("${BoxNames.romsFolder(system)}/${entry.name}", part)
+                    if (!part.renameTo(target)) throw BoxUnreachableException("could not keep ${entry.name}")
+                } catch (e: BoxFileTooLargeException) {
+                    return@forEachIndexed
+                } finally {
                     part.delete()
-                    throw BoxUnreachableException("could not keep ${entry.name}")
                 }
                 copied++
             }
@@ -111,8 +116,16 @@ class BoxSync(
             if (entry.isFolder || BoxNames.cheatFileStem(entry.name) !in stems) continue
             val target = File(cheatsDir, entry.name)
             if (target.isFile && target.length() == entry.size) continue
+            // A file larger than any cheat file is passed over, and the sync goes on.
+            if (entry.size > SmbBoxShare.MAX_READ) continue
+            val data =
+                try {
+                    share.read("${BoxNames.CHEATS_FOLDER}/${entry.name}")
+                } catch (e: BoxFileTooLargeException) {
+                    continue
+                }
             cheatsDir.mkdirs()
-            writeAtomic(target, share.read("${BoxNames.CHEATS_FOLDER}/${entry.name}"))
+            writeAtomic(target, data)
             copied++
         }
         return copied
@@ -128,7 +141,14 @@ class BoxSync(
         for (game in games) {
             val key = keyFor(game) ?: continue
             val listing = listings.getOrPut(key.system) { share.list(BoxNames.savesFolder(key.system)) }
-            when (syncSave(share, game, listing)) {
+            val action =
+                try {
+                    syncSave(share, game, listing)
+                } catch (e: BoxFileTooLargeException) {
+                    // Not a save; the other games' saves still go.
+                    SaveAction.NOTHING
+                }
+            when (action) {
                 SaveAction.PULL -> pulled++
                 SaveAction.PUSH -> pushed++
                 SaveAction.NOTHING -> Unit

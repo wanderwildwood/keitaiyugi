@@ -136,7 +136,7 @@ class SmbBoxShare private constructor(
         } catch (e: SMBRuntimeException) {
             throw BoxUnreachableException(e.message ?: "share", e)
         } catch (e: IOException) {
-            if (e is BoxUnreachableException) throw e
+            if (e is BoxUnreachableException || e is BoxFileTooLargeException) throw e
             throw BoxUnreachableException(e.message ?: "share", e)
         }
 
@@ -161,7 +161,7 @@ class SmbBoxShare private constructor(
                 val n = input.read(buffer)
                 if (n < 0) return
                 total += n
-                if (total > max) throw IOException("file on the box is larger than $max bytes")
+                if (total > max) throw BoxFileTooLargeException("file on the box is larger than $max bytes")
                 output.write(buffer, 0, n)
             }
         }

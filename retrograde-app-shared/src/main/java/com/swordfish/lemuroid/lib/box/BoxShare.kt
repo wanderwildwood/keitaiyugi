@@ -18,6 +18,9 @@ open class BoxUnreachableException(message: String, cause: Throwable? = null) : 
 /** What answers at the box's address is not the box the first sync found there (see [BoxIdentity]). */
 class BoxNotTheBoxException(message: String) : BoxUnreachableException(message)
 
+/** One file on the box is larger than any game, save or cheat file; the box itself is fine. */
+class BoxFileTooLargeException(message: String) : IOException(message)
+
 /**
  * The game box's shared drive: the folder a Batocera box shares on the home network, with
  * `roms`, `saves` and `cheats` inside it. Paths are relative to that folder and use `/`.

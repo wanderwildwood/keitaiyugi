@@ -1,6 +1,7 @@
 package com.swordfish.lemuroid.lib
 
 import com.swordfish.lemuroid.lib.box.BoxEntry
+import com.swordfish.lemuroid.lib.box.BoxFileTooLargeException
 import com.swordfish.lemuroid.lib.box.BoxKey
 import com.swordfish.lemuroid.lib.box.BoxNames
 import com.swordfish.lemuroid.lib.box.BoxShare
@@ -26,6 +27,9 @@ class BoxSyncTest {
         var clock = 1_000_000L
         var reads = 0
 
+        /** Files that read as larger than the share lets through. */
+        val tooLarge = HashSet<String>()
+
         fun put(
             path: String,
             data: String,
@@ -44,6 +48,7 @@ class BoxSyncTest {
 
         override fun read(path: String): ByteArray {
             reads++
+            if (path in tooLarge) throw BoxFileTooLargeException(path)
             return files.getValue(path).first
         }
 
@@ -175,6 +180,26 @@ class BoxSyncTest {
 
         share.put("roms/gb/Kirby's Dream Land (USA).zip", "kirby")
         assertEquals(1, sync.syncGames(share, emptyList()).copied)
+    }
+
+    @Test
+    fun aFileTooLargeOnTheBoxIsPassedOverAndTheSyncGoesOn() {
+        share.put("roms/gb/Huge (World).zip", "huge")
+        share.tooLarge += "roms/gb/Huge (World).zip"
+        share.put("roms/gb/Tetris (World).zip", "tetris")
+        share.put("${BoxNames.CHEATS_FOLDER}/Tetris (World) (Game Genie).cht", "huge cheats")
+        share.tooLarge += "${BoxNames.CHEATS_FOLDER}/Tetris (World) (Game Genie).cht"
+        share.put("${BoxNames.CHEATS_FOLDER}/Tetris (World).cht", "cheats")
+
+        assertEquals(1, sync.syncGames(share, emptyList()).copied)
+        assertEquals("tetris", File(roms, "gb/Tetris (World).zip").readText())
+        assertEquals(listOf("Tetris (World).zip"), File(roms, "gb").list()!!.toList())
+        assertEquals(1, sync.syncCheats(share))
+        assertEquals(listOf("Tetris (World).cht"), cheats.list()!!.toList())
+
+        val game = boxGame("gb", "Tetris (World).zip")
+        share.put("saves/gb/Tetris (World).srm", "box save")
+        assertEquals(1, sync.syncSaves(share, listOf(game)).pulled)
     }
 
     @Test
@@ -369,7 +394,8 @@ class BoxSyncTest {
 
         assertEquals(3, sync.syncCheats(share))
         assertEquals(3, cheats.listFiles()!!.size)
-        assertEquals(0, sync.syncCheats(share))
+        assertEquals(1, sync.syncCheats(share))
+        assertEquals(listOf("Tetris (World).cht"), cheats.list()!!.toList())
     }
 
     @Test
