@@ -40,6 +40,7 @@
     <string name="settings_box_sync_library">Adding the new games to the library</string>
     <string name="settings_box_sync_saves">Checking saves</string>
     <string name="settings_box_sync_done">Games copied: %1$d. Saves received: %2$d, sent: %3$d.</string>
+    <string name="settings_box_sync_same_name">Games left out because another on the box has the same name: %1$d.</string>
     <string name="settings_box_sync_unreachable">The box did not answer. Check the address and the Wi-Fi.</string>
     <string name="settings_box_sync_not_the_box">A different machine answers at this address. If you replaced or reinstalled the box, save its address again.</string>
     <string name="settings_title_save_saves">Save a backup of your saves</string>

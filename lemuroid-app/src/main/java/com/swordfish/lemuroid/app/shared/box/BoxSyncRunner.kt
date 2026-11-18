@@ -43,7 +43,13 @@ class BoxSyncRunner(
 
         data object Saves : Status
 
-        data class Done(val games: Int, val savesIn: Int, val savesOut: Int) : Status
+        data class Done(
+            val games: Int,
+            val savesIn: Int,
+            val savesOut: Int,
+            /** Box games left out because another in the same folder has the same name. */
+            val sameName: Int = 0,
+        ) : Status
 
         data object Unreachable : Status
 
@@ -97,7 +103,7 @@ class BoxSyncRunner(
 
                 SharedPreferencesHelper.getSharedPreferences(context).edit()
                     .putLong(PREF_LAST, System.currentTimeMillis()).apply()
-                state.value = Status.Done(games.copied, saves.pulled, saves.pushed)
+                state.value = Status.Done(games.copied, saves.pulled, saves.pushed, games.sameName)
             } catch (e: Exception) {
                 Timber.i(e, "Game box: sync stopped")
                 state.value =

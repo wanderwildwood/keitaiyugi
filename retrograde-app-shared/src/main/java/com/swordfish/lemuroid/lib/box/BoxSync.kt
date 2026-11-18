@@ -36,6 +36,8 @@ class BoxSync(
     data class GamesResult(
         val copied: Int,
         val onBox: Int,
+        /** Box games left out because another in the same folder has the same name. */
+        val sameName: Int = 0,
     )
 
     data class SavesResult(
@@ -50,6 +52,10 @@ class BoxSync(
      * Copies every game the box has and the phone lacks, and any the box has since replaced.
      * A game the phone already had under the same name is not copied a second time: it is
      * paired with the box's and shares its saves and cheats from then on.
+     *
+     * Two games in one folder of the box with the same name and different endings ("Foo.gb" and
+     * "Foo.zip") would share one save on the box and push over each other's on every sync. Only
+     * one of them is taken, the unzipped one first; the other is left out and counted.
      */
     fun syncGames(
         share: BoxShare,
@@ -62,7 +68,10 @@ class BoxSync(
                     .filter { !it.isFolder && BoxNames.isRom(it.name) }
                     .map { system to it }
             }
-        val own = games.filter { boxFileKey(it) == null }
+        val chosen =
+            onBox.groupBy { (system, entry) -> BoxKey(system, BoxNames.stem(entry.name)) }
+                .mapValues { (_, same) -> preferred(same.map { it.second.name }) }
+        val own = games.filter { boxCopy(it) == null }
         val records = HashMap(state.roms())
         val twins = HashMap<String, BoxKey>()
         var copied = 0
@@ -70,6 +79,7 @@ class BoxSync(
         onBox.forEachIndexed { index, (system, entry) ->
             progress(index, onBox.size)
             val key = BoxKey(system, BoxNames.stem(entry.name))
+            if (entry.name != chosen[key]) return@forEachIndexed
             val target = File(File(romsDir, system), entry.name)
             // A game of the box's already copied here owns its saves; an own ROM of the same name
             // found later is left unpaired, so the two never push over each other's save.
@@ -106,7 +116,7 @@ class BoxSync(
         progress(onBox.size, onBox.size)
         state.putRoms(records)
         state.putTwins(twins)
-        return GamesResult(copied, onBox.size)
+        return GamesResult(copied, onBox.size, sameName = onBox.size - chosen.size)
     }
 
     /** Every cheat file the box has for a game it has. Returns how many were copied. */
@@ -249,15 +259,30 @@ class BoxSync(
         }
     }
 
-    /** A game whose file is one this app copied from the box. */
+    /**
+     * A game whose file is one this app copied from the box. A copy of a game of the same name
+     * that the box's game list now gives to another file (see [syncGames]) has no box name.
+     */
     private fun boxFileKey(game: Game): BoxKey? {
+        val (system, name) = boxCopy(game) ?: return null
+        val key = BoxKey(system, BoxNames.stem(name))
+        val owner = state.roms()[key]?.fileName
+        return key.takeIf { owner == null || owner == name }
+    }
+
+    /** The system folder and file name of a game this app copied from the box, or null. */
+    private fun boxCopy(game: Game): Pair<String, String>? {
         val path = runCatching { URI(game.fileUri).takeIf { it.scheme == "file" }?.path }.getOrNull() ?: return null
         val root = romsDir.path.trimEnd('/') + "/"
         if (!path.startsWith(root)) return null
         val parts = path.removePrefix(root).split('/')
         if (parts.size != 2 || parts[0] !in BoxNames.SYSTEMS) return null
-        return BoxKey(parts[0], BoxNames.stem(parts[1]))
+        return parts[0] to parts[1]
     }
+
+    /** Of box games with one name, the one taken: an unzipped ROM before a zip, then by name. */
+    private fun preferred(names: List<String>): String =
+        names.sortedWith(compareBy<String>({ it.endsWith(".zip", ignoreCase = true) }, { it })).first()
 
     /** True when [game], a game the phone had already, goes by the box game's name. */
     private fun sameGame(

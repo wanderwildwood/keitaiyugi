@@ -212,6 +212,20 @@ class BoxSyncTest {
     }
 
     @Test
+    fun twoBoxGamesOfOneNameAreNotBothTakenSoTheyNeverShareASave() {
+        share.put("roms/gb/Tetris (World).zip", "zipped")
+        share.put("roms/gb/Tetris (World).gb", "plain")
+
+        assertEquals(BoxSync.GamesResult(copied = 1, onBox = 2, sameName = 1), sync.syncGames(share, emptyList()))
+        assertEquals(listOf("Tetris (World).gb"), File(roms, "gb").list()!!.toList())
+        assertEquals(BoxKey("gb", "Tetris (World)"), sync.keyFor(boxGame("gb", "Tetris (World).gb")))
+        // A copy of the other one, made before, keeps its save on the phone and sends nothing.
+        assertNull(sync.keyFor(boxGame("gb", "Tetris (World).zip", id = 2)))
+
+        assertEquals(0, sync.syncGames(share, emptyList()).copied)
+    }
+
+    @Test
     fun aGameThePhoneAlreadyHasIsPairedNotCopied() {
         share.put("roms/gb/Tetris (World).zip", "tetris")
         val own =

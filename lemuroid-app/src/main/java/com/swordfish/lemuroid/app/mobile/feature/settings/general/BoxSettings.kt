@@ -133,7 +133,12 @@ private fun statusText(
         BoxSyncRunner.Status.Library -> stringResource(id = R.string.settings_box_sync_library)
         BoxSyncRunner.Status.Saves -> stringResource(id = R.string.settings_box_sync_saves)
         is BoxSyncRunner.Status.Done ->
-            stringResource(id = R.string.settings_box_sync_done, status.games, status.savesIn, status.savesOut)
+            stringResource(id = R.string.settings_box_sync_done, status.games, status.savesIn, status.savesOut) +
+                if (status.sameName > 0) {
+                    " " + stringResource(id = R.string.settings_box_sync_same_name, status.sameName)
+                } else {
+                    ""
+                }
         BoxSyncRunner.Status.Unreachable -> stringResource(id = R.string.settings_box_sync_unreachable)
         BoxSyncRunner.Status.NotTheBox -> stringResource(id = R.string.settings_box_sync_not_the_box)
     }
