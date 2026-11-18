@@ -10,7 +10,7 @@ object deps {
     object versions {
         const val dagger          = "2.19"
         const val kotlin          = "2.0.21"
-        const val okHttp          = "4.9.1"
+        const val okHttp          = "4.12.0"
         const val retrofit        = "2.9.0"
         const val work            = "2.9.0"
         const val navigation      = "2.5.2"
