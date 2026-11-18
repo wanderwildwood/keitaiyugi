@@ -211,6 +211,27 @@ class BoxSyncTest {
     }
 
     @Test
+    fun anOwnGameOfTheNameOfABoxCopyIsLeftUnpaired() {
+        share.put("roms/gb/Tetris (World).zip", "tetris")
+        sync.syncGames(share, emptyList())
+        val copy = boxGame("gb", "Tetris (World).zip")
+        val own =
+            Game(
+                id = 7,
+                fileName = "Tetris (World).gb",
+                fileUri = "content://com.android.externalstorage.documents/tree/primary%3AGames/document/primary%3ATetris%20(World).gb",
+                title = "Tetris",
+                systemId = "gb",
+                developer = null,
+                coverFrontUrl = null,
+                lastIndexedAt = 0,
+            )
+        sync.syncGames(share, listOf(copy, own))
+        assertEquals(BoxKey("gb", "Tetris (World)"), sync.keyFor(copy))
+        assertNull(sync.keyFor(own))
+    }
+
+    @Test
     fun aCopiedGameIsKnownByItsFolderAndFileName() {
         assertEquals(BoxKey("gbc", "Wario Land 3 (World)"), sync.keyFor(boxGame("gbc", "Wario Land 3 (World).zip")))
     }

@@ -69,12 +69,16 @@ class BoxSync(
         onBox.forEachIndexed { index, (system, entry) ->
             progress(index, onBox.size)
             val key = BoxKey(system, BoxNames.stem(entry.name))
-            val twin = own.firstOrNull { it.systemId == system && sameGame(it, key.stem) }
+            val target = File(File(romsDir, system), entry.name)
+            // A game of the box's already copied here owns its saves; an own ROM of the same name
+            // found later is left unpaired, so the two never push over each other's save.
+            val twin =
+                own.firstOrNull { it.systemId == system && sameGame(it, key.stem) }
+                    ?.takeIf { !target.isFile }
             if (twin != null) {
                 twins[twin.fileUri] = key
                 return@forEachIndexed
             }
-            val target = File(File(romsDir, system), entry.name)
             val record = records[key]
             val upToDate =
                 target.isFile && target.length() == entry.size &&
