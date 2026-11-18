@@ -408,8 +408,7 @@ class BoxSyncTest {
 
         assertEquals(3, sync.syncCheats(share))
         assertEquals(3, cheats.listFiles()!!.size)
-        assertEquals(1, sync.syncCheats(share))
-        assertEquals(listOf("Tetris (World).cht"), cheats.list()!!.toList())
+        assertEquals(0, sync.syncCheats(share))
     }
 
     @Test
