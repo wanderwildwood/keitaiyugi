@@ -14,7 +14,7 @@ Handheld Games is a fork of Lemuroid by Filippo Scognamiglio (GPL-3.0), cut down
 
 On the phone: the library index (the games found in the folder you chose, with their titles), your settings, the save files and save states with their preview pictures, and a cache of cover pictures. No game is bundled, and none is copied off the phone; the app reads game files from the folder you choose in Settings, picked through Android's file picker.
 
-**Game box** (Settings) is off until you give it an address. With one set, the app keeps in its own storage the Game Boy games and cheat files it copied from that box, and a copy of any save that a sync replaced (`saves-replaced`), so nothing is lost when a newer save comes in.
+**Game box** (Settings) is off until you give it an address. With one set, the app keeps in its own storage the Game Boy games and cheat files it copied from that box, and a copy of any save that a sync replaced (`saves-replaced`), so nothing is lost when a newer save comes in. It also keeps the box's server ID, which the box sends with every connection, so that another machine answering at the same address later is not taken for the box; saving the address again in Settings forgets it.
 
 **Save a backup of your saves** (Settings) writes the save files, save states and their preview pictures to one zip file you choose through the phone's own file picker, and only when you ask. **Restore saves from a backup** reads such a file the same way, checks all of it first, and only then puts the saves in place, each over the same game's save; a wrong file changes nothing.
 

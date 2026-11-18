@@ -22,7 +22,11 @@ class BoxLink(
         SharedPreferencesHelper.getSharedPreferences(context).getString(PREF_ADDRESS, "").orEmpty().trim()
 
     fun setAddress(address: String) {
-        SharedPreferencesHelper.getSharedPreferences(context).edit().putString(PREF_ADDRESS, address.trim()).apply()
+        // An address saved, new or the same again, may be a new box: the next sync learns it anew.
+        SharedPreferencesHelper.getSharedPreferences(context).edit()
+            .putString(PREF_ADDRESS, address.trim())
+            .remove(PREF_GUID)
+            .apply()
     }
 
     fun isSetUp(): Boolean = address().isNotEmpty()
@@ -34,9 +38,23 @@ class BoxLink(
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 
-    /** @throws BoxUnreachableException when the box does not answer in time. */
-    fun open(patient: Boolean): BoxShare =
-        SmbBoxShare.connect(address(), if (patient) PATIENT_SECONDS else QUICK_SECONDS)
+    /**
+     * @throws BoxUnreachableException when the box does not answer in time, or when what answers
+     * at its address is not the box the first sync found there (see [BoxIdentity]).
+     */
+    fun open(patient: Boolean): BoxShare {
+        val share = SmbBoxShare.connect(address(), if (patient) PATIENT_SECONDS else QUICK_SECONDS)
+        val prefs = SharedPreferencesHelper.getSharedPreferences(context)
+        when (BoxIdentity.check(prefs.getString(PREF_GUID, null), share.serverGuid)) {
+            BoxIdentity.Verdict.SAME -> Unit
+            BoxIdentity.Verdict.REMEMBER -> prefs.edit().putString(PREF_GUID, share.serverGuid).apply()
+            BoxIdentity.Verdict.DIFFERENT -> {
+                share.close()
+                throw BoxUnreachableException("another machine answers at the box's address")
+            }
+        }
+        return share
+    }
 
     /**
      * One game's save, before it opens or after it closes. Never throws and never waits long:
@@ -55,6 +73,7 @@ class BoxLink(
 
     companion object {
         const val PREF_ADDRESS = "box_address"
+        private const val PREF_GUID = "box_server_guid"
         private const val QUICK_SECONDS = 3L
         private const val PATIENT_SECONDS = 15L
     }

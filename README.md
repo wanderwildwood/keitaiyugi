@@ -68,7 +68,9 @@ its address in Settings. The app copies its Game Boy and Game Boy Color games an
 cheats, and keeps battery saves in step both ways: before a game opens, after it closes, and
 on Sync now. It uses the file share Batocera offers out of the box, so nothing is set up on the
 box. Cheats appear in the game menu. Save states are not shared, only in-game saves, and
-whatever a sync replaces is kept (on the box, under `saves-sync-backup`).
+whatever a sync replaces is kept (on the box, under `saves-sync-backup`). The first sync
+remembers which box it found; a different machine at that address later is left alone, as if
+the box were away. If you replace the box, save its address in Settings again.
 
 If you have none, the [Homebrew Hub](https://hh.gbdev.io) is an archive of Game Boy games
 written in the last few years and given away by the people who wrote them. Plenty of it is

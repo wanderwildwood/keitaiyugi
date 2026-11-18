@@ -35,6 +35,9 @@ class SmbBoxShare private constructor(
     private val session: Session,
     private val disk: DiskShare,
 ) : BoxShare {
+    /** The GUID the server gave as the connection was made, which tells one box from another. */
+    val serverGuid: String? = runCatching { connection.connectionContext.serverGuid?.toString() }.getOrNull()
+
     override fun list(folder: String): List<BoxEntry> =
         guarded {
             try {
