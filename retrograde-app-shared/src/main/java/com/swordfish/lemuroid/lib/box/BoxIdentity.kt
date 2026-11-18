@@ -20,9 +20,11 @@ object BoxIdentity {
         val now = seen?.lowercase()?.takeIf { it.isNotBlank() && it != NONE }
         val before = kept?.lowercase()?.takeIf { it.isNotBlank() }
         return when {
-            // A server that gives no GUID cannot be told apart; it is taken as it was before.
-            now == null -> Verdict.SAME
-            before == null -> Verdict.REMEMBER
+            // Before any box is remembered, a server that gives no GUID cannot be told apart and
+            // is taken as it is. Once one is remembered, a server that gives none could be any
+            // machine at all, so it is not the box.
+            before == null -> if (now == null) Verdict.SAME else Verdict.REMEMBER
+            now == null -> Verdict.DIFFERENT
             now == before -> Verdict.SAME
             else -> Verdict.DIFFERENT
         }

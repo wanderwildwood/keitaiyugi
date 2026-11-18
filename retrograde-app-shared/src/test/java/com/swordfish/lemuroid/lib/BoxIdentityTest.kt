@@ -26,9 +26,16 @@ class BoxIdentityTest {
     }
 
     @Test
-    fun aServerWithNoGuidCannotBeToldApart() {
-        assertEquals(Verdict.SAME, BoxIdentity.check(box, null))
-        assertEquals(Verdict.SAME, BoxIdentity.check(box, "00000000-0000-0000-0000-000000000000"))
+    fun aServerWithNoGuidIsTakenOnlyWhileNoBoxIsRemembered() {
         assertEquals(Verdict.SAME, BoxIdentity.check(null, null))
+        assertEquals(Verdict.SAME, BoxIdentity.check(null, ""))
+        assertEquals(Verdict.SAME, BoxIdentity.check(null, "00000000-0000-0000-0000-000000000000"))
+    }
+
+    @Test
+    fun aServerWithNoGuidIsNotTheRememberedBox() {
+        assertEquals(Verdict.DIFFERENT, BoxIdentity.check(box, null))
+        assertEquals(Verdict.DIFFERENT, BoxIdentity.check(box, " "))
+        assertEquals(Verdict.DIFFERENT, BoxIdentity.check(box, "00000000-0000-0000-0000-000000000000"))
     }
 }
