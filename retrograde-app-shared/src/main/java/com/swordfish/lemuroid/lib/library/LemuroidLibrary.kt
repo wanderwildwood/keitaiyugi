@@ -222,10 +222,15 @@ class LemuroidLibrary(
         handleUnknownFiles(provider, unknownFiles, startedAtMs)
     }
 
+    /**
+     * Batches are processed in parallel, so reading the keys in use, choosing new ones and
+     * inserting them happen under one lock: two new games with the same name in different
+     * batches would otherwise both take the bare name and share one battery save.
+     */
     private fun handleNewGames(
         pairs: List<ScanEntry.GameFile>,
         startedAtMs: Long,
-    ) {
+    ) = synchronized(NEW_GAMES_LOCK) {
         val taken = retrogradedb.gameDao().selectSaveKeys().toMutableList()
         val games =
             pairs
@@ -425,5 +430,8 @@ class LemuroidLibrary(
         // We batch database updates to avoid unnecessary UI updates.
         const val MAX_BUFFER_SIZE = 200
         const val MAX_TIME = 5000
+
+        /** Held while new games are given save keys and inserted. See [handleNewGames]. */
+        private val NEW_GAMES_LOCK = Any()
     }
 }
